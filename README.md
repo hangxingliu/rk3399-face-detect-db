@@ -1,3 +1,5 @@
+![](docs/doxygen-configuration/icon.png)
+
 # RK3399 Face Detect DB
 
 A Face detect database utils/shared library for Rockchip-RK3399
@@ -17,3 +19,8 @@ A Face detect database utils/shared library for Rockchip-RK3399
 	- Or install from other package manager/sources
 - Generate API documents: `doxygen Doxyfile`
 - Configure doxygen options visibly: `doxywizard Doxyfile`
+
+
+## Third-Party Parts
+
+- Icon from <http://www.iconfont.cn> ([ICON_README.md](docs/doxygen-configuration/ICON_README.md))
