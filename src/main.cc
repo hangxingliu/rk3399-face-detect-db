@@ -1,5 +1,19 @@
 #include<stdio.h>
 
+/**
+ * Integer number plus function
+ * @param a integer A
+ * @param b integer B
+ * @return A+B
+ */
+int plus(int a,int b) {
+	return a + b;
+}
+
+/**
+ * This is an example doxygen comment
+ * @return status code
+ */
 int main() {
 	#ifdef NDEBUG
 		printf("Release Mode\n");

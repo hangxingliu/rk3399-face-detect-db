@@ -1,3 +1,6 @@
+# Ignore target doxygen documents
+docs/api-doxygen-docs
+
 # Ignore build folder (CMake)
 build
 
