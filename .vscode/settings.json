@@ -6,5 +6,20 @@
 		"autogen",
 		"doxygen",
 		"doxywizard"
-	]
+	],
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/CVS": true,
+		"**/.DS_Store": true,
+
+		//Ignore Qt Creator project files
+		"{src,test}/*.files": true,
+		"{src,test}/*.creator.user": true,
+		"{src,test}/*.creator": true,
+		"{src,test}/*.includes": true,
+		"{src,test}/*.config": true
+
+	}
 }
