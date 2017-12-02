@@ -176,6 +176,7 @@ fi
 
 if [[ "$ACTION" == "test" ]]; then
 	executeCMake $BUILD_TYPE $TEST_SRC "test";
+	resolveHeaderFiles;
 	executeMakeBuild $BUILD_TYPE "test";
 
 	TEST_ALL=0; TEST_PASSED=0;
