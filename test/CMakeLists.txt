@@ -12,4 +12,4 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE")
 
 set(EXT_NAME "test.bin")
-add_executable("1.${EXT_NAME}" test1.cc)
+add_executable("1.${EXT_NAME}" cpp_test.cc utils/index.cc)

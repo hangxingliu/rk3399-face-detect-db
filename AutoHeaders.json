@@ -21,5 +21,19 @@
 		"include": [
 			"./types.hpp"
 		]
+	},
+
+
+
+
+	{
+		"name": "TEST_UTILS_INDEX",
+		"hpp": "./test/utils/index.hpp",
+		"extern-c": false,
+		"input": [
+			"./test/utils/index.cc"
+		],
+		"include": []
 	}
+
 ]

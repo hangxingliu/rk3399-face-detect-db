@@ -1,2 +1,5 @@
+cpp_test.cc
+utils/index.hpp
+utils/index.cc
 CMakeLists.txt
 test1.cc
