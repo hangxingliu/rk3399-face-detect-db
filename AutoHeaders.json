@@ -1,0 +1,25 @@
+[
+	{
+		"name": "API_API_HPP",
+		"hpp": "./src/api/api.hpp",
+		"extern-c": true,
+		"input": [
+			"./src/api/api.cc"
+		],
+		"include": [
+			"../structs/index.hpp",
+			"../config/types.hpp"
+		]
+	},
+	{
+		"name": "CONFIG_METHODS_HPP",
+		"hpp": "./src/config/methods.hpp",
+		"extern-c": true,
+		"input": [
+			"./src/config/methods.cc"
+		],
+		"include": [
+			"./types.hpp"
+		]
+	}
+]

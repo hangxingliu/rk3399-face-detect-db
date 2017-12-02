@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+GENERATOR="./scripts/gen-hpp-util.sh";
+CONFIG_FILE="./AutoHeaders.json";
+
 # get directory this script located in
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -12,27 +15,39 @@ DIR="$(dirname "$DIR")"; # Project root path
 # =====================
 function fatal() { echo -e "\n  error: $1\n"; exit 1;}
 
-GENERATOR="./scripts/gen-hpp-util.sh";
+[[ -z `which jq` ]] && fatal "could not find denpedency: \"jq\" (sudo apt install jq) <https://stedolan.github.io/jq/>";
 
 pushd $DIR;
 echo -e "[~] goto project root path";
 
-NAME="API_API_HPP";
-HPP="./src/api/api.hpp";
-EXTERNC="--extern-c"
-echo -e "[.] generating header: ${NAME} into ${HPP}..."
-$GENERATOR --name="${NAME}" --output="${HPP}" ${EXTERNC}\
-	 --input="./src/api/api.cc"\
-	&& echo "[~] generated!" || fatal "generate failed!";
+CONFIG_CONTENT=`cat $CONFIG_FILE`;
+# paramter => $1: json selector
+function json() { echo "$CONFIG_CONTENT" | jq "$1" -r; }
 
+CONFIG_LEN=`json 'length'`;
+echo "[~] found $CONFIG_LEN configurations in ${CONFIG_FILE}";
 
-NAME="CONFIG_METHODS_HPP";
-HPP="./src/config/config_methods.hpp";
-EXTERNC="--extern-c"
-echo -e "[.] generating header: ${NAME} into ${HPP}..."
-$GENERATOR --name="${NAME}" --output="${HPP}" ${EXTERNC}\
-	 --input="./src/config/config_methods.cc"\
-	&& echo "[~] generated!" || fatal "generate failed!";
+index=0;
+while [[ $index -lt $CONFIG_LEN ]]; do
+    CONFIG_NAME=`json .[${index}].name`;
+	HPP=`json .[${index}].hpp`;
+	EXTERNC=`json .[${index}].\"extern-c\"`;
+	INPUT=`json .[${index}].input[] | awk '{printf("--input=" $0 " ")}'`
+	INCLUDE=`json .[${index}].include[] | awk '{printf("--include=" $0 " ")}'`
 
+	echo "[.] generating header ${CONFIG_NAME} into ${HPP} ...";
 
-echo "[+] all header files are generated!";
+	if [[ "EXTERNC" == "true" ]]; then EXTERNC="--extern-c";
+	else EXTERNC=""; fi
+	COMMAND="${GENERATOR} --name=${CONFIG_NAME} --output=${HPP} ${EXTERNC} ${INPUT} ${INCLUDE}";
+
+	$COMMAND && echo -e "[~] generated!\n" || fatal "generate failed!";
+
+	index=$[$index+1];
+done
+
+if [[ "$?" == "0" ]]; then
+	echo "[+] all header files are generated!";
+else
+	exit 1;
+fi

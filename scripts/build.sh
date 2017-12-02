@@ -95,6 +95,12 @@ function executeUnitTest() {
 		echo -e "\n${RED}[-] test ${TEST_NAME} failed (exit with ${TEST_RESULT})${RESET}\n";
 	fi
 }
+function resolveHeaderFiles() {
+	bash ../../scripts/resolve-all-hpp.sh;
+	RESULT_RESULT=$?;
+	[[ "$RESULT_RESULT" == "0" ]] && finish "resolved (generated) header files!" ||
+		fatal "resolve header files failed!";
+}
 
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -150,6 +156,7 @@ fi
 gotoDirectory "$TARGET_PATH";
 
 if [[ "$ACTION" == "cmake" ]]; then
+	resolveHeaderFiles;
 	executeCMake $BUILD_TYPE $LIB_SRC;
 	exit 0;
 fi
@@ -159,6 +166,7 @@ if [[ "$ACTION" == "build" ]]; then
 		echo -e "[.] executing cmake ...";
 		executeCMake $BUILD_TYPE $LIB_SRC;
 	fi
+	resolveHeaderFiles;
 	executeMakeBuild $BUILD_TYPE;
 	exit 0;
 fi
