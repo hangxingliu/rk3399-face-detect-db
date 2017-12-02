@@ -123,7 +123,10 @@ IS_HELP=`echo "$*" | grep -e "-h"`
 	fatal "Invalid Action! (usage: --help)";
 
 if [[ "$ACTION" != "clean-all" ]]; then
-	[[ -z "$BUILD_TYPE" ]] && fatal "BuildType is missing! (usage: --help)";
+	if [[ -z "$BUILD_TYPE" ]]; then
+		echo -e "\n  ${BLUE}info: Using default build type: debug (usage: --help)${RESET}\n";
+		BUILD_TYPE="debug";
+	fi
 	[[ "$BUILD_TYPE" != "debug" ]] && [[ "$BUILD_TYPE" != "release" ]] &&
 		fatal "Invalid BuildType! (usage: --help)";
 fi
