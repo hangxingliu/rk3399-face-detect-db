@@ -13,23 +13,25 @@
 // DON'T modify manually!
 // Generate time: 2017/12/03 03:35:20
 
-#ifndef TEST_UTILS_INDEX
-#define TEST_UTILS_INDEX 1
+#include "./types.hpp"
+
+#ifndef CONFIG_METHODS_HPP
+#define CONFIG_METHODS_HPP 1
 
 //  ====================
-//  @file ./test/utils/index.cc
+//  @file ./src/config/methods.cc
 //  ====================
 
-//  source: ./test/utils/index.cc:18
-int testDone(const char* description);
+//  source: ./src/config/methods.cc:13
+int Config_cloneGlobalConfig(GlobalConfig* src, GlobalConfig* dest);
 
-//  source: ./test/utils/index.cc:8
-int testFailed(const char* description);
+//  source: ./src/config/methods.cc:8
+int Config_getDefaultGlobalConfig(GlobalConfig* config);
 
-//  source: ./test/utils/index.cc:13
-int testPassed(const char* description);
+//  source: ./src/config/methods.cc:5
+int Config_initGlobalConfig();
 
 #endif
 
 // md5sum:
-// 1f79fe93691a82d1cdd3592882c3f6a8  ./test/utils/index.cc
+// 217d24c29f5264753f223700437d585e  ./src/config/methods.cc

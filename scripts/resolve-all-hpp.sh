@@ -33,15 +33,32 @@ while [[ $index -lt $CONFIG_LEN ]]; do
 	HPP=`json .[${index}].hpp`;
 	EXTERNC=`json .[${index}].\"extern-c\"`;
 	INPUT=`json .[${index}].input[] | awk '{printf("--input=" $0 " ")}'`
+	INPUT_MD5=`json .[${index}].input[] | xargs -I _f md5sum _f`;
 	INCLUDE=`json .[${index}].include[] | awk '{printf("--include=" $0 " ")}'`
 
 	echo "[.] generating header ${CONFIG_NAME} into ${HPP} ...";
+
+	if [[ -f "$HPP" ]]; then
+		MD5SUM_ALL=`echo "$INPUT_MD5" | wc -l`;
+		MD5SUM_MATCHED=`echo "$INPUT_MD5" | awk '{print $1}' |
+			xargs -I _regexp grep "$HPP" -e _regexp | wc -l`;
+
+		if [[ "$MD5SUM_ALL" == "$MD5SUM_MATCHED" ]]; then
+			echo -e "[~] keep old header file because it is not modified.\n";
+
+			index=$[$index+1];
+			continue;
+		fi
+	fi
 
 	if [[ "$EXTERNC" == "true" ]]; then EXTERNC="--extern-c";
 	else EXTERNC=""; fi
 	COMMAND="${GENERATOR} --name=${CONFIG_NAME} --output=${HPP} ${EXTERNC} ${INPUT} ${INCLUDE}";
 
-	$COMMAND && echo -e "[~] generated!\n" || fatal "generate failed!";
+	$COMMAND &&
+		echo "${INPUT_MD5}" |
+			awk 'BEGIN {print "\n// md5sum:";} {print "// " $0;}' >> "$HPP"  &&
+		echo -e "[~] generated!\n" || fatal "generate failed!";
 
 	index=$[$index+1];
 done

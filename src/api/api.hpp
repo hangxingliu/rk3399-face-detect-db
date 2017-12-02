@@ -13,23 +13,45 @@
 // DON'T modify manually!
 // Generate time: 2017/12/03 03:35:20
 
-#ifndef TEST_UTILS_INDEX
-#define TEST_UTILS_INDEX 1
+#include "../public_types/base.hpp"
+#include "../public_types/database_operation.hpp"
+#include "../public_types/capture.hpp"
+#include "../config/types.hpp"
+
+#ifndef API_API_HPP
+#define API_API_HPP 1
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //  ====================
-//  @file ./test/utils/index.cc
+//  @file ./src/api/api.cc
 //  ====================
 
-//  source: ./test/utils/index.cc:18
-int testDone(const char* description);
+//  source: ./src/api/api.cc:53
+int debugPingPong(int ping);
 
-//  source: ./test/utils/index.cc:8
-int testFailed(const char* description);
+//  source: ./src/api/api.cc:28
+int getDefaultGlobalConfig(GlobalConfig* returnConfig);
 
-//  source: ./test/utils/index.cc:13
-int testPassed(const char* description);
+//  source: ./src/api/api.cc:33
+int getFrameFromCapture(CaptureFrameAndPersonInfo* returnFrameImgAndFaceInfo);
+
+//  source: ./src/api/api.cc:16
+int init(GlobalConfig* overwriteConfig);
+
+//  source: ./src/api/api.cc:43
+int removeUserFromDatabase(DB_RemoveUser* removeDescription);
+
+//  source: ./src/api/api.cc:38
+int updateUserFeaturesInDatabase(DB_UpdateUserFeatures* updateDescription);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
 // md5sum:
-// 1f79fe93691a82d1cdd3592882c3f6a8  ./test/utils/index.cc
+// 270919a0ae9d44eccaf7d2eb7f1ec345  ./src/api/api.cc
