@@ -15,4 +15,9 @@ typedef struct Rect2 {
 	Point* rightBottom;
 } Rect2;
 
+typedef struct Path {
+	int count;
+	Point* points;
+} Path;
+
 #endif // JNA_STRUCT_TEST_SO_BASE_HPP
