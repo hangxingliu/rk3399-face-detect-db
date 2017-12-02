@@ -13,20 +13,30 @@
 // DON'T modify manually!
 // Generate time: 2017/12/02 18:26:10
 
-#ifndef TEST_UTILS_INDEX
-#define TEST_UTILS_INDEX 1
+#include "jna_struct_test_so_base.hpp"
+
+#ifndef JNA_STRUCT_TEST_SO
+#define JNA_STRUCT_TEST_SO 1
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //  ====================
-//  @file ./test/utils/index.cc
+//  @file ./test/jna_struct_test_so.cc
 //  ====================
 
-//  source: ./test/utils/index.cc:18
-int testDone(const char* description);
+//  source: ./test/jna_struct_test_so.cc:7
+void dumpRect1(Rect1* r);
 
-//  source: ./test/utils/index.cc:8
-int testFailed(const char* description);
+//  source: ./test/jna_struct_test_so.cc:14
+void dumpRect2(Rect2* r);
 
-//  source: ./test/utils/index.cc:13
-int testPassed(const char* description);
+//  source: ./test/jna_struct_test_so.cc:20
+int main();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

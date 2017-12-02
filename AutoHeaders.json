@@ -7,7 +7,7 @@
 			"./src/api/api.cc"
 		],
 		"include": [
-			"../structs/index.hpp",
+			"../public_types/base.hpp",
 			"../config/types.hpp"
 		]
 	},
@@ -30,10 +30,15 @@
 		"name": "TEST_UTILS_INDEX",
 		"hpp": "./test/utils/index.hpp",
 		"extern-c": false,
-		"input": [
-			"./test/utils/index.cc"
-		],
+		"input": ["./test/utils/index.cc"],
 		"include": []
+	},
+	{
+		"name": "JNA_STRUCT_TEST_SO",
+		"hpp": "./test/jna_struct_test_so.hpp",
+		"extern-c": true,
+		"input": [ "./test/jna_struct_test_so.cc"],
+		"include": [ "jna_struct_test_so_base.hpp" ]
 	}
 
 ]

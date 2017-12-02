@@ -1,4 +1,10 @@
 cpp_test.cc
+jna_struct_test_so.cc
+jna_struct_test_so.hpp
+jna_struct_test_so_base.hpp
+utils/index.hpp
+cpp_test.cc
+utils/index.cc
 utils/index.hpp
 utils/index.cc
 CMakeLists.txt
