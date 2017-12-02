@@ -1,9 +1,12 @@
 {
 	"cSpell.words": [
+		"CMAKE",
+		"CROSSCOMPILING",
 		"Ctags",
 		"Doxyfile",
 		"Rockchip",
 		"STRUCT",
+		"aarch",
 		"autogen",
 		"doxygen",
 		"doxywizard"
@@ -22,5 +25,9 @@
 		"{src,test}/*.includes": true,
 		"{src,test}/*.config": true
 
+	},
+	"files.associations": {
+		"system_error": "cpp",
+		"*.ipp": "cpp"
 	}
 }

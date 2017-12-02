@@ -1,4 +1,5 @@
 .
 api
-structs
 config
+include
+public_types
