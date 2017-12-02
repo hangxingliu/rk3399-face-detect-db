@@ -1,0 +1,11 @@
+{
+	global:
+		debugPingPong;
+		getDefaultGlobalConfig;
+		getFrameFromCapture;
+		init;
+		removeUserFromDatabase;
+		updateUserFeaturesInDatabase;
+
+	local: *;
+};
