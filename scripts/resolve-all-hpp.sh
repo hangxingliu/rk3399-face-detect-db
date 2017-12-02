@@ -37,7 +37,7 @@ while [[ $index -lt $CONFIG_LEN ]]; do
 
 	echo "[.] generating header ${CONFIG_NAME} into ${HPP} ...";
 
-	if [[ "EXTERNC" == "true" ]]; then EXTERNC="--extern-c";
+	if [[ "$EXTERNC" == "true" ]]; then EXTERNC="--extern-c";
 	else EXTERNC=""; fi
 	COMMAND="${GENERATOR} --name=${CONFIG_NAME} --output=${HPP} ${EXTERNC} ${INPUT} ${INCLUDE}";
 
