@@ -22,20 +22,46 @@ function missing() { fatal "missing option \"$1\" (\"--help\" for more help)"; }
 
 # parameters: $1: file.cc
 function parse() {
-	ctags -o - --output-format=xref "$1" |
+	# ctags --list-fields  # get detailed _xformat
+	# %{name} tag name
+	# %K      kind of tag
+	# %F:%n   input file:line
+	# %{properties} %{signature}
+	ctags -o - -x --_xformat="[%{C++.properties}] %{name} %K %F:%n %S ||| %C"\
+		--kinds-C++=+p --language-force=C++ --extras=+q --fields-C++='*' "$1" |
+		# function name starts with _ is private or anonymous or lambda
+		awk '$3=="function" && !match($2, /^_/) && !match($1, /static/)' |
 		awk -vfn="$1" 'BEGIN{
 			print "//  ====================";
 			print "//  @file " fn;
 			print "//  ====================";
 			print "";
-		}
-		# function name starts with _ is private or anonymous or lambda
-		$2=="function" && !match($1, /^_/) {
-			print "//  source: " $4 ":" $3;
+		}{
+			print "//  source: " $4;
+
+			name=$2;
+
 			$1="";$2="";$3="";$4="";
-			gsub(/^\s*/, "", $0); # remove empty characters in the front of string.
-			gsub(/\s*\{\s*$/, ";", $0); # { => ;
-			print $0 "\n";
+			i=index($0, " ||| ");
+			if(!i) i=length($0)-1;
+			body=substr($0,1,i-1);
+
+			def=substr($0,i+5,length($0)-i);
+			j=index(def, name);
+			if(!j) j=length(def);
+			prefix=substr(def, 1, j-1);
+
+			gsub(/inline/, "", prefix); # remove inline in declaration
+
+			gsub(/^\s*/, "", body); # trimLeft
+			gsub(/\s\*\s/, "* ", body); # make pointer beautiful
+			gsub(/,/, ", ", body); # make , beautiful
+			gsub(/=(\w|\*|\&|\.)+/, "", body); # remove default value
+			gsub(/\s+/, " ", body); # combine blank spaces
+
+			line=prefix name body;
+			gsub(/^\s+/, "", line);gsub(/\s+$/, "", line); #trim
+			print line ";\n";
 		}';
 }
 # parameters: $1: file1.cc\nfile2.cc\n
