@@ -16,6 +16,8 @@ function check() {
 	find . -type f \
 		-not -path "./.git/*" \
 		-not -path "./build/*" \
+		-not -path "./build-*/*" \
+		-not -path "./*.pro.user" \
 		-not -path "${SELF}"\
 		| xargs -I __file__ grep __file__ -e "/home/"\
 			--with-filename --line-number\

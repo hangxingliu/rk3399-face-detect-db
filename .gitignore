@@ -6,6 +6,9 @@ docs/api-doxygen-docs
 
 # Ignore build folder (CMake)
 build
+build-*
+# Qt Project user file (using absolute path)
+*.pro.user
 
 # Prerequisites
 *.d
