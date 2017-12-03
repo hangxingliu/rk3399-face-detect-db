@@ -1,4 +1,5 @@
 cpp_test.cc
+gui/opencv_test.cc
 jna_struct_test_so.cc
 jna_struct_test_so.hpp
 jna_struct_test_so_base.hpp
