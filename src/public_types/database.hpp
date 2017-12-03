@@ -50,7 +50,7 @@ typedef struct DB_BaseUserItem {
 	/** reserved space */
 	char reserved[7];
 
-	/** the hash value calacuted from following content to avoiding dirty data */
+	/** the hash value calculated from following content to avoiding dirty data */
 	int hash[4];
 
 	int priority;

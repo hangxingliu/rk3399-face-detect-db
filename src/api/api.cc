@@ -30,11 +30,19 @@ int getDefaultGlobalConfig(GlobalConfig* returnConfig) {
 	return Config_getDefaultGlobalConfig(returnConfig);
 }
 
-int getFrameFromCapture(CaptureFrameAndPersonInfo* returnFrameImgAndFaceInfo) {
+int getFrameFromCapture(CaptureRequestOptions* opts, CaptureFrameAndPersonInfo* returnFrameImgAndFaceInfo) {
 	printf("CALL: getFrameFromCapture()\n");
 	return 0;
 }
 
+/**
+ * Alias of updateUserFeaturesInDatabase()
+ * @see updateUserFeaturesInDatabase()
+ */
+int updateUserInDatabase(DB_UpdateUserFeatures* updateDescription) {
+	LOOP_TIMES(i, 5) printf("Tip: Hey, you can call method `updateUserFeaturesInDatabase` but not this!");
+	return updateUserFeaturesInDatabase(updateDescription);
+}
 int updateUserFeaturesInDatabase(DB_UpdateUserFeatures* updateDescription) {
 	printf("CALL: updateUserFeaturesInDatabase()\n");
 	return 0;

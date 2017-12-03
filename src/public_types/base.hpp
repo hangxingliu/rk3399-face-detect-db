@@ -1,25 +1,12 @@
 #ifndef PUBLIC_TYPES_BASE_HPP
 #define PUBLIC_TYPES_BASE_HPP 1
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#define LOOP(var,from,to,step) for(int var = from ; var < to ; var += step)
+#define LOOP_TIMES(var, times) LOOP(var, 0, times, 1)
 
 typedef unsigned char uchar;
-
-// =================
-//   Main  >>>>>>>
-
-/**
- * AnyType struct as a placeholder in api function
- */
-typedef struct AnyType {
-	void* anyValue;
-} AnyType;
-
-
-#ifdef __cplusplus
-}
-#endif
+typedef unsigned char ubyte;
+typedef ubyte* ubytes;
+typedef ubyte* ubyteArray;
 
 #endif

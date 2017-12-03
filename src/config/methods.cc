@@ -3,6 +3,7 @@
 
 
 int Config_initGlobalConfig() {
+	return 0;
 }
 
 int Config_getDefaultGlobalConfig(GlobalConfig* config) {

@@ -43,16 +43,6 @@ typedef struct GlobalConfig {
 	 */
 	long maxDatabaseFileSize = 3 * 1024 * 1024 * 1024l;
 
-	#ifdef DEBUG
-		int infoLogType = LOG_TYPE_FILE;
-		int debugLogType = LOG_TYPE_STDOUT;
-	#else
-		int infoLogType = LOG_TYPE_STDOUT;
-		int debugLogType = LOG_TYPE_NONE;
-	#endif
-	int fatalLogType = LOG_TYPE_ALL;
-	int warningLogType = LOG_TYPE_ALL;
-
 	/**
 	 * Read only configurations
 	 * **You can not set this value unless modify sources!**

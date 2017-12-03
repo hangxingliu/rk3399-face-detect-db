@@ -6,6 +6,7 @@
 		init;
 		removeUserFromDatabase;
 		updateUserFeaturesInDatabase;
+		updateUserInDatabase;
 
 	local: *;
 };
