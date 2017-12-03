@@ -27,6 +27,7 @@ target_link_libraries("opencv_base_test.gui" ${OpenCV_LIBS} )
 # Automatic Unit Test
 
 add_executable("cpp_base.${EXT_NAME}" cpp_test.cc ${UTILS})
+add_executable("log.${EXT_NAME}" log_test.cc ../src/log/methods.cc ${UTILS})
 
 add_executable("call_release_so.${EXT_NAME}" call_release_so.test.cc)
 target_link_libraries("call_release_so.${EXT_NAME}" rk3399-face-detect-db-release)

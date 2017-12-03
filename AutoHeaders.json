@@ -10,13 +10,18 @@
 			"../public_types/capture.hpp",
 			"../config/types.hpp"
 		]
-	},
-	{
+	}, {
 		"name": "CONFIG_METHODS_HPP",
 		"hpp": "./src/config/methods.hpp",
 		"extern-c": false,
 		"input": [ "./src/config/methods.cc" ],
 		"include": [ "./types.hpp" ]
+	}, {
+		"name": "LOG_METHODS_HPP",
+		"hpp": "./src/log/methods.hpp",
+		"extern-c": false,
+		"input": [ "./src/log/methods.cc" ],
+		"include": []
 	},
 
 
@@ -27,8 +32,7 @@
 		"extern-c": false,
 		"input": ["./test/utils/index.cc"],
 		"include": []
-	},
-	{
+	}, {
 		"name": "JNA_STRUCT_TEST_SO",
 		"hpp": "./test/jna_struct_test_so.hpp",
 		"extern-c": true,

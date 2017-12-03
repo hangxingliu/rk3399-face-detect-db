@@ -3,6 +3,7 @@ gui/opencv_test.cc
 jna_struct_test_so.cc
 jna_struct_test_so.hpp
 jna_struct_test_so_base.hpp
+log_test.cc
 utils/index.hpp
 cpp_test.cc
 utils/index.cc

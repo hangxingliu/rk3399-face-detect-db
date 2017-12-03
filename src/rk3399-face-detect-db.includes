@@ -3,3 +3,4 @@ api
 config
 include
 public_types
+log
