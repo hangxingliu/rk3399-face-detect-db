@@ -35,11 +35,24 @@ char* Log_getLogDatePrefix() {
 static inline void Log__log(const char* type, const char* content) {
 	printf("%s%s    %s\n", type, Log_getLogDatePrefix(), content);
 }
+static inline void Log__log2(const char* type, const char* prefix, const char* content) {
+	printf("%s%s    %s%s\n", type, Log_getLogDatePrefix(), prefix, content);
+}
 
-void Log_debug(const char* content) { Log__log("DEBUG    ", content); }
-void Log_info(const char* content) { Log__log("INFO     ", content); }
-void Log_warn(const char* content) { Log__log("WARN!    ", content); }
-void Log_fatal(const char* content) { Log__log("FATAL!!! ", content); }
+const char* PREFIX_DEBUG  = "DEBUG    ";
+const char* PREFIX_INFO   = "INFO     ";
+const char* PREFIX_WARN   = "WARN!    ";
+const char* PREFIX_FATAL  = "FATAL!!! ";
+
+void Log_debug(const char* content) { Log__log(PREFIX_DEBUG, content); }
+void Log_info(const char* content) { Log__log(PREFIX_INFO, content); }
+void Log_warn(const char* content) { Log__log(PREFIX_WARN, content); }
+void Log_fatal(const char* content) { Log__log(PREFIX_FATAL, content); }
+
+void Log_debug2(const char* prefix, const char* content) { Log__log2(PREFIX_DEBUG, prefix, content); }
+void Log_info2(const char* prefix, const char* content) { Log__log2(PREFIX_INFO, prefix, content); }
+void Log_warn2(const char* prefix, const char* content) { Log__log2(PREFIX_WARN, prefix, content); }
+void Log_fatal2(const char* prefix, const char* content) { Log__log2(PREFIX_FATAL, prefix, content); }
 
 /** @param name  max length is **64** */
 void Log_dumpInt(int value, const char* name) {

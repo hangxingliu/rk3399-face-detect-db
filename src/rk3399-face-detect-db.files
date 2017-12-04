@@ -10,8 +10,13 @@ log/log.hpp
 log/methods.cc
 log/methods.hpp
 main.cc
+media_handlers/capture.cc
+media_handlers/media_handlers.hpp
 public_types/base.hpp
 public_types/capture.hpp
 public_types/database.hpp
 public_types/database_operation.hpp
 public_types/firefly_face_sdk.hpp
+utils/convert2string.cc
+utils/memory.cc
+utils/utils.hpp

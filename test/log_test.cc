@@ -1,4 +1,5 @@
 #define DELAY_TEST 0
+#define IGNORE_OUTPUT_TEST 1
 
 #include<stdio.h>
 #include<string.h>
@@ -38,6 +39,10 @@ int main() {
 	testPassed("one second dealy test");
 
 #endif
+
+#if IGNORE_OUTPUT_TEST
+	return testDone("Log module test (ignore output test)");
+#endif
 	int arr[] = {100, 567, 888, -345, 9870, 2333, 520, 666666};
 	int length = sizeof(arr) >> 2; // => size / 4
 //	printf("siezof arr => %zu\n", sizeof(arr));
@@ -67,6 +72,9 @@ int main() {
 
 	LOG_WARN("FBI! --macro");
 	LOG_INFO("torrent --macro");
+
+	const char* ARG_NAME = "Name";
+	LOG_WARN2("Invalid arguemnt: ", ARG_NAME);
 
 	return testDone("Log module test");
 }

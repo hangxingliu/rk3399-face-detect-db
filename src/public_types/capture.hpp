@@ -59,4 +59,13 @@ typedef struct CaptureFrameAndPersonInfo {
 	CapturePersonInfoArray person;
 } CaptureFrameAndFaceInfo;
 
+
+typedef struct PhysicalCaptureDevice {
+	bool available;
+	int id;
+	char devicePath[32];
+	char cardName[32];
+	char driver[16];
+} PhysicalCaptureDevice;
+
 #endif // CAPTURE_HPP

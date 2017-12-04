@@ -22,7 +22,26 @@
 		"extern-c": false,
 		"input": [ "./src/log/methods.cc" ],
 		"include": []
+	}, {
+		"name": "MEDIA_HANDLERS_HPP",
+		"hpp": "./src/media_handlers/media_handlers.hpp",
+		"extern-c": false,
+		"input": [ "./src/media_handlers/capture.cc" ],
+		"include": [
+			"../public_types/base.hpp",
+			"../public_types/capture.hpp"
+		]
+	}, {
+		"name": "UTILS_HPP",
+		"hpp": "./src/utils/utils.hpp",
+		"extern-c": false,
+		"input": [
+			"./src/utils/convert2string.cc",
+			"./src/utils/memory.cc"
+		],
+		"include": []
 	},
+
 
 
 
