@@ -1,9 +1,7 @@
 api/api.cc
 api/api.hpp
-config/global.cc
-config/methods.cc
-config/methods.hpp
-config/types.hpp
+config/config.cc
+config/config.hpp
 include/firefly_faceverify.hpp
 include/firefly_faceverify_version.hpp
 log/log.hpp
@@ -12,8 +10,10 @@ log/methods.hpp
 main.cc
 media_handlers/capture.cc
 media_handlers/media_handlers.hpp
+public_types/api_types.hpp
 public_types/base.hpp
 public_types/capture.hpp
+public_types/config.hpp
 public_types/database.hpp
 public_types/database_operation.hpp
 public_types/firefly_face_sdk.hpp

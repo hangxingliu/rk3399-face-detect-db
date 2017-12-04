@@ -3,12 +3,12 @@
 
 #include "opencv2/opencv.hpp"
 
-#include "api.hpp"
+#include "./api.hpp"
 #include "../public_types/base.hpp"
 #include "../public_types/capture.hpp"
 #include "../public_types/database_operation.hpp"
-#include "../config/types.hpp"
-#include "../config/methods.hpp"
+#include "../public_types/config.hpp"
+#include "../config/config.hpp"
 #include "../media_handlers/media_handlers.hpp"
 #include "../log/log.hpp"
 

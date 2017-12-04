@@ -1,14 +1,5 @@
-#ifndef CONFIG_CONSTANT_HPP
-#define CONFIG_CONSTANT_HPP 1
-
-const int LOG_TYPE_NONE = 0;
-const int LOG_TYPE_STDOUT = 1;
-const int LOG_TYPE_FILE = 2;
-const int LOG_TYPE_ALL = LOG_TYPE_STDOUT | LOG_TYPE_FILE;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef PUBLIC_TYPES_CONFIG_HPP
+#define PUBLIC_TYPES_CONFIG_HPP 1
 
 typedef struct GlobalConfigReadOnly {
 
@@ -51,10 +42,4 @@ typedef struct GlobalConfig {
 
 } GlobalConfig;
 
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // CONFIG_CONSTANT_HPP
+#endif // PUBLIC_TYPES_CONFIG_HPP

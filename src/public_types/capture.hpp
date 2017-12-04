@@ -1,6 +1,5 @@
 #include "./firefly_face_sdk.hpp"
 #include "./database.hpp"
-#include "../public_types/base.hpp"
 
 #ifndef PUBLIC_TYPES_CAPTURE_HPP
 #define PUBLIC_TYPES_CAPTURE_HPP
@@ -31,7 +30,7 @@ typedef struct CaptureRequestOptions {
 
 typedef struct CaptureFrameImage {
 	CaptureImageFormat format;
-	ubyteArray data;
+	unsigned char* data;
 	int w;
 	int h;
 } CaptureFrameImage;
