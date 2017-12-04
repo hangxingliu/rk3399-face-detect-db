@@ -14,12 +14,18 @@ typedef enum {
 	BGR = 2
 } CaptureImageFormat;
 
+/**
+ * @see getFrameFromCapture()
+ */
 typedef struct CaptureRequestOptions {
 
 	CaptureImageFormat imageFormat;
 
 	/** face detection will be happen in each request if this value equals **1** */
 	int disableMotionDetection = 0;
+
+	/** set this value as 1 if you want **allocate memory of `image.data` by yourself** */
+	int disableMallocImageDataArray = 0;
 
 } CaptureRequestOptions;
 
@@ -31,6 +37,7 @@ typedef struct CaptureFrameImage {
 } CaptureFrameImage;
 
 typedef struct CapturePersonInfo {
+
 	FF_FaceInfo info;
 
 	/** (0:not/1:got) is program got this feature info from this face */
@@ -43,9 +50,13 @@ typedef struct CapturePersonInfo {
 	char matchedUserId[DB_UserIdLength];
 
 	char addonInfoReserved[64];
+
 } CapturePersonInfo;
 typedef CapturePersonInfo* CapturePersonInfoArray;
 
+/**
+ * @see getFrameFromCapture()
+ */
 typedef struct CaptureFrameAndPersonInfo {
 	CaptureFrameImage image;
 
@@ -57,6 +68,7 @@ typedef struct CaptureFrameAndPersonInfo {
 	 * @see MAX_FACE_IN_ONE_CAPTURE_FRAME
 	 */
 	CapturePersonInfoArray person;
+
 } CaptureFrameAndFaceInfo;
 
 

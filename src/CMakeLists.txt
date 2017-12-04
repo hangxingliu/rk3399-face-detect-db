@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 # Reference: https://phonzia.github.io/2015/12/CMake
 
 project(rk3399-face-detect-db)
+set(TARGET_LIB_NAME rk3399_face_detect_db)
 
 # Add compile options
 # -std=c++11            use c++ 11 standard
@@ -38,7 +39,7 @@ if (CMAKE_FOR_ARM)
 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
-	set(ARM_FILE_NAME "arm64-")
+	set(ARM_FILE_NAME "arm64_")
 else()
 	# message("Linux-x86-64")
 endif()
@@ -48,7 +49,7 @@ endif()
 file(GLOB_RECURSE SOURCE_FILES . "**/*.cc" "**/*.cpp" "**/*.c")
 # aux_source_directory(. SOURCE_FILES)
 # add_executable("${PROJECT_NAME}.${BUILD_TYPE}" ${SOURCE_FILES})
-set(TARGET_SHARED_LIB "${ARM_FILE_NAME}${PROJECT_NAME}-${BUILD_TYPE}")
+set(TARGET_SHARED_LIB "${ARM_FILE_NAME}${TARGET_LIB_NAME}_${BUILD_TYPE}")
 add_library(${TARGET_SHARED_LIB} SHARED ${SOURCE_FILES})
 
 # using export symbols file

@@ -3,7 +3,7 @@
 		debugPingPong;
 		getDefaultGlobalConfig;
 		getFrameFromCapture;
-		init;
+		initDatabase;
 		removeUserFromDatabase;
 		updateUserFeaturesInDatabase;
 		updateUserInDatabase;
