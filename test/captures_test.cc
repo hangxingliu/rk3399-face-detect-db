@@ -1,3 +1,7 @@
+
+#define TEST_CAPTURE_FRAME_IMAGE_IN_INIT 0
+
+
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -25,6 +29,9 @@ int oldMain(){
 }
 
 int main() {
+#if TEST_CAPTURE_FRAME_IMAGE_IN_INIT
+	Capture_enableUnitTest();
+#endif
 	Capture_Init();
 	return 0;
 }

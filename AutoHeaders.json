@@ -28,6 +28,7 @@
 		"extern-c": false,
 		"input": [ "./src/media_handlers/capture.cc" ],
 		"include": [
+			"opencv2/opencv.hpp",
 			"../public_types/base.hpp",
 			"../public_types/capture.hpp"
 		]

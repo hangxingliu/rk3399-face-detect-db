@@ -30,15 +30,19 @@ target_link_libraries("cv_capture.gui" ${OpenCV_LIBS} )
 # Automatic Unit Test
 
 add_executable("cpp_base.${EXT_NAME}" cpp_test.cc ${UTILS})
+
 add_executable("log.${EXT_NAME}" log_test.cc ../src/log/methods.cc ${UTILS})
+
 add_executable("captures.${EXT_NAME}" captures_test.cc
 	../src/media_handlers/capture.cc
 	../src/log/methods.cc
 	../src/utils/convert2string.cc
 	${UTILS})
+target_link_libraries("captures.${EXT_NAME}" ${OpenCV_LIBS} )
 
 add_executable("call_release_so.${EXT_NAME}" call_release_so.test.cc)
-target_link_libraries("call_release_so.${EXT_NAME}" rk3399-face-detect-db-release)
+target_link_libraries("call_release_so.${EXT_NAME}" rk3399_face_detect_db_release)
+target_link_libraries("call_release_so.${EXT_NAME}" ${OpenCV_LIBS} )
 
 add_executable("jna-struct-test.${EXT_NAME}" jna_struct_test_so.cc ${UTILS})
 add_library("jna-struct-test" SHARED jna_struct_test_so.cc)
