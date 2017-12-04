@@ -17,6 +17,10 @@ function fatal() { echo -e "\n  error: $1\n"; exit 1;}
 
 [[ -z `which jq` ]] && fatal "could not find denpedency: \"jq\" (sudo apt install jq) <https://stedolan.github.io/jq/>";
 
+FORCE_REFRESH="false";
+if [[ "$1" == "-f" ]] || [[ "$1" == "--force" ]]; then FORCE_REFRESH="true"; fi
+[[ "$FORCE_REFRESH" == "true" ]] && echo "Force mode: on (ignore cache)";
+
 pushd $DIR;
 echo -e "[~] goto project root path";
 
@@ -38,7 +42,7 @@ while [[ $index -lt $CONFIG_LEN ]]; do
 
 	echo "[.] generating header ${CONFIG_NAME} into ${HPP} ...";
 
-	if [[ -f "$HPP" ]]; then
+	if [[ "$FORCE_REFRESH" == "false" ]] && [[ -f "$HPP" ]]; then
 		MD5SUM_ALL=`echo "$INPUT_MD5" | wc -l`;
 		MD5SUM_MATCHED=`echo "$INPUT_MD5" | awk '{print $1}' |
 			xargs -I _regexp grep "$HPP" -e _regexp | wc -l`;
