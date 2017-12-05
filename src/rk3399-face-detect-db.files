@@ -18,5 +18,8 @@ public_types/database.hpp
 public_types/database_operation.hpp
 public_types/firefly_face_sdk.hpp
 utils/convert2string.cc
+utils/fs.cc
 utils/memory.cc
+utils/opencv.cc
+utils/opencv.hpp
 utils/utils.hpp

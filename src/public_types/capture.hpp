@@ -8,9 +8,9 @@
 
 typedef enum {
 	/// Channel order: Red Green Blue
-	RGB = 1,
+	IMAGE_FORMAT_RGB = 1,
 	/// Channel order: Blue Green Red (**OpenCV default**)
-	BGR = 2
+	IMAGE_FORMAT_BGR = 2
 } CaptureImageFormat;
 
 /**
@@ -31,6 +31,7 @@ typedef struct CaptureRequestOptions {
 typedef struct CaptureFrameImage {
 	CaptureImageFormat format;
 	unsigned char* data;
+	int dataLength;
 	int w;
 	int h;
 } CaptureFrameImage;

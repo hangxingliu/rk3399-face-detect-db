@@ -13,7 +13,7 @@ void listCaptures(int* resultArray, int* length) {
 }
 
 int main() {
-	const char* FILE = "../../test/images/children-817365_1280.jpg";
+	const char* FILE = "./test/images/children-817365_1280.jpg";
 	const char* WINDOW = "demo";
 
 	auto image = imread(FILE);

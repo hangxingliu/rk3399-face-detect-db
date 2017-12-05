@@ -10,21 +10,6 @@
 int return1() { return 0, 1; }
 
 int main() {
-	if(sizeof(long) == 8) {
-		testPassed("sizeof(long) == 8");
-	} else {
-		char desc[SIZE];
-		sprintf(desc, "sizeof(long) != 8 but %zu", sizeof(long));
-		return testFailed(desc);
-	}
-
-	if(sizeof(float) == 4) {
-		testPassed("sizeof(float) == 4");
-	} else {
-		char desc[SIZE];
-		sprintf(desc, "sizeof(float) != 4 but %zu", sizeof(long));
-		return testFailed(desc);
-	}
 
 	char data[SIZE];
 	float a = 102.56, b = a, c = 0;

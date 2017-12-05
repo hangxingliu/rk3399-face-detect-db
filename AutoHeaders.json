@@ -35,9 +35,13 @@
 		"extern-c": false,
 		"input": [
 			"./src/utils/convert2string.cc",
-			"./src/utils/memory.cc"
+			"./src/utils/memory.cc",
+			"./src/utils/opencv.cc"
 		],
-		"include": []
+		"include": [
+			"opencv2/opencv.hpp",
+			"./opencv.hpp"
+		]
 	},
 
 
@@ -51,9 +55,9 @@
 		"include": []
 	}, {
 		"name": "JNA_STRUCT_TEST_SO",
-		"hpp": "./test/jna_struct_test_so.hpp",
+		"hpp": "./test/jna/jna_struct_test_so.hpp",
 		"extern-c": true,
-		"input": [ "./test/jna_struct_test_so.cc"],
+		"input": [ "./test/jna/jna_struct_test_so.cc"],
 		"include": [ "jna_struct_test_so_base.hpp" ]
 	}
 
