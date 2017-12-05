@@ -59,6 +59,10 @@ add_executable("captures.${EXT_NAME}" captures_test.cc
 	${TestUtilFiles})
 target_link_libraries("captures.${EXT_NAME}" ${OpenCV_LIBS} )
 
+add_executable("utils_fs.${EXT_NAME}" utils_fs_test.cc
+	../src/utils/fs.cc
+	${TestUtilFiles})
+
 add_executable("call_release_so.${EXT_NAME}" call_release_so_test.cc)
 target_link_libraries("call_release_so.${EXT_NAME}" rk3399_face_detect_db_release)
 target_link_libraries("call_release_so.${EXT_NAME}" ${OpenCV_LIBS} )

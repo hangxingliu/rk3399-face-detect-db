@@ -1,4 +1,5 @@
 CMakeLists.txt
+call_debug_so_test.cc
 call_release_so_test.cc
 captures_test.cc
 cpp_malloc_sizeof_test.cc
@@ -16,3 +17,4 @@ jna/jna_struct_test_so_base.hpp
 log_test.cc
 utils/index.cc
 utils/index.hpp
+utils_fs_test.cc
