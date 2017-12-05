@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SECONDS=0;
+
 # get directory this script located in
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -13,6 +15,7 @@ LIB_TARGET_DEBUG="$DIR/../build/debug"
 LIB_TARGET_RELEASE="$DIR/../build/release"
 
 TEST_SRC="$DIR/../test"
+TEST_SRC_ARM="$DIR/../test-arm"
 TEST_TARGET_DEBUG="$DIR/../build/test-debug"
 TEST_TARGET_RELEASE="$DIR/../build/test-release"
 TEST_EXECUTE_FILE_EXT="test.bin";
@@ -57,8 +60,9 @@ function gotoDirectory() {
 		fi
 	fi
 }
-function fatal() { echo -e "\n  ${RED}error: $1$RESET\n"; exit 1; }
-function finish() { echo -e "\n  ${GREEN}success: $1$RESET\n";}
+function exitWithTimer() { echo -e "exit with ${1} (${SECONDS} seconds elapsed)"; exit $1; }
+function fatal() { echo -e "\n  ${RED}error: $1$RESET\n"; exitWithTimer 1; }
+function finish() { echo -e "\n  ${GREEN}success: $1$RESET\n"; }
 function removeIfExisted() {
 	for f in "$@"; do
 		if [[ -d "$f" ]]; then rm -rf "$f" || fatal "remove directory \"$f\" failed!"; fi
@@ -141,7 +145,7 @@ if [[ "$ACTION" == "clean-all" ]]; then
 		"$TEST_TARGET_DEBUG" "$TEST_TARGET_RELEASE";
 
 	finish "cleaned all build target directories!";
-	exit 0;
+	exitWithTimer 0;
 fi
 
 
@@ -166,7 +170,7 @@ if [[ "$ACTION" == "cmake" ]]; then
 	resolveHeaderFiles;
 	[[ -n "$IS_ARM" ]] &&
 		executeCMakeForARM $BUILD_TYPE $LIB_SRC || executeCMake $BUILD_TYPE $LIB_SRC;
-	exit 0;
+	exitWithTimer 0;
 fi
 
 if [[ "$ACTION" == "build" ]]; then # include: `build` and `build-arm`
@@ -177,7 +181,7 @@ if [[ "$ACTION" == "build" ]]; then # include: `build` and `build-arm`
 	fi
 	resolveHeaderFiles;
 	executeMakeBuild $BUILD_TYPE;
-	exit 0;
+	exitWithTimer 0;
 fi
 
 if [[ "$ACTION" == "test" ]]; then
@@ -199,7 +203,7 @@ if [[ "$ACTION" == "test" ]]; then
 			fi
 		done
 
-	exit $?;
+	exitWithTimer $?;
 fi
 
 # <<<<<<<<<<<<<<<<<<<<<<<<<<
