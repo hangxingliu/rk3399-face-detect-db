@@ -35,7 +35,7 @@ function usage() {
 	echo '    clean-all             :  just remove build folder';
 	echo '';
 	echo '  BuildType:';
-	echo '    debug, release';
+	echo '    debug, release, all';
 	echo '';
 	echo '  Examples:';
 	echo '';
@@ -135,6 +135,7 @@ if [[ "$ACTION" != "clean-all" ]]; then
 		BUILD_TYPE="debug";
 	fi
 	[[ "$BUILD_TYPE" != "debug" ]] && [[ "$BUILD_TYPE" != "release" ]] &&
+	[[ "$BUILD_TYPE" != "all" ]] &&
 		fatal "Invalid BuildType! (usage: --help)";
 fi
 # ===================================
@@ -163,6 +164,14 @@ elif [[ "$ACTION" == "test" ]]; then
 	TARGET_PATH="$TEST_TARGET_DEBUG";
 fi
 if [[ -n "$IS_ARM" ]]; then TARGET_PATH="$TARGET_PATH-arm"; fi
+
+
+
+if [[ "$BUILD_TYPE" == "all" ]]; then
+	"$SOURCE" "$ACTION" "debug" "$IS_ARM" &&
+	"$SOURCE" "$ACTION" "release" "$IS_ARM" &&
+		exitWithTimer 0 || exit 1;
+fi
 
 gotoDirectory "$TARGET_PATH";
 
