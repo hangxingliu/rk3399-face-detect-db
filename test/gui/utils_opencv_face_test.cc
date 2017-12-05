@@ -45,7 +45,7 @@ int main() {
 
 	Scalar color = CV_RGB(255, 0, 0);
 	for (int i = 0; i < length;i++) {
-		auto rect = result[i];
+		Rect rect = result[i];
 		rectangle(image, rect, color, 2);
 	}
 

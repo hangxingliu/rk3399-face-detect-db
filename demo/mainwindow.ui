@@ -69,13 +69,13 @@
      <string>Dump</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="txtDebug">
     <property name="geometry">
      <rect>
       <x>480</x>
       <y>80</y>
       <width>211</width>
-      <height>311</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -84,6 +84,29 @@ color: rgb(255, 255, 255);</string>
     </property>
     <property name="text">
      <string>Debug Information:</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+    <property name="margin">
+     <number>5</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="txtCounter">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>360</y>
+      <width>211</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(85, 87, 83);
+color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Count: --</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

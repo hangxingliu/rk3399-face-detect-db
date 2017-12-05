@@ -32,7 +32,8 @@ SOURCES += \
         mainwindow.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    face_manager.hpp
 
 FORMS += \
         mainwindow.ui

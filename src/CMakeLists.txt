@@ -40,6 +40,8 @@ if (CMAKE_FOR_ARM)
 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 	set(ARM_FILE_NAME "arm64_")
+
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFOR_ARM")
 else()
 	# message("Linux-x86-64")
 endif()

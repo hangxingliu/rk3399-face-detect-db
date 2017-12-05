@@ -64,8 +64,14 @@ unsigned char* copyBGRMat2DataArray(
 static cv::CascadeClassifier faceHaarCascade;
 bool initFaceHaarCascade(const char* haarcascadeXML) {
 	if(faceHaarCascade.empty()) {
-		return faceHaarCascade.load(haarcascadeXML);
+		if(!faceHaarCascade.load(haarcascadeXML)) {
+			char str[512];
+			sprintf(str, "init face haar cascade from %s failed!", haarcascadeXML);
+			LOG_FATAL(str);
+			return false;
+		}
 	}
+	LOG_DEBUG2("Initialized face haar cascade from ", haarcascadeXML);
 	return true;
 }
 bool detectFace(
