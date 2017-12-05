@@ -13,6 +13,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE")
 
 link_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/../build/release"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../build/debug"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../libs" )
 find_package( OpenCV REQUIRED )
 
@@ -61,6 +62,10 @@ target_link_libraries("captures.${EXT_NAME}" ${OpenCV_LIBS} )
 add_executable("call_release_so.${EXT_NAME}" call_release_so_test.cc)
 target_link_libraries("call_release_so.${EXT_NAME}" rk3399_face_detect_db_release)
 target_link_libraries("call_release_so.${EXT_NAME}" ${OpenCV_LIBS} )
+
+add_executable("call_debug_so.${EXT_NAME}" call_debug_so_test.cc)
+target_link_libraries("call_debug_so.${EXT_NAME}" rk3399_face_detect_db_debug)
+target_link_libraries("call_debug_so.${EXT_NAME}" ${OpenCV_LIBS} )
 
 add_executable("jna-struct-test.${EXT_NAME}" jna/jna_struct_test_so.cc ${TestUtilFiles})
 add_library("jna-struct-test" SHARED jna/jna_struct_test_so.cc)
