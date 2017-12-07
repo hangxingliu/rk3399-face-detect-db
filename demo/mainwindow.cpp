@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	faces = new FaceManager();
 
-	auto ok = initDatabase(NULL);
+	auto ok = face_init(NULL);
 	FLUSH_STDOUT();
 	if(ok != 0 ) {
 		QMessageBox::critical(NULL, "Initialize failed!", "Details in stdout");
@@ -58,48 +58,45 @@ void MainWindow::on_timerCapture_ticked() {
 	ui->txtCounter->setText(uiStringBuffer);
 	timerCapture->stop();
 
-	CaptureRequestOptions opts;
-	CaptureFrameAndFaceInfo info;
+	Capture_FrameImageInfo info;
+	Capture_FrameRequestOpts opts;
 
-	int disableFaceDetection = counter & 7; // 0, 8, 16 ... detect face
-	opts.disableFaceDetection = disableFaceDetection;
+//	auto ok = getFrameFromCapture(NULL, &info);
 
-	auto ok = getFrameFromCapture(NULL, &info);
+////	printf("getFrameFromCapture() return: %d { w: %d, h: %d, size: %d }\n", ok,
+////		info.image.w, info.image.h, info.image.dataLength);
 
-//	printf("getFrameFromCapture() return: %d { w: %d, h: %d, size: %d }\n", ok,
-//		info.image.w, info.image.h, info.image.dataLength);
+//	if(ok == 0) {
+////		printf("(after)  info.image.data: %p\n", info.image.data);
 
-	if(ok == 0) {
-//		printf("(after)  info.image.data: %p\n", info.image.data);
+//		if(!disableFaceDetection) {
+//			faces->clear();
+//			for(int i = 0 ; i < info.personCount; i ++ ) {
+//				auto p = &(info.persons[i]);
+//				faces->add(p->x0, p->y0, p->x1, p->y1);
+//			}
 
-		if(!disableFaceDetection) {
-			faces->clear();
-			for(int i = 0 ; i < info.personCount; i ++ ) {
-				auto p = &(info.persons[i]);
-				faces->add(p->x0, p->y0, p->x1, p->y1);
-			}
+//			if(info.personCount && info.persons)
+//				free(info.persons);
+//		}
 
-			if(info.personCount && info.persons)
-				free(info.persons);
-		}
+//		sprintf(uiStringBuffer, "FaceCount: %d", faces->count);
+//		ui->txtDebug->setText(uiStringBuffer);
 
-		sprintf(uiStringBuffer, "FaceCount: %d", faces->count);
-		ui->txtDebug->setText(uiStringBuffer);
+//		cv::Mat image(info.image.h, info.image.w, CV_8UC3, info.image.data);
+//		faces->drawToImage(image);
 
-		cv::Mat image(info.image.h, info.image.w, CV_8UC3, info.image.data);
-		faces->drawToImage(image);
+//		QImage qImage = QImage(image.data, image.cols, image.rows, image.cols * 3,
+//			QImage::Format_RGB888);
+//		ui->imgDisplay->setPixmap(QPixmap::fromImage(qImage));
 
-		QImage qImage = QImage(image.data, image.cols, image.rows, image.cols * 3,
-			QImage::Format_RGB888);
-		ui->imgDisplay->setPixmap(QPixmap::fromImage(qImage));
+//		free(info.image.data);
 
-		free(info.image.data);
-
-		//re-enable timer
-		timerCapture->start();
-	} else {
-		printf("Fatal: getFrameFromCapture => %d\n", ok);
-	}
+//		//re-enable timer
+//		timerCapture->start();
+//	} else {
+//		printf("Fatal: getFrameFromCapture => %d\n", ok);
+//	}
 
 	FLUSH_STDOUT();
 }

@@ -6,12 +6,12 @@
 #include<stdio.h>
 
 extern "C" {
-	int debugPingPong(int ping);
+	int face_ping_pong(int ping);
 }
 
 int main() {
 	int pingNumber = 63;
-	printf("ping(%d) == %d\n", pingNumber, debugPingPong(pingNumber));
+	printf("ping(%d) == %d\n", pingNumber, face_ping_pong(pingNumber));
 	printf("call debug shared library success!\n");
 	return 0;
 }
