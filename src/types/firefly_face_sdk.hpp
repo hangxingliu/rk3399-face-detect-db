@@ -1,3 +1,5 @@
+#include "./base.hpp"
+
 #ifndef PUBLIC_TYPES_FIREFLY_FACE_HPP
 #define PUBLIC_TYPES_FIREFLY_FACE_HPP 1
 
@@ -63,13 +65,13 @@ typedef struct FF_FaceInfo {
 	float quality;
 } FF_FaceInfo;
 
-#define FF_FACE_FEATURE_LEN 6000
+
 /**
  * Firefly Face SDK Face Features(len, data[6000])
  */
 typedef struct FF_FaceFeatures {
 	int len;
-	float data[FF_FACE_FEATURE_LEN];
+	float data[FACE_FEATURE_LENGTH];
 } FF_FaceFeatures;
 
 #ifdef __cplusplus

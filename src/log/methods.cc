@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<time.h>
-#include "../public_types/base.hpp"
+#include "../types/base.hpp"
 #include "./methods.hpp"
 
 #define SHORT_DATE_PREFIX 0

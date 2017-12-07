@@ -1,0 +1,7 @@
+#ifndef GLOBAL__CONSTANT_HPP
+#define GLOBAL__CONSTANT_HPP 1
+
+
+#define MAX_FRAME_DATA 16
+
+#endif // GLOBAL__CONSTANT_HPP

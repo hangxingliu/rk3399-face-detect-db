@@ -3,6 +3,7 @@
 /// { DB_BaseUserItem(Fixed Size) DB_BaseUserItem_LastMatched(Dynamic Size)  ..0.. }
 /// Each item max size: 64Kb
 
+#include "./base.hpp"
 #include "./firefly_face_sdk.hpp"
 
 #ifndef PUBLIC_TYPES_DATABASE_HPP
@@ -12,12 +13,13 @@
 #define DB_False 0
 typedef unsigned char DB_Boolean;
 
-#define DB_UserIdLength 64
-
 // size: 64 * 1024 = 65536 = 64Kb
 #define DB_BaseUserItemMaxSize 65536
 
 typedef struct DB_BaseUserItem_LastMatched {
+	/// 0: disable
+	int version = 0;
+
 	long timestamp;
 
 	float compareScore;
@@ -55,7 +57,7 @@ typedef struct DB_BaseUserItem {
 
 	int priority;
 
-	char userId[DB_UserIdLength];
+	char userId[USERID_LENGTH];
 
 	/** length:  6000 * 4 + 4 = 24004 = 24Kb */
 	FF_FaceFeatures features;

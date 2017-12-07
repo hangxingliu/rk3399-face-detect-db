@@ -1,6 +1,5 @@
-#include "./config.hpp"
-#include "../public_types/api_error_no.hpp"
-#include "../public_types/config.hpp"
+#include "./global.hpp"
+#include "../types/api_error_no.hpp"
 
 /** Global configurations instance */
 GlobalConfig Config;

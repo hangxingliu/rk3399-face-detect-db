@@ -1,7 +1,7 @@
 #include "opencv2/opencv.hpp"
 
 #include "./utils.hpp"
-#include "../public_types/base.hpp"
+#include "../types/base.hpp"
 #include "../log/log.hpp"
 #include "./opencv.hpp"
 

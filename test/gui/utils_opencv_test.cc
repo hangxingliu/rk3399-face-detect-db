@@ -10,7 +10,7 @@
 
 #include "opencv2/opencv.hpp"
 #include "../utilities/index.hpp"
-#include "../../src/public_types/base.hpp"
+#include "../../src/types/base.hpp"
 #include "../../src/utils/utils.hpp"
 
 #define SIZE 1024

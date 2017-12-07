@@ -9,8 +9,8 @@
 #include "opencv2/opencv.hpp"
 
 #include "../log/log.hpp"
-#include "../public_types/base.hpp"
-#include "../public_types/capture.hpp"
+#include "../types/base.hpp"
+#include "../types/capture.hpp"
 
 /// Default capture device id. 0 => /dev/video0
 const int defaultCapture = 0;
@@ -41,7 +41,7 @@ static void copyStrInV4L2Capability(char* to, __u8* from) {
 		if(v > 127) v = ' ';
 		*p1++ = (char) v;
 	}
-	p1='\0';
+	*p1='\0';
 }
 void physicalCaptureDeviceToString(char* result, PhysicalCaptureDevice* dev, bool markAsUse) {
 	if(dev->available)

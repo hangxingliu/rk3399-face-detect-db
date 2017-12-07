@@ -1,4 +1,4 @@
-#include <string.h>
+#include "./base.hpp"
 
 #ifndef PUBLIC_TYPES_CONFIG_HPP
 #define PUBLIC_TYPES_CONFIG_HPP 1
@@ -22,13 +22,13 @@ typedef struct GlobalConfig {
 
 	/**
 	 * Init database file size(minimum file size)
-	 * @default 4 * 1024 * 1024 (4MB)
+	 * default **4 * 1024 * 1024 (4MB)**
 	 */
 	long initDatabaseFileSize = 4 * 1024 * 1024l;
 
 	/**
 	 * Max database file size
-	 * @default 3 * 1024 * 1024 * 1024 (3GB)
+	 * default **3 * 1024 * 1024 * 1024 (3GB)**
 	 */
 	long maxDatabaseFileSize = 3 * 1024 * 1024 * 1024l;
 

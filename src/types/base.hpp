@@ -8,6 +8,15 @@
 #ifndef PUBLIC_TYPES_BASE_HPP
 #define PUBLIC_TYPES_BASE_HPP 1
 
+#define USERID_LENGTH 64
+#define FACE_FEATURE_LENGTH 6000
+
+// =================================
+
+#ifndef API_OUT
+	#define API_OUT
+#endif
+
 #define LOOP(var,from,to,step) for(int var = from ; var < to ; var += step)
 #define LOOP_TIMES(var, times) LOOP(var, 0, times, 1)
 

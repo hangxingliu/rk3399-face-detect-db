@@ -1,5 +1,5 @@
 #include "./firefly_faceverify_version.hpp";
-#include "../public_types/firefly_face_sdk.hpp"
+#include "../types/firefly_face_sdk.hpp"
 
 #ifndef FIREFLY_FACEVERIFY_HPP
 #define FIREFLY_FACEVERIFY_HPP 1

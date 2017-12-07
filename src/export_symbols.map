@@ -1,11 +1,10 @@
 {
 	global:
-		debugPingPong;
-		getFrameFromCapture;
-		initDatabase;
-		removeUserFromDatabase;
-		updateUserFeaturesInDatabase;
-		updateUserInDatabase;
+		face_detect;
+		face_get_frame;
+		face_init;
+		face_ping_pong;
+		face_update;
 
 	local: *;
 };
