@@ -1,3 +1,7 @@
+/// TestEntry: cv_capture
+/// Link: ${OpenCV_LIBS}
+/// ----------------------
+
 #include <stdio.h>
 #include "opencv2/opencv.hpp"
 

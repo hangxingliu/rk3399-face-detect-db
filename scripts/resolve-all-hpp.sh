@@ -17,19 +17,19 @@ function fatal() { echo -e "\n  error: $1\n"; exit 1;}
 
 [[ -z `which jq` ]] && fatal "could not find denpedency: \"jq\" (sudo apt install jq) <https://stedolan.github.io/jq/>";
 
-FORCE_REFRESH="false";
-if [[ "$1" == "-f" ]] || [[ "$1" == "--force" ]]; then FORCE_REFRESH="true"; fi
+[[ -n `echo "$*" | awk '/-q/||/quiet/'` ]] && QUIET=true || QUIET=false;
+[[ -n `echo "$*" | awk '/-f/||/force/'` ]] && FORCE_REFRESH=true || FORCE_REFRESH=false;
+
 [[ "$FORCE_REFRESH" == "true" ]] && echo "Force mode: on (ignore cache)";
 
-pushd $DIR;
-echo -e "[~] goto project root path";
+cd $DIR;
 
 CONFIG_CONTENT=`cat $CONFIG_FILE`;
 # paramter => $1: json selector
 function json() { echo "$CONFIG_CONTENT" | jq "$1" -r; }
 
 CONFIG_LEN=`json 'length'`;
-echo "[~] found $CONFIG_LEN configurations in ${CONFIG_FILE}";
+[[ "$QUIET" == "true" ]] || echo "[~] found $CONFIG_LEN configurations in ${CONFIG_FILE}";
 
 index=0;
 while [[ $index -lt $CONFIG_LEN ]]; do
@@ -40,7 +40,7 @@ while [[ $index -lt $CONFIG_LEN ]]; do
 	INPUT_MD5=`json .[${index}].input[] | xargs -I _f md5sum _f`;
 	INCLUDE=`json .[${index}].include[] | awk '{printf("--include=" $0 " ")}'`
 
-	echo "[.] generating header ${CONFIG_NAME} into ${HPP} ...";
+	[[ "$QUIET" == "true" ]] || echo "[.] generating header ${CONFIG_NAME} into ${HPP} ...";
 
 	if [[ "$FORCE_REFRESH" == "false" ]] && [[ -f "$HPP" ]]; then
 		MD5SUM_ALL=`echo "$INPUT_MD5" | wc -l`;
@@ -48,7 +48,7 @@ while [[ $index -lt $CONFIG_LEN ]]; do
 			xargs -I _regexp grep "$HPP" -e _regexp | wc -l`;
 
 		if [[ "$MD5SUM_ALL" == "$MD5SUM_MATCHED" ]]; then
-			echo -e "[~] keep old header file because it is not modified.\n";
+			[[ "$QUIET" == "true" ]] || echo -e "[~] keep old header file because it is not modified.\n";
 
 			index=$[$index+1];
 			continue;
@@ -59,10 +59,13 @@ while [[ $index -lt $CONFIG_LEN ]]; do
 	else EXTERNC=""; fi
 	COMMAND="${GENERATOR} --name=${CONFIG_NAME} --output=${HPP} ${EXTERNC} ${INPUT} ${INCLUDE}";
 
-	$COMMAND &&
-		echo "${INPUT_MD5}" |
-			awk 'BEGIN {print "\n// md5sum:";} {print "// " $0;}' >> "$HPP"  &&
-		echo -e "[~] generated!\n" || fatal "generate failed!";
+	$COMMAND && echo "${INPUT_MD5}" | awk 'BEGIN {print "\n// md5sum:";} {print "// " $0;}' >> "$HPP";
+
+	if [[ "$?" == "0" ]]; then
+		[[ "$QUIET" == "true" ]] || echo -e "[~] generated!\n";
+	else
+		fatal "generate failed!";
+	fi
 
 	index=$[$index+1];
 done

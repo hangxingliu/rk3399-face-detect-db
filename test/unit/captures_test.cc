@@ -1,3 +1,9 @@
+/// TestEntry: capture_module
+/// With: ../src/media_handlers/capture.cc
+/// With: ../src/log/methods.cc
+/// With: ../src/utils/convert2string.cc
+/// Link: ${OpenCV_LIBS}
+/// ----------------------
 
 #define TEST_CAPTURE_FRAME_IMAGE_IN_INIT 0
 
@@ -8,7 +14,7 @@
 #include <sys/ioctl.h>
 #include <linux/videodev2.h>
 
-#include "../src/media_handlers/media_handlers.hpp"
+#include "../../src/media_handlers/media_handlers.hpp"
 
 int oldMain(){
     int fd;

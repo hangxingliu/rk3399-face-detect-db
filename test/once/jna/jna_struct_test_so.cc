@@ -1,4 +1,7 @@
 /// This test unit is used for testing jna object mapping rules
+/// TestEntry: jna_struct_test
+/// SharedEntry: jna_struct_test
+/// -----------------------------
 
 #include<stdio.h>
 #include<stdlib.h>

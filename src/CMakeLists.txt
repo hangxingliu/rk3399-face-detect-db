@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 # Reference: https://phonzia.github.io/2015/12/CMake
 
+option(CMAKE_FOR_ARM "Set this variable to ON if you compile this project on arm board" OFF)
+
 project(rk3399-face-detect-db)
 set(TARGET_LIB_NAME rk3399_face_detect_db)
 
@@ -23,26 +25,27 @@ else()
 	message(FATAL_ERROR "fatal: unknwon CMAKE_BUILD_TYPE: \"${CMAKE_BUILD_TYPE}\" (available type: debug/release)")
 endif()
 
-set(ARM_FILE_NAME "")
+# set(ARM_FILE_NAME "")
 if (CMAKE_FOR_ARM)
-	# message("ARM64")
-	set(CMAKE_SYSTEM_NAME "Linux")
-	set(CMAKE_SYSTEM_VERSION 1)
-
-	set(CMAKE_C_COMPILER "/usr/bin/aarch64-linux-gnu-gcc-6")
-	set(CMAKE_CXX_COMPILER "/usr/bin/aarch64-linux-gnu-g++-6")
-
-
-	# search for programs in the build host directories
-	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-	# for libraries and headers in the target directories
-	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-
-	set(ARM_FILE_NAME "arm64_")
-
+	message("CMake for aarch64(arm) platform ...")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFOR_ARM")
-else()
+
+# 	set(CMAKE_SYSTEM_NAME "Linux")
+# 	set(CMAKE_SYSTEM_VERSION 1)
+
+# 	set(CMAKE_C_COMPILER "/usr/bin/aarch64-linux-gnu-gcc-6")
+# 	set(CMAKE_CXX_COMPILER "/usr/bin/aarch64-linux-gnu-g++-6")
+
+
+# 	# search for programs in the build host directories
+# 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+# 	# for libraries and headers in the target directories
+# 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+# 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+# 	set(ARM_FILE_NAME "arm64_")
+
+# else()
 	# message("Linux-x86-64")
 endif()
 
@@ -51,7 +54,7 @@ endif()
 file(GLOB_RECURSE SOURCE_FILES . "**/*.cc" "**/*.cpp" "**/*.c")
 # aux_source_directory(. SOURCE_FILES)
 # add_executable("${PROJECT_NAME}.${BUILD_TYPE}" ${SOURCE_FILES})
-set(TARGET_SHARED_LIB "${ARM_FILE_NAME}${TARGET_LIB_NAME}_${BUILD_TYPE}")
+set(TARGET_SHARED_LIB "${TARGET_LIB_NAME}_${BUILD_TYPE}")
 add_library(${TARGET_SHARED_LIB} SHARED ${SOURCE_FILES})
 
 # using export symbols file

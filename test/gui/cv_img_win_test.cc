@@ -1,3 +1,7 @@
+/// TestEntry: cv_img_window
+/// Link: ${OpenCV_LIBS}
+/// ----------------------
+
 #include <stdio.h>
 #include "opencv2/opencv.hpp"
 #include "opencv2/highgui/highgui.hpp"

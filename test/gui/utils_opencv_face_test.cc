@@ -1,8 +1,15 @@
+/// TestEntry: utils_opencv_face
+/// With: ../src/utils/convert2string.cc
+/// With: ../src/utils/opencv.cc
+/// With: ../src/log/methods.cc
+/// Link: ${OpenCV_LIBS}
+/// ----------------------
+
 #include<stdio.h>
 #include<string.h>
 
 #include "opencv2/opencv.hpp"
-#include "../utils/index.hpp"
+#include "../utilities/index.hpp"
 #include "../../src/public_types/base.hpp"
 #include "../../src/utils/utils.hpp"
 

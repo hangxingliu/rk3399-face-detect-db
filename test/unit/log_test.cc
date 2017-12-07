@@ -1,11 +1,15 @@
+/// TestEntry: log_module
+/// With: ../src/log/methods.cc
+/// ----------------------
+
 #define DELAY_TEST 0
 #define IGNORE_OUTPUT_TEST 1
 
 #include<stdio.h>
 #include<string.h>
 #include<unistd.h>
-#include "./utils/index.hpp"
-#include "../src/log/log.hpp"
+#include "../utilities/index.hpp"
+#include "../../src/log/log.hpp"
 
 #define SIZE 128
 

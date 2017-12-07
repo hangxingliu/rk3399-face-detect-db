@@ -50,15 +50,15 @@
 
 	{
 		"name": "TEST_UTILS_INDEX",
-		"hpp": "./test/utils/index.hpp",
+		"hpp": "./test/utilities/index.hpp",
 		"extern-c": false,
-		"input": ["./test/utils/index.cc"],
+		"input": ["./test/utilities/index.cc"],
 		"include": []
 	}, {
 		"name": "JNA_STRUCT_TEST_SO",
-		"hpp": "./test/jna/jna_struct_test_so.hpp",
+		"hpp": "./test/once/jna/jna_struct_test_so.hpp",
 		"extern-c": true,
-		"input": [ "./test/jna/jna_struct_test_so.cc"],
+		"input": [ "./test/once/jna/jna_struct_test_so.cc"],
 		"include": [ "jna_struct_test_so_base.hpp" ]
 	}
 

@@ -15,10 +15,9 @@ LIB_TARGET_DEBUG="$DIR/../build/debug"
 LIB_TARGET_RELEASE="$DIR/../build/release"
 
 TEST_SRC="$DIR/../test"
-TEST_SRC_ARM="$DIR/../test-arm"
 TEST_TARGET_DEBUG="$DIR/../build/test-debug"
 TEST_TARGET_RELEASE="$DIR/../build/test-release"
-TEST_EXECUTE_FILE_EXT="test.bin";
+TEST_EXECUTE_FILE_EXT="_unit.test";
 
 GREEN="\x1b[1;32m"
 RED="\x1b[1;31m"
@@ -26,7 +25,7 @@ BLUE="\x1b[1;34m"
 RESET="\x1b[0m"
 function usage() {
 	echo '';
-	echo '  Usage: ./scripts/build.sh <Action> [BuildType] [--arm]';
+	echo '  Usage: ./scripts/build.sh <$Action> --[$BuildType] [--arm] [-j$N] -D[$CMAKE_VAR=$VAL]...';
 	echo '';
 	echo '  Action:';
 	echo '    cmake [BuildType]     :  clean build folder and redo cmake command';
@@ -35,12 +34,15 @@ function usage() {
 	echo '    clean-all             :  just remove build folder';
 	echo '';
 	echo '  BuildType:';
-	echo '    debug, release, all';
-	echo '';
+	echo '    debug (in default), release, all';
+	echo '  ';
+	echo '  `--arm`` is same with `-DCMAKE_FOR_ARM=ON`';
+	echo '  ';
 	echo '  Examples:';
 	echo '';
-	echo '    ./scripts/build.sh cmake DEBUG';
-	echo '    ./scripts/build.sh build TEST';
+	echo '    ./scripts/build.sh cmake --all';
+	echo '    ./scripts/build.sh build --debug -j8';
+	echo '    ./scripts/build.sh test --debug --release --arm -DNoGUI=ON'
 	echo '';
 	exit 0;
 }
@@ -71,25 +73,20 @@ function removeIfExisted() {
 function executeCMake() {
 	# $1 BUILD_TYPE $2 SOURCE_FOLDER $3 IS_TEST_PROJ
 	IS_TEST="";  if [[ -n "$3" ]]; then IS_TEST="(test)"; fi
-	cmake -DCMAKE_BUILD_TYPE="$1" "$2";
+	cmake -DCMAKE_BUILD_TYPE="$1" $CMAKE_OPTS "$2";
 	[[ "$?" == "0" ]] && finish "cmake for $1$IS_TEST" || fatal "cmake for $1$IS_TEST failed!";
-}
-function executeCMakeForARM() {
-	# $1 BUILD_TYPE $2 SOURCE_FOLDER
-	cmake -DCMAKE_FOR_ARM="TRUE" -DCMAKE_BUILD_TYPE="$1" "$2";
-	[[ "$?" == "0" ]] && finish "cmake for $1(arm)" || fatal "cmake for $1(arm) failed!";
 }
 function executeMakeBuild() {
 	# $1 BUILD_TYPE $2 IS_TEST_PROJ
 	IS_TEST="";  if [[ -n "$2" ]]; then IS_TEST="(test)"; fi
-	make;
+	make -j$MAKE_J;
 	[[ "$?" == "0" ]] && finish "building by make for $1$IS_TEST" ||
 		fatal "building by make for $1$IS_TEST failed!";
 }
 function executeUnitTest() {
 	TEST_FILE="$1";
 	TEST_ALL=$(($TEST_ALL+1));
-	TEST_NAME="${TEST_FILE%.${TEST_EXECUTE_FILE_EXT}}";
+	TEST_NAME="${TEST_FILE%${TEST_EXECUTE_FILE_EXT}}";
 	echo -e "${BLUE}[.] testing ${TEST_NAME} ...${RESET}";
 
 	"./$TEST_FILE" # execute test binary file
@@ -102,7 +99,7 @@ function executeUnitTest() {
 	fi
 }
 function resolveHeaderFiles() {
-	bash ../../scripts/resolve-all-hpp.sh;
+	bash ../../scripts/resolve-all-hpp.sh --quiet;
 	RESULT_RESULT=$?;
 	[[ "$RESULT_RESULT" == "0" ]] && finish "resolved (generated) header files!" ||
 		fatal "resolve header files failed!";
@@ -113,36 +110,42 @@ function resolveHeaderFiles() {
 #   M a i n    >>>>>>>>>>>>>>>>>
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-ACTION="$1"
-BUILD_TYPE="$2"
-IS_ARM="$3"
-if [[ "$BUILD_TYPE" == "--arm" ]]; then BUILD_TYPE=""; IS_ARM="--arm"; fi
-
-# ===================================
-#       Checking  Arguments
-# ===================================
-IS_HELP=`echo "$*" | grep -e "-h"`
-[[ -n "$IS_HELP" ]] && usage;
-[[ "$ACTION" == "help" ]] && usage;
-
-VALID_ACTION="{cmake},{build},{test},{clean-all}";
-[[ -z "$ACTION" ]] && fatal "Action is missing! (usage: --help)";
-[[ "$VALID_ACTION" == *$ACTION* ]] || fatal "Invalid Action! (usage: --help)";
-
-if [[ "$ACTION" != "clean-all" ]]; then
-	if [[ -z "$BUILD_TYPE" ]]; then
-		echo -e "\n  ${BLUE}info: Using default build type: debug (usage: --help)${RESET}\n";
-		BUILD_TYPE="debug";
+ACTION=""
+BUILD_TYPE="";
+MAKE_J="8";
+CMAKE_OPTS="";
+IS_ARM=0;
+for opt in "$@"; do
+	if [[ "$opt" == "--help" ]] || [[ "$opt" == "-h" ]] || [[ "$opt" == "help" ]]; then usage;
+	elif [[ "$opt" == "--arm" ]]; then CMAKE_OPTS="${CMAKE_OPTS} -DCMAKE_FOR_ARM=ON";
+	elif [[ "$opt" == -j* ]]; then MAKE_J="${opt#-j}";
+	elif [[ "$opt" == "--debug" ]] || [[ "$opt" == "--release" ]] || [[ "$opt" == "--all" ]]; then
+		_opt="${opt#--}";
+		if [[ -z "$BUILD_TYPE" ]]; then BUILD_TYPE="${_opt}";
+		else BUILD_TYPE=`echo -e "${BUILD_TYPE}\n${_opt}" | sort | uniq`;
+			[[ `echo -e "${BUILD_TYPE}" | wc -l` == "2" ]] && BUILD_TYPE="all";
+		fi
+	elif [[ "$opt" == -D*=* ]]; then CMAKE_OPTS="${CMAKE_OPTS} $opt";
+	elif [[ "$opt" == --* ]]; then fatal "unknown option '${opt}' (usage: --help)";
+	elif [[ -n `echo "$opt" | awk '/^cmake$/||/^build$/||/^test$/||/^clean-all$/'` ]]; then ACTION="$opt";
+	else fatal "unknown action: '${opt}' (usage: --help)";
 	fi
-	[[ "$BUILD_TYPE" != "debug" ]] && [[ "$BUILD_TYPE" != "release" ]] &&
-	[[ "$BUILD_TYPE" != "all" ]] &&
-		fatal "Invalid BuildType! (usage: --help)";
+done
+
+[[ -n `echo "$CMAKE_OPTS" | grep "DCMAKE_FOR_ARM"` ]] && IS_ARM=1 || IS_ARM=0;
+[[ -z "$ACTION" ]] && fatal "Action is missing! (usage: --help)";
+if [[ -z "$BUILD_TYPE" ]]; then
+	[[ "$ACTION" == "clean-all" ]] ||
+		echo -e "${BLUE}info: Using default build type: debug (usage: --help)${RESET}";
+	BUILD_TYPE="debug";
 fi
+echo -e "action    : $ACTION\nbuildType : $BUILD_TYPE\noptions   : -j$MAKE_J $CMAKE_OPTS";
+
+
 # ===================================
 
 if [[ "$ACTION" == "clean-all" ]]; then
 	removeIfExisted "$LIB_TARGET_DEBUG" "$LIB_TARGET_RELEASE" \
-		"$LIB_TARGET_DEBUG-arm" "$LIB_TARGET_RELEASE-arm" \
 		"$TEST_TARGET_DEBUG" "$TEST_TARGET_RELEASE";
 
 	finish "cleaned all build target directories!";
@@ -163,13 +166,11 @@ if [[ "$BUILD_TYPE" == "release" ]]; then
 elif [[ "$ACTION" == "test" ]]; then
 	TARGET_PATH="$TEST_TARGET_DEBUG";
 fi
-if [[ -n "$IS_ARM" ]]; then TARGET_PATH="$TARGET_PATH-arm"; fi
-
 
 
 if [[ "$BUILD_TYPE" == "all" ]]; then
-	"$SOURCE" "$ACTION" "debug" "$IS_ARM" &&
-	"$SOURCE" "$ACTION" "release" "$IS_ARM" &&
+	"$SOURCE" "$ACTION" "--debug" -j$MAKE_J $CMAKE_OPTS &&
+	"$SOURCE" "$ACTION" "--release" -j$MAKE_J $CMAKE_OPTS &&
 		exitWithTimer 0 || exit 1;
 fi
 
@@ -177,29 +178,29 @@ gotoDirectory "$TARGET_PATH";
 
 if [[ "$ACTION" == "cmake" ]]; then
 	resolveHeaderFiles;
-	[[ -n "$IS_ARM" ]] &&
-		executeCMakeForARM $BUILD_TYPE $LIB_SRC || executeCMake $BUILD_TYPE $LIB_SRC;
+	executeCMake $BUILD_TYPE $LIB_SRC;
 	exitWithTimer 0;
 fi
 
 if [[ "$ACTION" == "build" ]]; then # include: `build` and `build-arm`
+	resolveHeaderFiles;
 	if [[ ! -f "CMakeCache.txt" ]]; then
 		echo -e "[.] executing cmake ...";
-		[[ -n "$IS_ARM" ]] &&
-			executeCMakeForARM $BUILD_TYPE $LIB_SRC || executeCMake $BUILD_TYPE $LIB_SRC;
+		executeCMake $BUILD_TYPE $LIB_SRC;
 	fi
-	resolveHeaderFiles;
 	executeMakeBuild $BUILD_TYPE;
 	exitWithTimer 0;
 fi
 
 if [[ "$ACTION" == "test" ]]; then
-	executeCMake $BUILD_TYPE $TEST_SRC "test";
+	bash ../../scripts/resolve-test-cmake.sh;
 	resolveHeaderFiles;
+	executeCMake $BUILD_TYPE $TEST_SRC "test";
 	executeMakeBuild $BUILD_TYPE "test";
 
 	TEST_ALL=0; TEST_PASSED=0;
-	ls | grep "$TEST_EXECUTE_FILE_EXT$" | awk '{print $0;} END {print "EOF";}' |
+	ls | grep "$TEST_EXECUTE_FILE_EXT$" |
+		awk -vIS_ARM="$IS_ARM" 'IS_ARM || !/arm/ {print $0;} END {print "EOF";}' |
 		while read TEST_FILE; do
 			if [[ "$TEST_FILE" == "EOF" ]]; then
 				echo -e "\n Test result: (Passed: ${TEST_PASSED} / All: ${TEST_ALL})\n";

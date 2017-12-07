@@ -1,9 +1,12 @@
+/// TestEntry: cpp_malloc_sizeof
+/// ----------------------
+
 #include<stdio.h>
 #include<strings.h>
 #include<stdlib.h>
 #include<memory.h>
 #include<time.h>
-#include "./utils/index.hpp"
+#include "../../utilities/index.hpp"
 
 #define SIZE 128
 char str[SIZE];

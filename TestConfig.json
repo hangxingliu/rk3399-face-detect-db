@@ -1,0 +1,21 @@
+{
+	"CMakeVersion": "2.8",
+	"Name": "rk3399-face-detect-db-test",
+	"CXXFlags": "-std=c++11",
+	"XCCFlags_Debug": "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG",
+	"XCCFlags_Release": "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE",
+	"LinkDirectories": [
+		"${CMAKE_CURRENT_SOURCE_DIR}/../build/release",
+		"${CMAKE_CURRENT_SOURCE_DIR}/../build/debug",
+		"${CMAKE_CURRENT_SOURCE_DIR}/../libs"
+	],
+	"Packages": [
+		"OpenCV",
+		"Threads"
+	],
+	"With": [
+		"utilities/*.cpp",
+		"utilities/*.cc",
+		"utilities/*.c"
+	]
+}

@@ -1,8 +1,12 @@
+/// TestEntry: utils_fs_module
+/// With: ../src/utils/fs.cc
+/// ----------------------
+
 #include <stdio.h>
 #include <string.h>
 
-#include "./utils/index.hpp"
-#include "../src/utils/utils.hpp"
+#include "../utilities/index.hpp"
+#include "../../src/utils/utils.hpp"
 
 char buf[128];
 
