@@ -1,3 +1,5 @@
+#include <string.h>
+
 #ifndef PUBLIC_TYPES_CONFIG_HPP
 #define PUBLIC_TYPES_CONFIG_HPP 1
 
@@ -7,21 +9,17 @@ typedef struct GlobalConfigReadOnly {
 
 } GlobalConfigReadOnly;
 
+#define MAX_LENGTH_OF_CONFIG_PATH 255
 typedef struct GlobalConfig {
 
-	#define MAX_LENGTH_OF_WORKSPACE_PATH 256
 	/**
 	 * **REQUIRED** the workspace path for database environment.
-	 * Max length is 256
+	 * Max length is 255
 	 */
-	char* workspacePath;
+	char workspacePath[MAX_LENGTH_OF_CONFIG_PATH + 1];
 
-	/**
-	 * Recommend memory size for database
-	 * @default 0 (automatic)
-	 * @todo
-	 */
-	int recommendMemorySize = 0;
+	char resourcesPath[MAX_LENGTH_OF_CONFIG_PATH + 1];
+
 	/**
 	 * Init database file size(minimum file size)
 	 * @default 4 * 1024 * 1024 (4MB)
@@ -39,6 +37,11 @@ typedef struct GlobalConfig {
 	 * **You can not set this value unless modify sources!**
 	 */
 	GlobalConfigReadOnly readOnly;
+
+	GlobalConfig() {
+		strcpy(workspacePath, "./workspace");
+		strcpy(resourcesPath, "./resources");
+	}
 
 } GlobalConfig;
 

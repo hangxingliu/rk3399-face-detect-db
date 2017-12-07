@@ -10,6 +10,7 @@ log/methods.hpp
 main.cc
 media_handlers/capture.cc
 media_handlers/media_handlers.hpp
+public_types/api_error_no.hpp
 public_types/api_types.hpp
 public_types/base.hpp
 public_types/capture.hpp

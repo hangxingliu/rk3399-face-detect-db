@@ -33,27 +33,15 @@ int initDatabase(GlobalConfig* overwriteConfig) {
 
 	// Initialize capture
 	if(Capture_Init() < 0)
-		return -1;
+		return API_CANNOT_INIT_CAPTURE;
 
 #ifndef FOR_ARM
 	// TODO to config
-	if(!initFaceHaarCascade("./resources/haarcascade_frontalface_alt2.xml"))
+	if(!initFaceHaarCascade("../resources/haarcascade_frontalface_alt2.xml"))
 		return -1;
 #endif
 
 	return 0;
-}
-
-/**
- * Get default value of GlobalConfig.
- * You can modify config base on it and init database
- * @param returnConfig the location default config return to
- * @return status code 0: success
- * @see init(GlobalConfig* overwriteConfig)
- */
-int getDefaultGlobalConfig(GlobalConfig* returnConfig) {
-	printf("CALL: getDefaultGlobalConfig()\n");
-	return Config_getDefaultGlobalConfig(returnConfig);
 }
 
 /**
