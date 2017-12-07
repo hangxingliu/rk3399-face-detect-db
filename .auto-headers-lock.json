@@ -17,9 +17,11 @@
 		"extern-c": false,
 		"input": [
 			"./src/global/configurations.cc",
+			"./src/global/frame_buffer.cc",
 			"./src/global/lockers.cc"
 		],
 		"include": [
+			"opencv2/opencv.hpp",
 			"./_constant.hpp",
 			"../types/config.hpp"
 		]
@@ -31,9 +33,9 @@
 		"include": []
 	}, {
 		"name": "MEDIA_HANDLERS_HPP",
-		"hpp": "./src/media_handlers/media_handlers.hpp",
+		"hpp": "./src/media/media.hpp",
 		"extern-c": false,
-		"input": [ "./src/media_handlers/capture.cc" ],
+		"input": [ "./src/media/capture.cc" ],
 		"include": [
 			"opencv2/opencv.hpp",
 			"../types/base.hpp",

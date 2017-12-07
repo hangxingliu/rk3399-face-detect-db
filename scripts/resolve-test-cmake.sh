@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONFIG_FILE="../TestConfig.json";
+CONFIG_FILE="../test.config.json";
 TARGET_CMAKELIST="../test/CMakeLists.txt";
 UNIT_TEST="../test/unit";
 GUI_TEST="../test/gui";

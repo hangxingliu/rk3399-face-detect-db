@@ -1,0 +1,77 @@
+[
+	{
+		"name": "API_API_HPP",
+		"hpp": "./src/api/api.hpp",
+		"extern-c": true,
+		"input": [ "./src/api/api.cc" ],
+		"include": [
+			"../types/capture.hpp",
+			"../types/detect.hpp",
+			"../types/config.hpp",
+			"../types/api_error_no.hpp",
+			"../types/database_operation.hpp"
+		]
+	}, {
+		"name": "GLOBAL_GLOBAL_HPP",
+		"hpp": "./src/global/global.hpp",
+		"extern-c": false,
+		"input": [
+			"./src/global/configurations.cc",
+			"./src/global/frame_buffer.cc",
+			"./src/global/lockers.cc"
+		],
+		"include": [
+			"opencv2/opencv.hpp",
+			"./_constant.hpp",
+			"../types/config.hpp"
+		]
+	}, {
+		"name": "LOG_METHODS_HPP",
+		"hpp": "./src/log/methods.hpp",
+		"extern-c": false,
+		"input": [ "./src/log/methods.cc" ],
+		"include": []
+	}, {
+		"name": "MEDIA_HANDLERS_HPP",
+		"hpp": "./src/media/media.hpp",
+		"extern-c": false,
+		"input": [ "./src/media/capture.cc" ],
+		"include": [
+			"opencv2/opencv.hpp",
+			"../types/base.hpp",
+			"../types/capture.hpp"
+		]
+	}, {
+		"name": "UTILS_HPP",
+		"hpp": "./src/utils/utils.hpp",
+		"extern-c": false,
+		"input": [
+			"./src/utils/convert2string.cc",
+			"./src/utils/memory.cc",
+			"./src/utils/opencv.cc",
+			"./src/utils/fs.cc"
+		],
+		"include": [
+			"opencv2/opencv.hpp",
+			"./opencv.hpp"
+		]
+	},
+
+
+
+
+	{
+		"name": "TEST_UTILS_INDEX",
+		"hpp": "./test/utilities/index.hpp",
+		"extern-c": false,
+		"input": ["./test/utilities/index.cc"],
+		"include": []
+	}, {
+		"name": "JNA_STRUCT_TEST_SO",
+		"hpp": "./test/once/jna/jna_struct_test_so.hpp",
+		"extern-c": true,
+		"input": [ "./test/once/jna/jna_struct_test_so.cc"],
+		"include": [ "jna_struct_test_so_base.hpp" ]
+	}
+
+]
