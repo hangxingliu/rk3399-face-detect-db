@@ -14,6 +14,7 @@
 
 /// Default capture device id. 0 => /dev/video0
 const int defaultCapture = 0;
+
 #define MAX_CAPTURES 10
 
 #define IS_NUMBER_CHAR(x)  (x >= '0' && x <= '9')
@@ -85,6 +86,7 @@ static int getDeviceId(const char* deviceName) {
 	return c1 - '0';
 }
 
+
 // =============================
 //    Methods about OpenCV
 
@@ -126,6 +128,7 @@ int Capture_Init() {
 		sprintf(dev->devicePath, "%s/%s", SYSTEM_DEVICE_PATH, deviceName);
 
 		int fd;
+		// Is this device readable and writable
 		if((fd = open(dev->devicePath, O_RDWR)) < 0) {
 			dev->available = false;
 			char warn[2048];
@@ -135,6 +138,7 @@ int Capture_Init() {
 			continue;
 		}
 
+		// Is this device could be open by ioctl
 		if(ioctl(fd, VIDIOC_QUERYCAP, &videoCap) < 0) {
 			dev->available = false;
 			char warn[2048];
@@ -170,14 +174,13 @@ int Capture_Init() {
 	}
 
 	//Dump
-	CREATE_STR(strDump, 2048);
+	char strDump[2048];
 	LOG_INFO("Capture list:");
 	LOOP_TIMES(i, GlobalCaptureDeviceLen) {
 		auto dev = &GlobalCaptureDevices[i];
 		physicalCaptureDeviceToString(strDump, dev, dev->id == GlobalCaptureDev->id);
 		LOG_INFO(strDump);
 	}
-	DELETE_STR(strDump);
 
 	//Open capture
 	if(initGlobalCapture() < 0)
@@ -194,8 +197,9 @@ int Capture_Init() {
 	return 0;
 }
 
-int Capture_Read(cv::Mat *frame) {
+
+bool Capture_Read(cv::Mat *frame) {
 	if(!GlobalCaptureDev)
-		return LOG_FATAL("Please invoke Capture_Init before invoking Capture_Read()"), -1;
+		return LOG_FATAL("Please invoke Capture_Init before invoking Capture_Read()"), false;
 	return GlobalCapture->read(*frame);
 }

@@ -49,7 +49,7 @@ add_executable( utils_fs_module_unit.test ./unit/utils_fs_test.cc ${CompileWithF
     ../src/utils/fs.cc )
 
 add_executable( capture_module_unit.test ./unit/captures_test.cc ${CompileWithFiles}
-    ../src/media_handlers/capture.cc
+    ../src/media/capture.cc
     ../src/log/methods.cc
     ../src/utils/convert2string.cc )
 target_link_libraries( capture_module_unit.test ${OpenCV_LIBS} )
@@ -71,14 +71,15 @@ add_executable( utils_opencv_test.gui ./gui/utils_opencv_test.cc ${CompileWithFi
     ../src/log/methods.cc )
 target_link_libraries( utils_opencv_test.gui ${OpenCV_LIBS} )
 
-add_executable( cv_capture_test.gui ./gui/cv_capture.cc ${CompileWithFiles} )
-target_link_libraries( cv_capture_test.gui ${OpenCV_LIBS} )
-
 add_executable( utils_opencv_face_test.gui ./gui/utils_opencv_face_test.cc ${CompileWithFiles}
     ../src/utils/convert2string.cc
     ../src/utils/opencv.cc
     ../src/log/methods.cc )
 target_link_libraries( utils_opencv_face_test.gui ${OpenCV_LIBS} )
+
+add_executable( call_debug_so_get_frame_test.gui ./gui/call_debug_so_get_frame.cc ${CompileWithFiles} )
+target_link_libraries( call_debug_so_get_frame_test.gui rk3399_face_detect_db_debug )
+target_link_libraries( call_debug_so_get_frame_test.gui ${OpenCV_LIBS} )
 endif()
 
 

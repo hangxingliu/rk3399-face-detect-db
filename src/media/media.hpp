@@ -13,26 +13,30 @@
 // DON'T modify manually!
 // Generate time: 2017/12/07 23:41:08
 
-#ifndef TEST_UTILS_INDEX
-#define TEST_UTILS_INDEX 1
+#include "opencv2/opencv.hpp"
+#include "../types/base.hpp"
+#include "../types/capture.hpp"
+
+#ifndef MEDIA_HANDLERS_HPP
+#define MEDIA_HANDLERS_HPP 1
 
 //  ====================
-//  @file ./test/utilities/index.cc
+//  @file ./src/media/capture.cc
 //  ====================
 
-//  source: ./test/utilities/index.cc:34
-int testCompareStrings(const char* s1, const char* s2);
+//  source: ./src/media/capture.cc:105
+int Capture_Init();
 
-//  source: ./test/utilities/index.cc:29
-int testDone(const char* description);
+//  source: ./src/media/capture.cc:201
+bool Capture_Read(cv::Mat* frame);
 
-//  source: ./test/utilities/index.cc:19
-int testFailed(const char* description);
+//  source: ./src/media/capture.cc:25
+void Capture_enableUnitTest();
 
-//  source: ./test/utilities/index.cc:24
-int testPassed(const char* description);
+//  source: ./src/media/capture.cc:47
+void physicalCaptureDeviceToString(char* result, PhysicalCaptureDevice* dev, bool markAsUse);
 
 #endif
 
 // md5sum:
-// 9f72da08f776f767f97d70fb6fb4a636  ./test/utilities/index.cc
+// 4c096c10bc2faf31926cc302aead1295  ./src/media/capture.cc

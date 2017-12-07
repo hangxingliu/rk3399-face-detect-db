@@ -1,5 +1,5 @@
 /// TestEntry: capture_module
-/// With: ../src/media_handlers/capture.cc
+/// With: ../src/media/capture.cc
 /// With: ../src/log/methods.cc
 /// With: ../src/utils/convert2string.cc
 /// Link: ${OpenCV_LIBS}
@@ -14,7 +14,7 @@
 #include <sys/ioctl.h>
 #include <linux/videodev2.h>
 
-#include "../../src/media_handlers/media_handlers.hpp"
+#include "../../src/media/media.hpp"
 
 int oldMain(){
     int fd;

@@ -2,6 +2,6 @@
 #define GLOBAL__CONSTANT_HPP 1
 
 
-#define MAX_FRAME_DATA 16
+#define FRAME_BUFFER_COUNT 16
 
 #endif // GLOBAL__CONSTANT_HPP

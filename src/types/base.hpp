@@ -16,6 +16,11 @@
 #ifndef API_OUT
 	#define API_OUT
 #endif
+#ifndef API_OUT_NON_NULL
+	#define API_OUT_NON_NULL
+#endif
+
+
 
 #define LOOP(var,from,to,step) for(int var = from ; var < to ; var += step)
 #define LOOP_TIMES(var, times) LOOP(var, 0, times, 1)
@@ -26,9 +31,9 @@
 #define CREATE_STR_FROM_INT(strName, value, withQuote) \
 	CREATE_STR(strName, 16); int2String(value, strName, withQuote);
 
-typedef unsigned char uchar;
 typedef unsigned char ubyte;
 typedef ubyte* ubytes;
 typedef ubyte* ubyteArray;
+typedef uchar* ucharArray;
 
 #endif

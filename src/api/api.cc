@@ -11,7 +11,7 @@
 #include "../log/log.hpp"
 #include "../utils/utils.hpp"
 #include "../global/global.hpp"
-#include "../media_handlers/media_handlers.hpp"
+#include "../media/media.hpp"
 
 #ifdef NDEBUG
 #define LOG_API_INVOKE(name, ps, ...) 0;
@@ -98,6 +98,9 @@ int getFrameFromCapture(CaptureRequestOptions* opts, CaptureFrameAndPersonInfo* 
 }
  */
 
+
+static const Capture_FrameRequestOpts face_get_frame_DefaultRequestOpts;
+
 int face_init(GlobalConfig* config) {
 
 	LOG_API_INVOKE("init", "%p", config);
@@ -106,22 +109,66 @@ int face_init(GlobalConfig* config) {
 	if(Capture_Init() < 0)
 		return API_CANNOT_INIT_CAPTURE;
 
+	if(FrameBuffer_init() < 0)
+		return API_CANNOT_INIT_BUFFER;
+
 #ifndef FOR_ARM
 	// TODO to config
-	if(!initFaceHaarCascade("../resources/haarcascade_frontalface_alt2.xml"))
-		return -1;
+	initFaceHaarCascade("./resources/haarcascade_frontalface_alt2.xml");
 #endif
 
 	return 0;
 }
 
+/**
+ * @param opts
+ * @param resultInfo
+ * @param resultData this is a pointer pointed to a uchar(unsigned char) array
+ * @return int
+ */
 int face_get_frame(
-	Capture_FrameRequestOpts* opts,
-	API_OUT Capture_FrameImageInfo* result) {
+	const Capture_FrameRequestOpts* opts,
+	API_OUT Capture_FrameImageInfo* resultInfo,
+	API_OUT_NON_NULL ucharArray* resultData) {
 
-	LOG_API_INVOKE("get_frame", "%p, %p", opts, result);
+	LOG_API_INVOKE("get_frame", "%p, %p, %p", opts, resultInfo, resultData);
 
-	return 0;
+	if(!resultData) return API_EMPTY_POINTER;
+	if(!opts) opts = &face_get_frame_DefaultRequestOpts;
+
+	int lockId = -1;
+	cv::Mat* buffer = FrameBuffer_giveMeBuffer(&lockId);
+	if(!buffer) return API_ERROR_TERRIBLE;
+
+	lockFrameAccess(lockId);
+	#define _23_unlock_return(code) unlockFrameAccess(lockId), (code);
+
+	if(!Capture_Read(buffer))
+		return _23_unlock_return(API_READ_FRAME_FAILED);
+
+	int width = buffer->cols;
+	int height = buffer->rows;
+
+	if(!buffer->isContinuous())
+		return _23_unlock_return(API_FRAME_IS_NOT_CONTINUOUS);
+	if(width <= 0 || height <= 0 || !buffer->data)
+		return _23_unlock_return(API_FRAME_IS_EMPTY);
+#ifndef NDEBUG
+	if(buffer->channels() != 3 || buffer->elemSize() != 3)
+		return _23_unlock_return(API_FRAME_IS_NOT_U8C3);
+#endif
+
+	if(resultInfo) {
+		/// TODO: If convert to RGB
+		resultInfo->isRGB = 0;
+		resultInfo->w = width;
+		resultInfo->h = height;
+		resultInfo->frameId = lockId;
+		resultInfo->size = width * height * 3;
+	}
+	*resultData = buffer->data;
+
+	return _23_unlock_return(API_OK);
 }
 
 int face_detect(
