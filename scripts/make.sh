@@ -184,6 +184,7 @@ fi
 
 if [[ "$ACTION" == "build" ]]; then # include: `build` and `build-arm`
 	resolveHeaderFiles;
+	bash ../../scripts/gen-export-symbol-list.sh
 	if [[ ! -f "CMakeCache.txt" ]]; then
 		echo -e "[.] executing cmake ...";
 		executeCMake $BUILD_TYPE $LIB_SRC;

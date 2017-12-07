@@ -26,9 +26,9 @@ function parse() {
 
 parse > "$LIST_TO";
 if [[ "$?" != "0" ]]; then
-	echo -e "\n  error: generate failed!\n";
+	echo -e "error: generate $(basename "$LIST_TO") failed!";
 	exit 1;
 else
-	echo -e "\n  success!\n"
+	echo -e "generate $(basename "$LIST_TO") success!"
 fi
 

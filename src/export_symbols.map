@@ -1,7 +1,6 @@
 {
 	global:
 		debugPingPong;
-		getDefaultGlobalConfig;
 		getFrameFromCapture;
 		initDatabase;
 		removeUserFromDatabase;
