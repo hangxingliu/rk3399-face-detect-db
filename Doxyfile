@@ -51,7 +51,7 @@ PROJECT_BRIEF          = "A face detect and compare database on rk3399 machine"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = docs/doxygen-configutaions/icon.png
+PROJECT_LOGO           = docs/doxygen-configuration/icon.png
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
@@ -453,7 +453,7 @@ EXTRACT_PACKAGE        = YES
 # included in the documentation.
 # The default value is: NO.
 
-EXTRACT_STATIC         = YES
+EXTRACT_STATIC         = NO
 
 # If the EXTRACT_LOCAL_CLASSES tag is set to YES, classes (and structs) defined
 # locally in source files will be included in the documentation. If set to NO,
@@ -724,7 +724,7 @@ CITE_BIB_FILES         =
 # messages are off.
 # The default value is: NO.
 
-QUIET                  = NO
+QUIET                  = YES
 
 # The WARNINGS tag can be used to turn on/off the warning messages that are
 # generated to standard error (stderr) by doxygen. If WARNINGS is set to YES
@@ -762,7 +762,7 @@ WARN_NO_PARAMDOC       = NO
 # a warning is encountered.
 # The default value is: NO.
 
-WARN_AS_ERROR          = NO
+WARN_AS_ERROR          = YES
 
 # The WARN_FORMAT tag determines the format of the warning messages that doxygen
 # can produce. The string should contain the $file, $line, and $text tags, which
@@ -792,9 +792,7 @@ WARN_LOGFILE           =
 
 INPUT                  = src/api \
                          src/include \
-                         src/public_types \
-                         src/log \
-						 src/utils
+                         src/types
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -851,7 +849,9 @@ EXCLUDE_SYMLINKS       = NO
 # Note that the wildcards are matched against the file with absolute path, so to
 # exclude all test directories for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       =
+EXCLUDE_PATTERNS       = */src/utils/* \
+                         */src/global/* \
+                         */src/log/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -1908,7 +1908,7 @@ MAN_LINKS              = NO
 # captures the structure of the code including all documentation.
 # The default value is: NO.
 
-GENERATE_XML           = YES
+GENERATE_XML           = NO
 
 # The XML_OUTPUT tag is used to specify where the XML pages will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -2417,7 +2417,7 @@ DOT_GRAPH_MAX_NODES    = 50
 # Minimum value: 0, maximum value: 1000, default value: 0.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-MAX_DOT_GRAPH_DEPTH    = 0
+MAX_DOT_GRAPH_DEPTH    = 2
 
 # Set the DOT_TRANSPARENT tag to YES to generate images with a transparent
 # background. This is disabled by default, because dot on Windows does not seem
