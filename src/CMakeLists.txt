@@ -61,5 +61,7 @@ add_library(${TARGET_SHARED_LIB} SHARED ${SOURCE_FILES})
 # https://www.gnu.org/software/gnulib/manual/html_node/LD-Version-Scripts.html
 set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--version-script=${CMAKE_SOURCE_DIR}/export_symbols.map")
 
+add_executable("db-walker" db-walker.cc)
+
 # gcc -fPIC
 # set(CMAKE_POSITION_INDEPENDENT_CODE ON)

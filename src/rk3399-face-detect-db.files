@@ -1,6 +1,8 @@
 CMakeLists.txt
 api/api.cc
 api/api.hpp
+db-walker.cc
+exmaple.cc
 export_symbols.map
 global/_constant.hpp
 global/configurations.cc
@@ -12,10 +14,10 @@ include/firefly_faceverify_version.hpp
 log/log.hpp
 log/methods.cc
 log/methods.hpp
-main.cc
 media/capture.cc
 media/media.hpp
 media/media_handlers.hpp
+storage/encoder.cc
 types/api_error_no.hpp
 types/base.hpp
 types/capture.hpp
