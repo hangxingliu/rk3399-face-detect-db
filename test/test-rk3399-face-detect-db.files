@@ -15,6 +15,7 @@ once/cpp_base/cpp_thread_test.cc
 once/jna/jna_struct_test_so.cc
 once/jna/jna_struct_test_so.hpp
 once/jna/jna_struct_test_so_base.hpp
+once/random_access_file.cc
 unit-arm/arm_test.cc
 unit/captures_test.cc
 unit/log_test.cc

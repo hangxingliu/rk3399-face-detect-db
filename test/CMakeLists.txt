@@ -108,6 +108,8 @@ target_link_libraries( call_debug_so_once.test ${OpenCV_LIBS} )
 add_executable( call_release_so_once.test ./once/call_release_so_test.cc ${CompileWithFiles} )
 target_link_libraries( call_release_so_once.test rk3399_face_detect_db_release )
 target_link_libraries( call_release_so_once.test ${OpenCV_LIBS} )
+
+add_executable( random_access_file_once.test ./once/random_access_file.cc ${CompileWithFiles} )
 endif()
 
 

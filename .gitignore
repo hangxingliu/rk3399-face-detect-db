@@ -1,6 +1,8 @@
 # Ignore autosave files
 *.autosave
 
+test-env
+
 # Ignore target doxygen documents
 docs/api-doxygen-docs
 
