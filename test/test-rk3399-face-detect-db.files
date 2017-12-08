@@ -9,6 +9,7 @@ images/sudo-rm-rf-meme.png
 once/call_debug_so_test.cc
 once/call_release_so_test.cc
 once/cpp_base/cpp_malloc_sizeof_test.cc
+once/cpp_base/cpp_pointer_as_parameter.cc
 once/cpp_base/cpp_test.cc
 once/cpp_base/cpp_thread_test.cc
 once/jna/jna_struct_test_so.cc

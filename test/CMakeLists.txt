@@ -91,6 +91,8 @@ if (CMAKE_TEST_ONCE)
 message ( STATUS "Compile: enabled CMAKE_TEST_ONCE")
 add_executable( cpp_malloc_sizeof_once.test ./once/cpp_base/cpp_malloc_sizeof_test.cc ${CompileWithFiles} )
 
+add_executable( cpp_pointer_as_parameter_once.test ./once/cpp_base/cpp_pointer_as_parameter.cc ${CompileWithFiles} )
+
 add_executable( cpp_thread_once.test ./once/cpp_base/cpp_thread_test.cc ${CompileWithFiles} )
 target_link_libraries( cpp_thread_once.test ${CMAKE_THREAD_LIBS_INIT} )
 
