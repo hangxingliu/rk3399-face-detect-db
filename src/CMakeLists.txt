@@ -49,6 +49,8 @@ if (CMAKE_FOR_ARM)
 	# message("Linux-x86-64")
 endif()
 
+# libraries
+find_package( OpenCV REQUIRED )
 
 # scan all files in this folder to set into variable: ${SOURCE_FILES}
 file(GLOB_RECURSE SOURCE_FILES . "**/*.cc" "**/*.cpp" "**/*.c")
@@ -56,6 +58,7 @@ file(GLOB_RECURSE SOURCE_FILES . "**/*.cc" "**/*.cpp" "**/*.c")
 # add_executable("${PROJECT_NAME}.${BUILD_TYPE}" ${SOURCE_FILES})
 set(TARGET_SHARED_LIB "${TARGET_LIB_NAME}_${BUILD_TYPE}")
 add_library(${TARGET_SHARED_LIB} SHARED ${SOURCE_FILES})
+target_link_libraries(${TARGET_SHARED_LIB} ${OpenCV_LIBS})
 
 # using export symbols file
 # https://www.gnu.org/software/gnulib/manual/html_node/LD-Version-Scripts.html

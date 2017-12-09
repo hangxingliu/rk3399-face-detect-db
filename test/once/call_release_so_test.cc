@@ -1,6 +1,5 @@
 /// TestEntry: call_release_so
 /// Link: rk3399_face_detect_db_release
-/// Link: ${OpenCV_LIBS}
 /// ----------------------
 
 #include<stdio.h>

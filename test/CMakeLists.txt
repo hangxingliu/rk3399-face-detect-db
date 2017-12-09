@@ -46,7 +46,8 @@ add_executable( log_module_unit.test ./unit/log_test.cc ${CompileWithFiles}
     ../src/log/methods.cc )
 
 add_executable( utils_fs_module_unit.test ./unit/utils_fs_test.cc ${CompileWithFiles}
-    ../src/utils/fs.cc )
+    ../src/utils/fs.cc
+    ../src/log/methods.cc )
 
 add_executable( capture_module_unit.test ./unit/captures_test.cc ${CompileWithFiles}
     ../src/media/capture.cc
@@ -103,11 +104,9 @@ add_library( jna_struct_test SHARED ./once/jna/jna_struct_test_so.cc ${CompileWi
 
 add_executable( call_debug_so_once.test ./once/call_debug_so_test.cc ${CompileWithFiles} )
 target_link_libraries( call_debug_so_once.test rk3399_face_detect_db_debug )
-target_link_libraries( call_debug_so_once.test ${OpenCV_LIBS} )
 
 add_executable( call_release_so_once.test ./once/call_release_so_test.cc ${CompileWithFiles} )
 target_link_libraries( call_release_so_once.test rk3399_face_detect_db_release )
-target_link_libraries( call_release_so_once.test ${OpenCV_LIBS} )
 
 add_executable( random_access_file_once.test ./once/random_access_file.cc ${CompileWithFiles} )
 endif()
