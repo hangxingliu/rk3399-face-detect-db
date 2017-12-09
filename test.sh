@@ -18,10 +18,14 @@ for ARG in "$@"; do
 	if [[ "$ARG" == --* ]]; then OTHER_OPTS="${OTHER_OPTS} $ARG";
 	else TYPE="$ARG"; fi
 done
-if [[ "$TYPE" == "unit" ]] || [[ -z "$TYPE" ]] ; then TYPE_OPTS="-DCMAKE_TEST_UNIT=ON";
-elif [[ "$TYPE" == "gui" ]]; then TYPE_OPTS="-DCMAKE_TEST_GUI=ON";
-elif [[ "$TYPE" == "once" ]]; then TYPE_OPTS="-DCMAKE_TEST_ONCE=ON";
-elif [[ "$TYPE" == "all" ]]; then TYPE_OPTS="-DCMAKE_TEST_UNIT=ON -DCMAKE_TEST_GUI=ON -DCMAKE_TEST_ONCE=ON";
+
+CMAKE_TEST_UNIT="OFF";
+CMAKE_TEST_GUI="OFF";
+CMAKE_TEST_ONCE="OFF";
+if [[ "$TYPE" == "unit" ]] || [[ -z "$TYPE" ]]; then CMAKE_TEST_UNIT="ON";
+elif [[ "$TYPE" == "gui" ]]; then CMAKE_TEST_GUI="ON";
+elif [[ "$TYPE" == "once" ]]; then CMAKE_TEST_ONCE="ON";
+elif [[ "$TYPE" == "all" ]]; then CMAKE_TEST_UNIT="ON"; CMAKE_TEST_GUI="ON"; CMAKE_TEST_ONCE="ON";
 else echo "  error: invalid test option: '$TYPE' "; exit 1;
 fi
 
@@ -33,5 +37,6 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd "$DIR";
-./scripts/make.sh test $IS_ARM -j`bash ./scripts/get-cpu-core-count.sh 8` $OTHER_OPTS $TYPE_OPTS;
+./scripts/make.sh test $IS_ARM -j`bash ./scripts/get-cpu-core-count.sh 8` $OTHER_OPTS \
+	-DCMAKE_TEST_UNIT="$CMAKE_TEST_UNIT" -DCMAKE_TEST_GUI="$CMAKE_TEST_GUI" -DCMAKE_TEST_ONCE="$CMAKE_TEST_ONCE";
 exit $?;
