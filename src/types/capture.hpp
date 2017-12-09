@@ -14,7 +14,7 @@ typedef struct PhysicalCaptureDevice {
 typedef struct Capture_FrameRequestOpts {
 	/// 1: convert BGR to RGB (slowly)
 	/// @todo add this function if it is necessary
-	uchar convert2RGB = 0;
+	int convert2RGB = 0;
 } Capture_FrameRequestOpts;
 
 typedef struct Capture_FrameImageInfo {
@@ -22,7 +22,7 @@ typedef struct Capture_FrameImageInfo {
 	int frameId = 0;
 
 	/// 0: BGR(in default)  1: RGB
-	uchar isRGB = 0;
+	int isRGB = 0;
 	/// image data size
 	int size = 0;
 	/// width of image, height of image

@@ -136,12 +136,13 @@ int face_get_frame(
 	if(!resultData) return API_EMPTY_POINTER;
 	if(!opts) opts = &face_get_frame_DefaultRequestOpts;
 
-	int lockId = -1;
-	cv::Mat* buffer = FrameBuffer_giveMeBuffer(&lockId);
+	int bufferId = -1;
+	cv::Mat* buffer = FrameBuffer_giveMeBuffer(&bufferId);
 	if(!buffer) return API_ERROR_TERRIBLE;
 
-	lockFrameAccess(lockId);
-	#define _23_unlock_return(code) unlockFrameAccess(lockId), (code);
+	lockFrameAccess(bufferId);
+	FrameBuffer_setInvalid(bufferId);
+	#define _23_unlock_return(code) unlockFrameAccess(bufferId), (code);
 
 	if(!Capture_Read(buffer))
 		return _23_unlock_return(API_READ_FRAME_FAILED);
@@ -163,24 +164,61 @@ int face_get_frame(
 		resultInfo->isRGB = 0;
 		resultInfo->w = width;
 		resultInfo->h = height;
-		resultInfo->frameId = lockId;
+		resultInfo->frameId = bufferId;
 		resultInfo->size = width * height * 3;
 	}
 	*resultData = buffer->data;
 
+	FrameBuffer_setValid(bufferId);
 	return _23_unlock_return(API_OK);
 }
 
+/**
+ * @param frameId
+ * @param maxResultCapacity
+ * @param resultCount
+ * @param results
+ * @see dispose_detect_results
+ * @return
+ */
 int face_detect(
 	int frameId,
 	int maxResultCapacity,
 	API_OUT int* resultCount,
-	API_OUT Detect_FaceInfo** results) {
+	API_OUT Detect_FaceInfoArray* results) {
 
 	LOG_API_INVOKE("detect", "%d, %d, %p, %p", frameId, maxResultCapacity, resultCount, results);
 
-	return 0;
+	return API_TODO;
 }
+
+int face_dispose_detect_results(int count, Detect_FaceInfoArray* results) {
+
+	LOG_API_INVOKE("dispose_detect_results", "%p", results);
+
+	if(results && count > 0)
+		for(int i = 0 ; i < count ; i ++ )
+			free(results[i]);
+
+	return API_OK;
+}
+
+/**
+ * @param result a pointer to a Detect_FaceInfo struct to receiving face result
+ * @see API_NO_FACE
+ * @return 0: detected face. 10001: no face. ...: other error
+ */
+int face_detect_one_face_in_last_frame(
+	API_OUT_NON_NULL Detect_FaceInfo* result) {
+
+	LOG_API_INVOKE("detect_one_face_in_last_frame", "%p", result);
+
+	if(!result)
+		return API_EMPTY_POINTER;
+
+	return API_TODO;
+}
+
 
 int face_update(DB_Modification* modification) {
 

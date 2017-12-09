@@ -5,25 +5,27 @@
 #include "../log/log.hpp"
 
 static cv::Mat staticFrameBuffer[FRAME_BUFFER_COUNT];
-static bool staticFrameUsed[FRAME_BUFFER_COUNT];
+static bool staticIsFrameBufferValid[FRAME_BUFFER_COUNT];
 
 static int staticFrameBufferSwitcher = 0;
 
 int FrameBuffer_init() {
 	LOOP_TIMES(i, FRAME_BUFFER_COUNT) {
-		staticFrameUsed[i] = false;
+		staticIsFrameBufferValid[i] = false;
 	}
 	return 0;
 }
 
-bool FrameBuffer_exist(int id) {
-	if(id >= 0 && id < FRAME_BUFFER_COUNT)
+bool FrameBuffer_isBufferValid(int bufferId) {
+	if(bufferId >= 0 && bufferId < FRAME_BUFFER_COUNT)
 		return false;
 
-	return staticFrameUsed[id];
+	return staticIsFrameBufferValid[bufferId];
 }
+void FrameBuffer_setValid(int bufferId) { staticIsFrameBufferValid[bufferId] = true; }
+void FrameBuffer_setInvalid(int bufferId) { staticIsFrameBufferValid[bufferId] = false; }
 
-cv::Mat* FrameBuffer_giveMeBuffer(int* accessLockId) {
+cv::Mat* FrameBuffer_giveMeBuffer(int* bufferId) {
 	int v = -1;
 	lockFrameSwitcher();
 
@@ -36,11 +38,12 @@ cv::Mat* FrameBuffer_giveMeBuffer(int* accessLockId) {
 	unlockFrameSwitcher();
 
 	if(v >= 0 && v < FRAME_BUFFER_COUNT) {
-		*accessLockId = v;
+		*bufferId = v;
 		return &(staticFrameBuffer[v]);
 	}
 
 	return NULL;
 }
+
 
 
