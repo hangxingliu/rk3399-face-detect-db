@@ -28,6 +28,10 @@ int main() {
 		return sizeofFailed("long", 8, sizeof(long));
 	sizeofPassed("long", 8);
 
+	if(sizeof(int) != 4)
+		return sizeofFailed("int", 4, sizeof(int));
+	sizeofPassed("int", 4);
+
 	if(sizeof(float) != 4)
 		return sizeofFailed("float", 4, sizeof(float));
 	sizeofPassed("float", 4);

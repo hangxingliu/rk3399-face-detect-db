@@ -42,6 +42,8 @@ endif()
 option(CMAKE_TEST_UNIT "Enable compile unit tests" OFF)
 if (CMAKE_TEST_UNIT)
 message ( STATUS "Compile: enabled CMAKE_TEST_UNIT")
+add_executable( sizeof_structures_unit.test ./unit/sizeof_structures.cc ${CompileWithFiles} )
+
 add_executable( log_module_unit.test ./unit/log_test.cc ${CompileWithFiles}
     ../src/log/methods.cc )
 

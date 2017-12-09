@@ -19,6 +19,7 @@ once/random_access_file.cc
 unit-arm/arm_test.cc
 unit/captures_test.cc
 unit/log_test.cc
+unit/sizeof_structures.cc
 unit/utils_fs_test.cc
 utilities/index.cc
 utilities/index.hpp
