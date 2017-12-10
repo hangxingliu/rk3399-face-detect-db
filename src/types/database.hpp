@@ -3,6 +3,8 @@
 /// { DB_BaseUserItem(Fixed Size) DB_BaseUserItem_LastMatched(Dynamic Size)  ..0.. }
 /// Each item max size: 64Kb
 
+#include <time.h>
+
 #include "./base.hpp"
 #include "./firefly_face_sdk.hpp"
 
@@ -20,29 +22,38 @@ typedef struct DB_BaseUserItem_LastMatched {
 	/// 0: disable
 	int version = 0;
 
-	long timestamp;
+	long timestamp = 0;
 
-	float compareScore;
+	float compareScore = 0.0f;
 
-	float quality;
+	float quality = 0.0f;
 
 	/** chinese: 置信度 */
-	float confidence;
+	float confidence = 0.0f;
 
-	int yaw;
-	int pitch;
-	int roll;
+	int yaw = 0;
+	int pitch = 0;
+	int roll = 0;
 
+	int landmarkSize = 0;
 	float landmarksX[5];
 	float landmarksY[5];
 
-	int faceImageSize;
-	unsigned char* faceImage;
+	int faceImageSize = 0;
+	unsigned char* faceImage = nullptr;
+
+	static DB_BaseUserItem_LastMatched getVersion1() {
+		DB_BaseUserItem_LastMatched result;
+		result.version = 1;
+		result.timestamp = (long) time(NULL);
+		return result;
+	}
 
 } DB_BaseUserItem_LastMatched;
 
+// 4 + 1 + 7 + 4 * 4 + 4 + 64 + 24004 + 1024 = 25124
 typedef struct DB_BaseUserItem {
-	int itemNumber;
+	int itemNumber = 0;
 	/**
 	 * is this item live ?
 	 * (live is DB_False means this item has been deleted or non-init)
@@ -50,19 +61,25 @@ typedef struct DB_BaseUserItem {
 	DB_Boolean live = DB_False;
 
 	/** reserved space */
-	char reserved[7];
+	unsigned char reserved[7];
 
 	/** the hash value calculated from following content to avoiding dirty data */
-	int hash[4];
+	unsigned int hash[4];
 
-	int priority;
+	int priority = 0;
 
 	char userId[USERID_LENGTH];
 
 	/** length:  6000 * 4 + 4 = 24004 = 24Kb */
 	FF_FaceFeatures features;
 
-	char addonReserved[1024];
+	unsigned char addonReserved[1024];
+
+	DB_BaseUserItem() {
+		memset(this->reserved, 0, 7);
+		memset(this->userId, 0, USERID_LENGTH);
+		memset(this->addonReserved, 0, 1024);
+	}
 
 } DB_BaseUserItem;
 

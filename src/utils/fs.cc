@@ -11,6 +11,14 @@ static inline bool _Fs_testFile(const char* path, int mode) {
 bool isFileReadable(const char* path) { return _Fs_testFile(path, R_OK); }
 bool isFileWritable(const char* path) { return _Fs_testFile(path, W_OK); }
 
+bool isPathAFile(const char* path) {
+	struct stat st;
+	if(stat(path, &st) != 0)
+		return false;
+	return S_ISREG(st.st_mode);
+}
+
+
 bool mkdirIfNotExist(const char* dir, mode_t mode) {
 	struct stat st;
 	if(stat(dir, &st) < 0)

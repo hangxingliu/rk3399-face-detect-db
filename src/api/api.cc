@@ -105,16 +105,20 @@ int face_init(GlobalConfig* config) {
 
 	LOG_API_INVOKE("init", "%p", config);
 
+	int status = 0;
 	// Initialize capture
-	if(Capture_Init() < 0)
-		return API_CANNOT_INIT_CAPTURE;
+	status = Capture_Init();
+	if(status != 0) return API_CANNOT_INIT_CAPTURE;
 
-	if(FrameBuffer_init() < 0)
-		return API_CANNOT_INIT_BUFFER;
+	status = FrameBuffer_init();
+	if(status != 0) return API_CANNOT_INIT_BUFFER;
+
+	status = Config_initGlobalConfig(config);
+	if(status != 0) return status;
+
 
 #ifndef FOR_ARM
-	// TODO to config
-	initFaceHaarCascade("./resources/haarcascade_frontalface_alt2.xml");
+	initFaceHaarCascade("/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml");
 #endif
 
 	return 0;
@@ -139,17 +143,22 @@ int face_get_frame(
 	int bufferId = -1;
 	cv::Mat* buffer = FrameBuffer_giveMeBuffer(&bufferId);
 	if(!buffer) return API_ERROR_TERRIBLE;
+	DUMP_INT(bufferId, "got buffer to storaging frame image");
 
 	lockFrameAccess(bufferId);
 	FrameBuffer_setInvalid(bufferId);
 	#define _23_unlock_return(code) unlockFrameAccess(bufferId), (code);
 
+	LOG_DEBUG("getting frame image from capture (opencv) ...");
 	if(!Capture_Read(buffer))
 		return _23_unlock_return(API_READ_FRAME_FAILED);
+	LOG_DEBUG("got frame image");
 
 	int width = buffer->cols;
 	int height = buffer->rows;
 
+// =========================
+// Validate image of frame
 	if(!buffer->isContinuous())
 		return _23_unlock_return(API_FRAME_IS_NOT_CONTINUOUS);
 	if(width <= 0 || height <= 0 || !buffer->data)
@@ -158,6 +167,7 @@ int face_get_frame(
 	if(buffer->channels() != 3 || buffer->elemSize() != 3)
 		return _23_unlock_return(API_FRAME_IS_NOT_U8C3);
 #endif
+// =========================
 
 	if(resultInfo) {
 		/// TODO: If convert to RGB
@@ -170,6 +180,8 @@ int face_get_frame(
 	*resultData = buffer->data;
 
 	FrameBuffer_setValid(bufferId);
+
+	LOG_DEBUG("Incoke API get_frame success!");
 	return _23_unlock_return(API_OK);
 }
 

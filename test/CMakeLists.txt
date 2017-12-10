@@ -44,12 +44,22 @@ if (CMAKE_TEST_UNIT)
 message ( STATUS "Compile: enabled CMAKE_TEST_UNIT")
 add_executable( sizeof_structures_unit.test ./unit/sizeof_structures.cc ${CompileWithFiles} )
 
+add_executable( database_init_unit.test ./unit/database_init.cc ${CompileWithFiles}
+    ../src/utils/fs.cc
+    ../src/log/methods.cc
+    ../src/storage/main.cc
+    ../src/global/configurations.cc )
+
 add_executable( log_module_unit.test ./unit/log_test.cc ${CompileWithFiles}
     ../src/log/methods.cc )
 
 add_executable( utils_fs_module_unit.test ./unit/utils_fs_test.cc ${CompileWithFiles}
     ../src/utils/fs.cc
     ../src/log/methods.cc )
+
+add_executable( hash_user_item_unit.test ./unit/hash_user_item.cc ${CompileWithFiles}
+    ../../src/storage/hash.cc
+    ../../src/log/methods.cc )
 
 add_executable( capture_module_unit.test ./unit/captures_test.cc ${CompileWithFiles}
     ../src/media/capture.cc

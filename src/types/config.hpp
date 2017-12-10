@@ -5,8 +5,6 @@
 
 typedef struct GlobalConfigReadOnly {
 
-	int eachFaceItemSizeInDB = 0;
-
 } GlobalConfigReadOnly;
 
 #define MAX_LENGTH_OF_CONFIG_PATH 255

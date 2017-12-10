@@ -50,6 +50,27 @@ int main() {
 	}
 	testPassed("create test folder recursively!");
 
+	const char* testFile = "./test-env/reg.file";
+	sprintf(buf, "touch %s", testFile);
+	if(system(buf) != 0){
+		sprintf(buf, "create test file failed: %s", testFile);
+		return testFailed(buf);
+	}
+	if(!isPathAFile(testFile)) {
+		sprintf(buf, "isPathAFile return false with a existed file: %s", testFile);
+		return testFailed(buf);
+	}
+	testPassed("isPathAFile(file) => true");
+
+	if(isPathAFile("./test-env/i-dont-existed"))
+		return testFailed("isPathAFile return true with a non-existed path!");
+	testPassed("isPathAFile(non-existed) => false");
+
+
+	if(isPathAFile(createDir))
+		return testFailed("isPathAFile return true with a directory path!");
+	testPassed("isPathAFile(directory) => false");
+
 
 	return testDone("Fs utils test");
 }

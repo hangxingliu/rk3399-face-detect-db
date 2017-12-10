@@ -18,6 +18,8 @@ once/jna/jna_struct_test_so_base.hpp
 once/random_access_file.cc
 unit-arm/arm_test.cc
 unit/captures_test.cc
+unit/database_init.cc
+unit/hash_user_item.cc
 unit/log_test.cc
 unit/sizeof_structures.cc
 unit/utils_fs_test.cc

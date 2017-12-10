@@ -1,29 +1,29 @@
+#include <stdio.h>
+
 #include "./global.hpp"
 #include "../types/api_error_no.hpp"
+#include "../types/base.hpp"
+
+#define Config_copyString(from, to, max) snprintf(to, max, "%s", from)
 
 /** Global configurations instance */
 GlobalConfig Config;
 
-/** 0: Config has not init, 1: initialized.  @see initGlobalConfig() */
-int configHasInitialized = 0;
+bool configHasInitialized = false;
 
-int Config_initGlobalConfig(GlobalConfig* mergeInto) {
-	int status = Config_mergeConfig(&Config, mergeInto);
-	if(status != 0)
-		return status;
-
-	return 0;
+GlobalConfig* getGlobalConfig() {
+	if(!configHasInitialized)
+		return nullptr;
+	return &Config;
 }
 
-static bool Config_copyString(const char* from, char* to, int max) {
-	int i = 0;
-	while(*from) {
-		if(i++ >= max)
-			return false;
-		*to++ = *from++;
-	}
-	*to = 0;
-	return true;
+int Config_initGlobalConfig(GlobalConfig* mergeInto) {
+	if(configHasInitialized)
+		return API_INIT_CONFIG_AGAIN;
+	int status = Config_mergeConfig(&Config, mergeInto);
+	if(status == 0)
+		configHasInitialized = true;
+	return status;
 }
 
 int Config_mergeConfig(GlobalConfig* mergeTo, GlobalConfig* overwrite) {
@@ -34,15 +34,16 @@ int Config_mergeConfig(GlobalConfig* mergeTo, GlobalConfig* overwrite) {
 		if(!Config_copyString(overwrite->workspacePath, mergeTo->workspacePath, MAX_LENGTH_OF_CONFIG_PATH))
 			return API_WORKSPACE_TOO_LONG;
 
-	if(overwrite->resourcesPath)
-		if(!Config_copyString(overwrite->resourcesPath, mergeTo->resourcesPath, MAX_LENGTH_OF_CONFIG_PATH))
-			return API_RESOURCES_TOO_LONG;
+	// if(overwrite->resourcesPath)
+	// 	if(!Config_copyString(overwrite->resourcesPath, mergeTo->resourcesPath, MAX_LENGTH_OF_CONFIG_PATH))
+	// 		return API_RESOURCES_TOO_LONG;
 
-	if(overwrite->initDatabaseFileSize)
-		mergeTo->initDatabaseFileSize = overwrite->initDatabaseFileSize;
+///  TODO: Could not change size now.
+//	if(overwrite->initDatabaseFileSize)
+//		mergeTo->initDatabaseFileSize = overwrite->initDatabaseFileSize;
 
-	if(overwrite->maxDatabaseFileSize)
-		mergeTo->maxDatabaseFileSize = overwrite->maxDatabaseFileSize;
+//	if(overwrite->maxDatabaseFileSize)
+//		mergeTo->maxDatabaseFileSize = overwrite->maxDatabaseFileSize;
 
 	return 0;
 }

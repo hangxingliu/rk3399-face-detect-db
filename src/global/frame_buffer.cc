@@ -26,10 +26,9 @@ void FrameBuffer_setValid(int bufferId) { staticIsFrameBufferValid[bufferId] = t
 void FrameBuffer_setInvalid(int bufferId) { staticIsFrameBufferValid[bufferId] = false; }
 
 cv::Mat* FrameBuffer_giveMeBuffer(int* bufferId) {
-	int v = -1;
 	lockFrameSwitcher();
 
-	v = staticFrameBufferSwitcher;
+	int v = staticFrameBufferSwitcher;
 
 	staticFrameBufferSwitcher++;
 	if(staticFrameBufferSwitcher >= FRAME_BUFFER_COUNT)

@@ -42,6 +42,20 @@
 			"../types/capture.hpp"
 		]
 	}, {
+		"name": "STORAGE_HPP",
+		"hpp": "./src/storage/storage.hpp",
+		"extern-c": false,
+		"input": [
+			"./src/storage/encoder.cc",
+			"./src/storage/hash.cc",
+			"./src/storage/main.cc"
+		],
+		"include": [
+			"../types/base.hpp",
+			"../types/database.hpp",
+			"../types/database_operation.hpp"
+		]
+	}, {
 		"name": "UTILS_HPP",
 		"hpp": "./src/utils/utils.hpp",
 		"extern-c": false,

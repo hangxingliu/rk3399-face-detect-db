@@ -78,5 +78,17 @@ int main() {
 
 	printf("(return 0, 1) == %d\n", return1());
 
+	unsigned int i = 2100000000;
+	printf("overflow test: i = %u\n", i);
+	i *= 2;
+	printf("overflow test: i = %u\n", i);
+	i += 200000000;
+	printf("overflow test: i = %u\n", i);
+	i *= 2;
+	printf("overflow test: i = %u\n", i);
+	i += 1;
+	printf("overflow test: i = %u\n", i);
+
+
 	return testDone("C++ test");
 }

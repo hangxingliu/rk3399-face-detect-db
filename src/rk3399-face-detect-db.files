@@ -17,7 +17,11 @@ log/methods.hpp
 media/capture.cc
 media/media.hpp
 media/media_handlers.hpp
+storage/blank_space_manager.cc
 storage/encoder.cc
+storage/hash.cc
+storage/main.cc
+storage/storage.hpp
 types/api_error_no.hpp
 types/base.hpp
 types/capture.hpp

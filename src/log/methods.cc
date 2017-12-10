@@ -34,9 +34,11 @@ char* Log_getLogDatePrefix() {
 
 static inline void Log__log(const char* type, const char* content) {
 	printf("%s%s    %s\n", type, Log_getLogDatePrefix(), content);
+	fflush(stdout);
 }
 static inline void Log__log2(const char* type, const char* prefix, const char* content) {
 	printf("%s%s    %s%s\n", type, Log_getLogDatePrefix(), prefix, content);
+	fflush(stdout);
 }
 
 const char* PREFIX_DEBUG  = "DEBUG    ";

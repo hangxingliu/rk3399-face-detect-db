@@ -140,9 +140,9 @@ void read(char* params) {
 
 	uint size = 16, rows = 1;
 	if(strchr(params, 'x')) {
-		sscanf(params, "%dx%d", &size, &rows);
+		sscanf(params, "%ux%u", &size, &rows);
 	} else {
-		sscanf(params, "%d", &size);
+		sscanf(params, "%u", &size);
 	}
 	printContent(size, rows, follow);
 }
@@ -168,15 +168,15 @@ int write(char* params) {
 	if(params[0] == 's') {
 		return write(params+1, len-1, "string"), 0;
 	} else if(params[0] == 'c'){
-		int value = 0;
+		unsigned int value = 0;
 		if(strstr(params, "0x")) sscanf(params+1, "0x%x", &value);
-		else sscanf(params+1, "%d", &value);
+		else sscanf(params+1, "%u", &value);
 		char c = (char)(value & 0xFF);
 		return write(&c, 1, "char"), 0;
 	} else if(params[0] == 'i') {
-		int value = 0;
+		unsigned int value = 0;
 		if(strstr(params, "0x")) sscanf(params+1, "0x%x", &value);
-		else sscanf(params+1, "%d", &value);
+		else sscanf(params+1, "%u", &value);
 		return write(&value, 4, "integer"), 0;
 	} else if(params[0] == 'f') {
 		float value = 0;
@@ -204,7 +204,8 @@ int main(int argc, char** argv) {
 	while(!end) {
 		prompt();
 
-		fgets(line, sizeof(line), stdin);
+		if(!fgets(line, sizeof(line), stdin))
+			break;
 
 		char* param = NULL;
 		char cmd = parseInput(line, &param);
