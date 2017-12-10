@@ -40,8 +40,8 @@ bool DB_validateUserItem(DB_BaseUserItem* item) {
 
 	if(!passed) {
 		char buf[256];
-		sprintf(buf, "Wrong hash in UserItem{index: %d, id: \"%s\"}",
-			item->itemNumber, item->userId);
+		sprintf(buf, "Wrong hash in UserItem{index: %u, id: \"%s\"}",
+			item->itemIndex, item->userId);
 		LOG_WARN(buf);
 	}
 

@@ -35,5 +35,6 @@ typedef unsigned char ubyte;
 typedef ubyte* ubytes;
 typedef ubyte* ubyteArray;
 typedef uchar* ucharArray;
+typedef unsigned int uint;
 
 #endif

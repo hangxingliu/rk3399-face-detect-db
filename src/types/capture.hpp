@@ -25,8 +25,14 @@ typedef struct Capture_FrameImageInfo {
 	int isRGB = 0;
 	/// image data size
 	int size = 0;
-	/// width of image, height of image
-	int w = 0, h = 0;
+	/// width of image
+	int w = 0;
+	/// height of image
+	int h = 0;
+
+	/// @todo
+	/// point to data of image
+	ucharArray* data = nullptr;
 } Capture_FrameImageInfo;
 
 

@@ -14,7 +14,10 @@
 // Fix database if count wrong in opening database automatically
 
 #include <fcntl.h>
+#include <unistd.h>
 #include <sys/stat.h>
+
+#include "./storage.hpp"
 
 #include "../types/base.hpp"
 #include "../types/database.hpp"
@@ -26,13 +29,6 @@
 
 #define print2str(...) snprintf(str, sizeof(str), __VA_ARGS__)
 
-static int DatabaseFd = -1;
-static FILE* DatabaseFs = nullptr;
-
-static char DatabaseFile[512];
-static char DatabaseRecoverDir[512];
-
-
 const unsigned char DB_FILE_HEAD[] = {
 	'F', 'a', 'c', 'e',
 	10, 44, 96, 150,
@@ -40,11 +36,22 @@ const unsigned char DB_FILE_HEAD[] = {
 	0, 0, 0, 0, // Count
 	0, 0, 0, 0  // Count Repeat
 };
+const unsigned char* DB_getDefaultHead() { return DB_FILE_HEAD; }
+
 const int DB_HEAD_FLAG_SIZE = 8;
 const int DB_HEAD_VERSION_SIZE = 4;
+const int DB_HEAD_SIZE = sizeof(DB_FILE_HEAD);
+int DB_getHeadSize() { return DB_HEAD_SIZE; }
 
 const char* DB_FILE_NAME = "face.db";
 const char* DB_RECOVER_DIR = ".recover";
+
+static int DatabaseFd = -1;
+static FILE* DatabaseFs = nullptr;
+
+static char DatabaseFile[512];
+static char DatabaseRecoverDir[512];
+
 
 /**
  * Create database file/directory
@@ -54,7 +61,7 @@ const char* DB_RECOVER_DIR = ".recover";
  */
 int DB_createDatabaseFile(
 	const char* _path,
-	long initializedSize) {
+	unsigned long initializedSize) {
 	LOG_DEBUG2("createDatabaseFile: ", _path);
 
 	char path[256];
@@ -180,20 +187,12 @@ int DB_loadDatabase(const char* path) {
 	print2str("load database head success, item count: %d", itemCount);
 	LOG_INFO(str);
 
-
+	status = ItemReader_init(DatabaseFs, itemCount);
+	if(status != 0)
+		return status;
 
 	return API_OK;
 }
-
-static void loadDatabaseFromDisk() {
-
-}
-
-static void updateUserInfoToDisk() {
-	// TODO rollback log file support
-
-}
-
 
 int DB_init() {
 	char str[256];
@@ -224,5 +223,13 @@ int DB_init() {
 }
 
 int DB_close() {
-	// TODO
+	if(DatabaseFd < 0 || !DatabaseFs) {
+		LOG_DEBUG("Database file was not opened");
+		return 0;
+	}
+	fflush(DatabaseFs);
+	fsync(DatabaseFd);
+	return fclose(DatabaseFs);
+	// close file descriptor is unnecessary because fclose fd together.
+	// close(DatabaseFd);
 }

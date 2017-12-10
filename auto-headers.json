@@ -48,7 +48,10 @@
 		"input": [
 			"./src/storage/encoder.cc",
 			"./src/storage/hash.cc",
-			"./src/storage/main.cc"
+			"./src/storage/main.cc",
+			"./src/storage/blank_space_manager.cc",
+			"./src/storage/item_reader.cc",
+			"./src/storage/item_writer.cc"
 		],
 		"include": [
 			"../types/base.hpp",

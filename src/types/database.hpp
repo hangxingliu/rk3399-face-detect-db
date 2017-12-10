@@ -16,7 +16,11 @@
 typedef unsigned char DB_Boolean;
 
 // size: 64 * 1024 = 65536 = 64Kb
-#define DB_BaseUserItemMaxSize 65536
+#define DB_ITEM_SIZE 65536
+#define DB_MAX_ITEM 30000
+/// TODO
+#define DB_MAX_ITEM_IN_MEMORY 1000
+
 
 typedef struct DB_BaseUserItem_LastMatched {
 	/// 0: disable
@@ -53,7 +57,10 @@ typedef struct DB_BaseUserItem_LastMatched {
 
 // 4 + 1 + 7 + 4 * 4 + 4 + 64 + 24004 + 1024 = 25124
 typedef struct DB_BaseUserItem {
-	int itemNumber = 0;
+	/// itemIndex => fileLocation
+	/// 16 + sizeof(DB_BaseUserItem) * (index - 1 )
+	/// itemIndex of first item is 1
+	unsigned int itemIndex = 0;
 	/**
 	 * is this item live ?
 	 * (live is DB_False means this item has been deleted or non-init)
