@@ -88,7 +88,22 @@ function generateCMakeFromFile() {
 			switch(r[1]) {
 				case "TestEntry": name=r[2] ext; break;
 				case "SharedEntry": soName=r[2]; break;
-				case "With": with=with "\n    " r[2]; break;
+				case "With":
+					addWith=r[2];
+
+					# extract glob
+					if(index(addWith, "*") > 0) {
+						comment="# " addWith "\n    ";
+
+						command="GLOB=\"" addWith "\";echo $GLOB;";
+						command | getline addWith;
+						close(command);
+						gsub(/\s+/, "\n    ", addWith);
+						addWith=comment addWith;
+					}
+
+					with=with "\n    " addWith;
+					break;
 				case "Link": links[linkLen++]=r[2]; break;
 			}
 		}

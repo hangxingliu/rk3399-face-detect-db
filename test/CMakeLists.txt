@@ -47,6 +47,12 @@ add_executable( sizeof_structures_unit.test ./unit/sizeof_structures.cc ${Compil
 add_executable( database_init_unit.test ./unit/database_init.cc ${CompileWithFiles}
     ../src/utils/fs.cc
     ../src/log/methods.cc
+    # ../src/storage/*.cc
+    ../src/storage/blank_space_manager.cc
+    ../src/storage/encoder.cc
+    ../src/storage/hash.cc
+    ../src/storage/item_reader.cc
+    ../src/storage/item_writer.cc
     ../src/storage/main.cc
     ../src/global/configurations.cc )
 

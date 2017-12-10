@@ -1,7 +1,7 @@
 /// TestEntry: database_init
 /// With: ../src/utils/fs.cc
 /// With: ../src/log/methods.cc
-/// With: ../src/storage/main.cc
+/// With: ../src/storage/*.cc
 /// With: ../src/global/configurations.cc
 /// ----------------------
 
