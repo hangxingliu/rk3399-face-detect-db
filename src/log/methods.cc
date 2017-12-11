@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<time.h>
+#include<errno.h>
 #include "../types/base.hpp"
 #include "./methods.hpp"
 
@@ -50,6 +51,13 @@ void Log_debug(const char* content) { Log__log(PREFIX_DEBUG, content); }
 void Log_info(const char* content) { Log__log(PREFIX_INFO, content); }
 void Log_warn(const char* content) { Log__log(PREFIX_WARN, content); }
 void Log_fatal(const char* content) { Log__log(PREFIX_FATAL, content); }
+
+void Log_fatalErrno() {
+	char descBuffer[256];
+	int no = errno;
+	snprintf(descBuffer, 256, "errno: %d; description: %s", no, strerror(no));
+	Log__log(PREFIX_FATAL, descBuffer);
+}
 
 void Log_debug2(const char* prefix, const char* content) { Log__log2(PREFIX_DEBUG, prefix, content); }
 void Log_info2(const char* prefix, const char* content) { Log__log2(PREFIX_INFO, prefix, content); }

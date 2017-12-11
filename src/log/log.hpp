@@ -28,6 +28,7 @@
 #define LOG_INFO(ctx) Log_info(ctx)
 #define LOG_WARN(ctx) Log_warn(ctx)
 #define LOG_FATAL(ctx) Log_fatal(ctx)
+#define LOG_ERRNO() Log_fatalErrno()
 
 #define LOG_INFO2(pf, ctx) Log_info2(pf, ctx)
 #define LOG_WARN2(pf, ctx) Log_warn2(pf, ctx)
