@@ -16,8 +16,6 @@ typedef struct GlobalConfig {
 	 */
 	char workspacePath[MAX_LENGTH_OF_CONFIG_PATH + 1];
 
-	char resourcesPath[MAX_LENGTH_OF_CONFIG_PATH + 1];
-
 	/**
 	 * Init database file size(minimum file size)
 	 * default **4 * 1024 * 1024 (4MB)**
@@ -30,6 +28,7 @@ typedef struct GlobalConfig {
 	 */
 	long maxDatabaseFileSize = 3 * 1024 * 1024 * 1024l;
 
+
 	/**
 	 * Read only configurations
 	 * **You can not set this value unless modify sources!**
@@ -38,7 +37,6 @@ typedef struct GlobalConfig {
 
 	GlobalConfig() {
 		strcpy(workspacePath, "./workspace");
-		strcpy(resourcesPath, "./resources");
 	}
 
 } GlobalConfig;

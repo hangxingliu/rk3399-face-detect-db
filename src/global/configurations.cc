@@ -7,7 +7,7 @@
 #define Config_copyString(from, to, max) snprintf(to, max, "%s", from)
 
 /** Global configurations instance */
-GlobalConfig Config;
+static GlobalConfig Config;
 
 bool configHasInitialized = false;
 
@@ -33,10 +33,6 @@ int Config_mergeConfig(GlobalConfig* mergeTo, GlobalConfig* overwrite) {
 	if(overwrite->workspacePath)
 		if(!Config_copyString(overwrite->workspacePath, mergeTo->workspacePath, MAX_LENGTH_OF_CONFIG_PATH))
 			return API_WORKSPACE_TOO_LONG;
-
-	// if(overwrite->resourcesPath)
-	// 	if(!Config_copyString(overwrite->resourcesPath, mergeTo->resourcesPath, MAX_LENGTH_OF_CONFIG_PATH))
-	// 		return API_RESOURCES_TOO_LONG;
 
 ///  TODO: Could not change size now.
 //	if(overwrite->initDatabaseFileSize)

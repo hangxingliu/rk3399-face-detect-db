@@ -98,8 +98,15 @@ int getFrameFromCapture(CaptureRequestOptions* opts, CaptureFrameAndPersonInfo* 
 }
  */
 
+#define INIT_FLAG_NO_CAPTURE 1
 
 static const Capture_FrameRequestOpts face_get_frame_DefaultRequestOpts;
+
+static int initFlagForTest = 0;
+void face_set_init_flag(int flag) {
+	LOG_API_INVOKE("set_init_flag", "%d", flag);
+	initFlagForTest = flag;
+}
 
 int face_init(GlobalConfig* config) {
 
@@ -107,8 +114,12 @@ int face_init(GlobalConfig* config) {
 
 	int status = 0;
 	// Initialize capture
-	status = Capture_Init();
-	if(status != 0) return API_CANNOT_INIT_CAPTURE;
+	if(initFlagForTest & INIT_FLAG_NO_CAPTURE) {
+		LOG_INFO("Skip initialization for capture (INIT_FLAG_NO_CAPTURE)");
+	} else {
+		status = Capture_Init();
+		if(status != 0) return API_CANNOT_INIT_CAPTURE;
+	}
 
 	status = FrameBuffer_init();
 	if(status != 0) return API_CANNOT_INIT_BUFFER;

@@ -6,6 +6,7 @@
 		face_get_frame;
 		face_init;
 		face_ping_pong;
+		face_set_init_flag;
 		face_update;
 
 	local: *;

@@ -14,9 +14,8 @@
 #define API_CANNOT_INIT_CAPTURE		__API_ERR(101, "Can not initialize capture")
 
 #define API_WORKSPACE_TOO_LONG		__API_ERR(201, "Workspace path is too long")
-#define API_RESOURCES_TOO_LONG		__API_ERR(202, "Resources path is too long")
-#define API_INIT_CONFIG_AGAIN		__API_ERR(203, "Initialize configuration repeatedly")
-#define API_HAS_NOT_INIT_CONFIG		__API_ERR(204, "Configuration has not initialized")
+#define API_INIT_CONFIG_AGAIN		__API_ERR(202, "Initialize configuration repeatedly")
+#define API_HAS_NOT_INIT_CONFIG		__API_ERR(203, "Configuration has not initialized")
 
 #define API_CANNOT_INIT_BUFFER		__API_ERR(301, "Can not initialize frame buffer")
 
