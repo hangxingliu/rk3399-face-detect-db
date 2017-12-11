@@ -53,7 +53,7 @@ appendCMake 'project(' `queryConfig '.Name' raw` ')\n';
 appendCMake 'set( CMAKE_CXX_FLAGS' `queryConfig '.CXXFlags'` ')';
 appendCMake 'set( CMAKE_CXX_FLAGS_DEBUG' \
 	`queryConfig '.XCCFlags_Debug'` ')';
-appendCMake 'set( CMAKE_CXX_FLAGS_DEBUG' \
+appendCMake 'set( CMAKE_CXX_FLAGS_RELEASE' \
 	`queryConfig '.XCCFlags_Release'` ')\n';
 
 DIRS=`queryConfig '.LinkDirectories[]' | awk '{print "    " $0;}'`;

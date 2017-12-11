@@ -17,7 +17,7 @@ project( rk3399-face-detect-db-test )
 
 set( CMAKE_CXX_FLAGS "-std=c++11" )
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG" )
-set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE" )
+set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE" )
 
 link_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/../build/release"
