@@ -8,8 +8,6 @@
 
 static FILE* fs = nullptr;
 
-static long IR_itemSizeL = DB_ITEM_SIZE;
-
 /// 0: don't use
 static bool IR_living[DB_MAX_ITEM];
 static DB_BaseUserItem* IR_items[DB_MAX_ITEM];
@@ -18,10 +16,10 @@ static uint IR_livingCount = 0;
 uint ItemReader_getLivingCount() { return IR_livingCount; }
 
 void ItemReader_disposeAllItemInMemory() {
-	LOOP_TIMES(i, IR_length) { if(IR_items[i]) { free(IR_items[i]); } }
+	for(uint i = 0; i < IR_length; i++ ) { if(IR_items[i]) { free(IR_items[i]); } }
 }
 
-int ItemReader_init(FILE* _fs, int expectlivingCount) {
+int ItemReader_init(FILE* _fs, uint expectlivingCount) {
 	fs = _fs;
 
 	BlankSpaceManager_init();
@@ -34,7 +32,7 @@ int ItemReader_init(FILE* _fs, int expectlivingCount) {
 	IR_livingCount = 0;
 
 	/// string buffer to output/log
-	char str[256]; str;
+	char str[256];
 	#define INNER_EXCEPTION(...) sprintf(str, __VA_ARGS__ ), LOG_FATAL(str), API_DB_INNER_EXCEPTION
 
 	DB_BaseUserItem bufferItem;

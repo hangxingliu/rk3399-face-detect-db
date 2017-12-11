@@ -200,7 +200,7 @@ int DB_loadDatabase(const char* path) {
 	print2str("load database head success, item count: %d", itemCount);
 	LOG_INFO(str);
 
-	status = ItemReader_init(DatabaseFs, itemCount);
+	status = ItemReader_init(DatabaseFs, (uint) itemCount);
 	if(status != 0)
 		return status;
 
