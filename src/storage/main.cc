@@ -41,7 +41,19 @@ const unsigned char* DB_getDefaultHead() { return DB_FILE_HEAD; }
 const int DB_HEAD_FLAG_SIZE = 8;
 const int DB_HEAD_VERSION_SIZE = 4;
 const int DB_HEAD_SIZE = sizeof(DB_FILE_HEAD);
+
+const static long DB__itemSizeL = DB_ITEM_SIZE;
+
+// ============
+// getter
 int DB_getHeadSize() { return DB_HEAD_SIZE; }
+int DB_getLivingCountOffset() { return DB_HEAD_FLAG_SIZE + DB_HEAD_VERSION_SIZE; }
+int DB_getLivingCountRepeatOffset() {
+	return DB_HEAD_FLAG_SIZE + DB_HEAD_VERSION_SIZE + sizeof(int); }
+long DB_getItemOffset(uint itemIndex) {
+	return DB_HEAD_SIZE + (itemIndex - 1) * DB__itemSizeL;}
+
+
 
 const char* DB_FILE_NAME = "face.db";
 const char* DB_RECOVER_DIR = ".recover";
@@ -52,6 +64,7 @@ static FILE* DatabaseFs = nullptr;
 static char DatabaseFile[512];
 static char DatabaseRecoverDir[512];
 
+FILE* DB_getFileStream() { return DatabaseFs; }
 
 /**
  * Create database file/directory
@@ -222,14 +235,31 @@ int DB_init() {
 	return 0;
 }
 
-int DB_close() {
-	if(DatabaseFd < 0 || !DatabaseFs) {
-		LOG_DEBUG("Database file was not opened");
-		return 0;
-	}
+/// @private
+static inline int DB__flushToDisk() {
 	fflush(DatabaseFs);
-	fsync(DatabaseFd);
-	return fclose(DatabaseFs);
+	if(fsync(DatabaseFd) != 0) {
+		LOG_FATAL("fsync(DatabaseFd)");
+		LOG_ERRNO();
+		return API_DB_FLUSH_FAILED;
+	}
+	return 0;
+}
+/// Check database file stream, then invoke DB__flushToDisk
+int DB_flushToDisk() {
+	if(DatabaseFd < 0 || !DatabaseFs)
+		return LOG_DEBUG("Database file was not opened"), 0;
+	return DB__flushToDisk();
+}
+
+int DB_close() {
+	if(DatabaseFd < 0 || !DatabaseFs)
+		return LOG_DEBUG("Database file was not opened"), 0;
+	int status = DB__flushToDisk();
+
+	if( fclose(DatabaseFs) != 0 )
+		return API_DB_FCLOSE_FAILED;
+	return status;
 	// close file descriptor is unnecessary because fclose fd together.
 	// close(DatabaseFd);
 }

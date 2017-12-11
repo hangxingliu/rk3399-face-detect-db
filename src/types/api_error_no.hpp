@@ -36,8 +36,11 @@
 
 #define API_DB_OPEN_FD_FAILED		__API_ERR(511, "Could not open database file descriptor")
 #define API_DB_OPEN_FS_FAILED		__API_ERR(512, "Could not open database file stream from fd")
+#define API_DB_FLUSH_FAILED			__API_ERR(513, "Could not flush buffer to disk")
+#define API_DB_FCLOSE_FAILED		__API_ERR(514, "Could not fclose database file stream")
 
 #define API_DB_INNER_EXCEPTION		__API_ERR(521, "Database inner exception")
+
 
 #define API_NO_FACE				__API_DEBUG(10001, "Could not detect face from frame image");
 

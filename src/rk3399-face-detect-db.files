@@ -21,6 +21,7 @@ storage/blank_space_manager.cc
 storage/encoder.cc
 storage/hash.cc
 storage/item_reader.cc
+storage/item_writer.cc
 storage/main.cc
 storage/storage.hpp
 types/api_error_no.hpp
