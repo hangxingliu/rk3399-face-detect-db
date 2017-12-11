@@ -21,5 +21,5 @@ done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd "$DIR";
-./scripts/make.sh build $IS_ARM $@;
+./scripts/make.sh build $IS_ARM -j`bash ./scripts/get-cpu-core-count.sh 8` $@;
 exit $?;
