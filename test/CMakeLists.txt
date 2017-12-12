@@ -120,6 +120,19 @@ add_executable( cpp_base_once.test ./once/cpp_base/cpp_test.cc ${CompileWithFile
 add_executable( jna_struct_test_once.test ./once/jna/jna_struct_test_so.cc ${CompileWithFiles} )
 add_library( jna_struct_test SHARED ./once/jna/jna_struct_test_so.cc ${CompileWithFiles} )
 
+add_executable( storage_once.test ./once/storage/main.cc ${CompileWithFiles}
+    # ../src/storage/*.cc
+    ../src/storage/blank_space_manager.cc
+    ../src/storage/encoder.cc
+    ../src/storage/hash.cc
+    ../src/storage/item_reader.cc
+    ../src/storage/item_writer.cc
+    ../src/storage/main.cc
+    # ../src/log/*.cc
+    ../src/log/methods.cc
+    ../src/utils/fs.cc
+    ../src/global/configurations.cc )
+
 add_executable( call_debug_so_once.test ./once/call_debug_so_test.cc ${CompileWithFiles} )
 target_link_libraries( call_debug_so_once.test rk3399_face_detect_db_debug )
 

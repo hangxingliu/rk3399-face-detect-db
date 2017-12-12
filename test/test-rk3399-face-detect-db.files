@@ -16,6 +16,7 @@ once/jna/jna_struct_test_so.cc
 once/jna/jna_struct_test_so.hpp
 once/jna/jna_struct_test_so_base.hpp
 once/random_access_file.cc
+once/storage/main.cc
 unit-arm/arm_test.cc
 unit/captures_test.cc
 unit/database_init.cc

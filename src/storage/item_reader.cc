@@ -15,15 +15,16 @@ static uint IR_length = 1; //< with one item(index: 0)
 static uint IR_livingCount = 0;
 uint ItemReader_getLivingCount() { return IR_livingCount; }
 
-void ItemReader_disposeAllItemInMemory() {
+void ItemReader_resetAllItemInMemory() {
 	for(uint i = 0; i < IR_length; i++ ) { if(IR_items[i]) { free(IR_items[i]); } }
+	for(uint i = 0; i < DB_MAX_ITEM ; i++ ) { IR_living[i] = false; }
 }
 
 int ItemReader_init(FILE* _fs, uint expectlivingCount) {
 	fs = _fs;
 
 	BlankSpaceManager_init();
-	ItemReader_disposeAllItemInMemory();
+	ItemReader_resetAllItemInMemory();
 
 	IR_living[0] = false;
 	IR_items[0] = nullptr;
@@ -106,7 +107,7 @@ bool ItemReader_getItem(uint itemIndex, DB_BaseUserItem* result) {
 	return true;
 }
 
-bool ItemReader_findItemByUserId(char* userId, DB_BaseUserItem* result) {
+bool ItemReader_findItemByUserId(const char* userId, DB_BaseUserItem* result) {
 	DB_BaseUserItem itemBuffer;
 	DB_BaseUserItem* item;
 	for( uint itemIndex = 0 ; itemIndex < IR_length ; itemIndex ++ ) {
@@ -135,20 +136,24 @@ bool ItemReader_findItemByUserId(char* userId, DB_BaseUserItem* result) {
  * @return bool
  */
 bool ItemReader__updateItemCacheInMemory(uint itemIndex, DB_BaseUserItem* newItem) {
-	if(itemIndex < 0 || itemIndex >= IR_length)
+	if(!newItem)
 		return false;
 
+	if(itemIndex < 0 || itemIndex >= DB_MAX_ITEM)
+		return false;
+
+	if(itemIndex >= IR_length)
+		IR_length = itemIndex + 1;
+
 	bool oldLiving = IR_living[itemIndex];
-	bool newLiving = newItem->live;
+	DB_Boolean newLiving = newItem->live;
 
 	// delete
-	if(newLiving == false) {
+	if(newLiving == DB_False) {
 		IR_living[itemIndex] = false;
 		IR_livingCount -= oldLiving ? 1 : 0;
 		return true;
 	}
-	if(!newItem)
-		return false;
 
 	IR_livingCount += oldLiving ? 0 : 1;
 	// new

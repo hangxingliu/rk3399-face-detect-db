@@ -87,15 +87,15 @@ int DB_createDatabaseFile(
 		path[i] = 0;
 		if(!mkdirRecursively(path))
 			return API_DB_MKDIRS_FAILED;
-		LOG_DEBUG2("Create directory for database file: ", path);
+		LOG_DEBUG2("Created directory for database file: ", path);
 		path[i] = '/';
 		break;
 	}
 
-	FILE *file;
-	file = fopen(path, "wb");
+	FILE *file = nullptr;
+	file = fopen(path, "wb+");
 	if(!file)
-		return API_DB_CREATE_FILE_FAILED;
+		return LOG_ERRNO(), API_DB_CREATE_FILE_FAILED;
 
 	char buffer[4096];
 	const int bufferSize = sizeof(buffer);
@@ -221,7 +221,7 @@ int DB_init() {
 	if(!isPathAFile(DatabaseFile)) {
 		print2str("Database file \"%s\" is not a file. creating now ...", DatabaseFile);
 		LOG_INFO(str);
-		status = DB_createDatabaseFile(config->workspacePath, config->initDatabaseFileSize);
+		status = DB_createDatabaseFile(DatabaseFile, config->initDatabaseFileSize);
 		if( status != 0 )
 			return status;
 	}
@@ -262,4 +262,94 @@ int DB_close() {
 	return status;
 	// close file descriptor is unnecessary because fclose fd together.
 	// close(DatabaseFd);
+}
+
+int DB_pingPong(int ping) { return ping + 1; }
+
+int DB__validateUserId(const char* userId) {
+	if(!userId)
+		return API_DB_USERID_IS_NULL;
+	int i = 0;
+	while(userId[i++])
+		if(i >= USERID_LENGTH)
+			return API_DB_USERID_IS_TOO_LONG;
+	return 0;
+}
+
+static bool DB__createNewLivingUser(
+	const char* userId,
+	DB_BaseUserItem* result) {
+
+	result->itemIndex = BlankSpaceManager_getSpace();
+	result->live = DB_True;
+	strcpy(result->userId, userId);
+	return true;
+}
+
+int DB_deleteUser(const char* userId) {
+	int status = DB__validateUserId(userId);
+	if(status != 0) return status;
+
+	DB_BaseUserItem item;
+	if(!ItemReader_findItemByUserId(userId, &item)) {
+		LOG_FATAL2("Could not found userId: ", userId);
+		return API_DB_USERID_NOT_FOUND;
+	}
+	if(!ItemWriter_deleteItem(&item))
+		return API_DB_UPDATE_FAILED;
+
+	return 0;
+}
+int DB_updateFeatures(const char* userId, FF_FaceFeatures* features) {
+	int status = DB__validateUserId(userId);
+	if(status != 0) return status;
+	if(!features) {
+		LOG_FATAL("DB_updateFeatures: features is null pointer");
+		return API_EMPTY_POINTER;
+	}
+	if(features->len <= 0 || features->len >= FACE_FEATURE_LENGTH) {
+		char buf[128];
+		snprintf(buf, 128, "DB_updateFeatures: features->len: %d is invalid!", features->len);
+		LOG_FATAL(buf);
+		return API_DB_INVALID_FEATURES;
+	}
+
+	DB_BaseUserItem item;
+	if(!ItemReader_findItemByUserId(userId, &item)) {
+		DB__createNewLivingUser(userId, &item);
+		memcpy(&(item.features), features, sizeof(FF_FaceFeatures));
+
+		DB_calcUserItemHash(&item, item.hash);
+		if(!ItemWriter_newItem(&item))
+			return API_DB_UPDATE_FAILED;
+	} else {
+		memcpy(&(item.features), features, sizeof(FF_FaceFeatures));
+
+		DB_calcUserItemHash(&item, item.hash);
+		if(!ItemWriter_newItem(&item))
+			return API_DB_UPDATE_FAILED;
+	}
+	return 0;
+
+}
+int DB_updatePriority(const char* userId, int priority) {
+	int status = DB__validateUserId(userId);
+	if(status != 0) return status;
+
+	DB_BaseUserItem item;
+	if(!ItemReader_findItemByUserId(userId, &item)) {
+		DB__createNewLivingUser(userId, &item);
+		item.priority = priority;
+
+		DB_calcUserItemHash(&item, item.hash);
+		if(!ItemWriter_newItem(&item))
+			return API_DB_UPDATE_FAILED;
+	} else {
+		item.priority = priority;
+
+		DB_calcUserItemHash(&item, item.hash);
+		if(!ItemWriter_newItem(&item))
+			return API_DB_UPDATE_FAILED;
+	}
+	return 0;
 }

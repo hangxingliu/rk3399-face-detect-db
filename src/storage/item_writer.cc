@@ -105,7 +105,8 @@ bool ItemWriter__update(int lCount, uint itemIndex, DB_BaseUserItem* item) {
 			lCount);
 	}
 
-	return true;
+	return ItemReader__updateItemCacheInMemory(itemIndex, item);
+
 }
 
 
@@ -146,7 +147,7 @@ bool ItemWriter_deleteItem(DB_BaseUserItem* oldItem) {
 	DB_BaseUserItem item;
 	IR_COPY_ITEM(&item, oldItem);
 
-	item.live = false;
+	item.live = DB_False;
 	DB_calcUserItemHash(&item, item.hash);
 
 	return ItemWriter__update(oldLivingCount-1, item.itemIndex, &item);

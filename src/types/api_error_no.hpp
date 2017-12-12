@@ -40,6 +40,13 @@
 
 #define API_DB_INNER_EXCEPTION		__API_ERR(521, "Database inner exception")
 
+#define API_DB_USERID_IS_NULL		__API_ERR(531, "Argument userId is null pointer")
+#define API_DB_USERID_IS_TOO_LONG	__API_ERR(532, "Argument userId is too long")
+#define API_DB_USERID_NOT_FOUND		__API_ERR(533, "Argument userId is not existed in database")
+#define API_DB_INVALID_FEATURES		__API_ERR(534, "Argument features are invalid")
+
+#define API_DB_UPDATE_FAILED		__API_ERR(541, "Update database file failed")
+
 
 #define API_NO_FACE				__API_DEBUG(10001, "Could not detect face from frame image");
 
