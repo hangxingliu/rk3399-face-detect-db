@@ -12,7 +12,7 @@ set(TARGET_LIB_NAME rk3399_face_detect_db)
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
 # Add DEBUG and RELEASE to g++
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -Wall -g")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE -O2 -s")
 
 # validate build type and get build type string be lowered to setting target file name
@@ -28,8 +28,8 @@ endif()
 if (CMAKE_FOR_ARM)
 	message("CMake for aarch64(arm) platform ...")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFOR_ARM")
-# else()
-	# message("Linux-x86-64")
+else()
+	message("Linux-x86-64")
 endif()
 
 # libraries
@@ -44,6 +44,16 @@ file(GLOB_RECURSE SOURCE_FILES . "**/*.cc" "**/*.cpp" "**/*.c")
 set(TARGET_SHARED_LIB "${TARGET_LIB_NAME}_${BUILD_TYPE}")
 add_library(${TARGET_SHARED_LIB} SHARED ${SOURCE_FILES})
 target_link_libraries(${TARGET_SHARED_LIB} ${OpenCV_LIBS})
+
+if (CMAKE_FOR_ARM)
+	# Link firefly face SDK
+	target_link_libraries( ${TARGET_SHARED_LIB}
+		rr_facedetect_3_0
+		rr_faceverify_3_0
+		arcsoft_fsdk_face_detection
+		arcsoft_fsdk_face_recognition
+		firefly_faceverify)
+endif()
 
 # using export symbols file
 # https://www.gnu.org/software/gnulib/manual/html_node/LD-Version-Scripts.html
