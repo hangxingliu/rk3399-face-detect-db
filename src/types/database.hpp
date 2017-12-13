@@ -20,6 +20,7 @@ typedef unsigned char DB_Boolean;
 #define DB_MAX_ITEM 30000
 /// TODO
 #define DB_MAX_ITEM_IN_MEMORY 1000
+#define DB_MAX_ITEM_SIZE_IN_MEMORY (DB_MAX_ITEM_IN_MEMORY * sizeof(DB_BaseUserItem))
 
 
 typedef struct DB_BaseUserItem_LastMatched {
@@ -90,6 +91,6 @@ typedef struct DB_BaseUserItem {
 
 } DB_BaseUserItem;
 
-
+typedef bool(*DB_Iterator)(DB_BaseUserItem* item);
 
 #endif // DATABASE_HPP

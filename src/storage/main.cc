@@ -276,7 +276,7 @@ int DB__validateUserId(const char* userId) {
 	return 0;
 }
 
-static bool DB__createNewLivingUser(
+static bool DB__createNewLivingUserStruct(
 	const char* userId,
 	DB_BaseUserItem* result) {
 
@@ -286,6 +286,15 @@ static bool DB__createNewLivingUser(
 	return true;
 }
 
+int DB_findUser(const char* userId, DB_BaseUserItem* item) {
+	int status = DB__validateUserId(userId);
+	if(status != 0) return status;
+
+	if(!ItemReader_findItemByUserId(userId, item))
+		return API_DB_USERID_NOT_FOUND;
+
+	return 0;
+}
 int DB_deleteUser(const char* userId) {
 	int status = DB__validateUserId(userId);
 	if(status != 0) return status;
@@ -316,7 +325,7 @@ int DB_updateFeatures(const char* userId, FF_FaceFeatures* features) {
 
 	DB_BaseUserItem item;
 	if(!ItemReader_findItemByUserId(userId, &item)) {
-		DB__createNewLivingUser(userId, &item);
+		DB__createNewLivingUserStruct(userId, &item);
 		memcpy(&(item.features), features, sizeof(FF_FaceFeatures));
 
 		DB_calcUserItemHash(&item, item.hash);
@@ -338,13 +347,16 @@ int DB_updatePriority(const char* userId, int priority) {
 
 	DB_BaseUserItem item;
 	if(!ItemReader_findItemByUserId(userId, &item)) {
-		DB__createNewLivingUser(userId, &item);
+		LOG_INFO_F("\"%s\" is new user", userId);
+
+		DB__createNewLivingUserStruct(userId, &item);
 		item.priority = priority;
 
 		DB_calcUserItemHash(&item, item.hash);
 		if(!ItemWriter_newItem(&item))
 			return API_DB_UPDATE_FAILED;
 	} else {
+		LOG_INFO_F("itemIndex of \"%s\" is %d.", userId, item.itemIndex);
 		item.priority = priority;
 
 		DB_calcUserItemHash(&item, item.hash);

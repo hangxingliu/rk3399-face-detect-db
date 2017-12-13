@@ -6,28 +6,30 @@
 #include "../types/api_error_no.hpp"
 #include "../types/database.hpp"
 
+#include "../utils/memory.hpp"
+
 static FILE* fs = nullptr;
 
 /// 0: don't use
 static bool IR_living[DB_MAX_ITEM];
-static DB_BaseUserItem* IR_items[DB_MAX_ITEM];
+static MemoryManager<DB_BaseUserItem> memory(DB_MAX_ITEM, DB_MAX_ITEM_SIZE_IN_MEMORY);
+
 static uint IR_length = 1; //< with one item(index: 0)
 static uint IR_livingCount = 0;
 uint ItemReader_getLivingCount() { return IR_livingCount; }
 
-void ItemReader_resetAllItemInMemory() {
-	for(uint i = 0; i < IR_length; i++ ) { if(IR_items[i]) { free(IR_items[i]); } }
-	for(uint i = 0; i < DB_MAX_ITEM ; i++ ) { IR_living[i] = false; }
+void ItemReader_resetAllLivingStatus() {
+	for(uint i = 0; i < DB_MAX_ITEM ; i++ )
+		IR_living[i] = false;
 }
 
 int ItemReader_init(FILE* _fs, uint expectlivingCount) {
 	fs = _fs;
 
 	BlankSpaceManager_init();
-	ItemReader_resetAllItemInMemory();
+	ItemReader_resetAllLivingStatus();
 
 	IR_living[0] = false;
-	IR_items[0] = nullptr;
 
 	IR_length = 1;
 	IR_livingCount = 0;
@@ -58,19 +60,12 @@ int ItemReader_init(FILE* _fs, uint expectlivingCount) {
 		if(!DB_validateUserItem(&bufferItem))
 			return INNER_EXCEPTION("wrong hash of item");
 
-		if(bufferItem.live) {
-			IR_living[IR_length] = true;
-			if(IR_length < DB_MAX_ITEM_IN_MEMORY) {
-				IR_items[IR_length] = (DB_BaseUserItem*) malloc(bufferItemSize);
-				memcpy(IR_items[IR_length], &bufferItem, bufferItemSize);
-			} else {
-				IR_items[IR_length] = nullptr;
-			}
+		if( (IR_living[IR_length] = bufferItem.live) == true ) {
+			if(IR_length < DB_MAX_ITEM_IN_MEMORY)
+				memcpy(memory.allocate(IR_length), &bufferItem, bufferItemSize);
 			IR_livingCount++;
 		} else {
-			IR_living[IR_length] = false;
-			IR_items[IR_length] = nullptr;
-			BlankSpaceManager_addFragment(IR_length);
+			BlankSpaceManager_addFragment(IR_length, true);
 		}
 		IR_length++;
 		location+=DB_ITEM_SIZE;
@@ -83,6 +78,8 @@ int ItemReader_init(FILE* _fs, uint expectlivingCount) {
 }
 
 bool ItemReader__getItemFromDisk(uint itemIndex, DB_BaseUserItem* result) {
+	LOG_DEBUG_F("ItemReader__getItemFromDisk(%u, %p)", itemIndex, result);
+
 	long location = DB_getItemOffset(itemIndex);
 	fseek(fs, location, SEEK_SET);
 	if(ftell(fs) != location) {
@@ -100,19 +97,22 @@ bool ItemReader_getItem(uint itemIndex, DB_BaseUserItem* result) {
 	if(!IR_living[itemIndex])
 		return false;
 
-	if(!IR_items[itemIndex])
+	auto item = memory.at(itemIndex);
+	if(!item)
 		return ItemReader__getItemFromDisk(itemIndex, result);
 
-	memcpy(result, &(IR_items[itemIndex]), sizeof(DB_BaseUserItem));
+	memcpy(result, item, sizeof(DB_BaseUserItem));
 	return true;
 }
 
 bool ItemReader_findItemByUserId(const char* userId, DB_BaseUserItem* result) {
 	DB_BaseUserItem itemBuffer;
 	DB_BaseUserItem* item;
+
+	auto list = memory.getItemList();
 	for( uint itemIndex = 0 ; itemIndex < IR_length ; itemIndex ++ ) {
 		if(!IR_living[itemIndex]) continue;
-		item = IR_items[itemIndex];
+		item = list[itemIndex];
 
 		if(!item) {
 			if(!ItemReader__getItemFromDisk(itemIndex, &itemBuffer))
@@ -129,6 +129,31 @@ bool ItemReader_findItemByUserId(const char* userId, DB_BaseUserItem* result) {
 }
 
 
+bool ItemReader_iterateItem(DB_Iterator iterator) {
+	if(!iterator)
+		return false;
+
+	DB_BaseUserItem itemBuffer;
+	DB_BaseUserItem* item;
+
+	auto list = memory.getItemList();
+	for( uint itemIndex = 0 ; itemIndex < IR_length ; itemIndex ++ ) {
+		if(!IR_living[itemIndex]) continue;
+		item = list[itemIndex];
+
+		if(!item) {
+			if(!ItemReader__getItemFromDisk(itemIndex, &itemBuffer))
+				return false;
+			item = &itemBuffer;
+		}
+
+		if(!(*iterator)(item))
+			break;
+	}
+	return true;
+}
+
+
 /**
  * Don't invoke this method manual. It will be invoke by method "ItemWrite_xxx"
  * @param itemIndex
@@ -136,6 +161,8 @@ bool ItemReader_findItemByUserId(const char* userId, DB_BaseUserItem* result) {
  * @return bool
  */
 bool ItemReader__updateItemCacheInMemory(uint itemIndex, DB_BaseUserItem* newItem) {
+	LOG_DEBUG_F("ItemReader__updateItemCacheInMemory(%u, %p)", itemIndex, newItem);
+
 	if(!newItem)
 		return false;
 
@@ -150,14 +177,29 @@ bool ItemReader__updateItemCacheInMemory(uint itemIndex, DB_BaseUserItem* newIte
 
 	// delete
 	if(newLiving == DB_False) {
+		LOG_DEBUG_F("ItemReader__updateItemCacheInMemory: DELETE Operation");
 		IR_living[itemIndex] = false;
 		IR_livingCount -= oldLiving ? 1 : 0;
 		return true;
 	}
+#ifndef RELEASE
+	if(!oldLiving) {
+		LOG_DEBUG("ItemReader__updateItemCacheInMemory: INSERT Operation");
+	} else {
+		LOG_DEBUG("ItemReader__updateItemCacheInMemory: MODIFY Operation");
+	}
+#endif
 
 	IR_livingCount += oldLiving ? 0 : 1;
 	// new
 	IR_living[itemIndex] = true;
-	memcpy(IR_items[itemIndex], newItem, sizeof(DB_BaseUserItem));
+
+	auto item = memory.at(itemIndex);
+	if(!item)
+		item = memory.allocate(itemIndex);
+
+	memcpy(item, newItem, sizeof(DB_BaseUserItem));
+
+	LOG_DEBUG("ItemReader__updateItemCacheInMemory: update success!");
 	return true;
 }

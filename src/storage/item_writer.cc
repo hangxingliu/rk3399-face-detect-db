@@ -105,6 +105,11 @@ bool ItemWriter__update(int lCount, uint itemIndex, DB_BaseUserItem* item) {
 			lCount);
 	}
 
+	/// update fragment blank space
+	/// @todo check security (don't add fragment space duplicated (it'is dangerous))
+	if(item->live == false)
+		BlankSpaceManager_addFragment(item->itemIndex, false);
+
 	return ItemReader__updateItemCacheInMemory(itemIndex, item);
 
 }

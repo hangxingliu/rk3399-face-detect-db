@@ -18,11 +18,28 @@ const char* ENV = "./test-env/storage/";
 
 void help() {
 	puts("Help:");
-	puts("  p ${userId} ${priority}");
-	puts("  d ${userId}");
-	puts("  q/e");
+	puts("  p ${userId} ${priority}   set priority");
+	puts("  d ${userId}               delete");
+	puts("  v ${userId}               view");
+	puts("  l                         list");
+	puts("  q/e                       exit");
 }
 void prompt() { printf("repl > "); }
+void dumpItem(DB_BaseUserItem* item) {
+	printf("    itemIndex: %u, live: %d, name: \"%s\", priority: %d, feature length: %d\n",
+		item->itemIndex, item->live, item->userId, item->priority, item->features.len);
+}
+
+int iterateCount = 0;
+const int iterateMaxCount = 5;
+bool iterate(DB_BaseUserItem* item) {
+	dumpItem(item);
+	if(++iterateCount > iterateMaxCount) {
+		printf("    ...");
+		return false;
+	}
+	return true;
+}
 
 
 int main() {
@@ -32,7 +49,7 @@ int main() {
 #else
 	LOG_DEBUG("Storage REPL test:");
 #endif
-	printf("test environment: %s\n", ENV);
+	printf("  test environment: %s\n", ENV);
 
 	const int PING_PING = 63;
 	if(DB_pingPong(PING_PING) != PING_PING+1)
@@ -51,21 +68,37 @@ int main() {
 
 	char line[1024];
 	char userId[128];
+	int status = 0;
+
+	help();
 	while(prompt(), fgets(line, 1024, stdin)) {
 		if(strlen(line) < 1) continue;
 		if(line[0] == 'q' || line[0] == 'e') break;
 		if(line[0] == 'p') { //priority
 			int priority = 0;
 			sscanf(line+1, "%s %d", userId, &priority);
-			printf("DB_updatePriority(%s, %d):\n", userId, priority);
-			DB_updatePriority(userId, priority);
+			printf("  DB_updatePriority(%s, %d):\n", userId, priority);
+			status = DB_updatePriority(userId, priority);
 		} else if(line[0] == 'd') { //delete
 			sscanf(line+1, "%s", userId);
-			printf("DB_deleteUser(%s):\n", userId);
-			DB_deleteUser(userId);
-		} else {
+			printf("  DB_deleteUser(%s):\n", userId);
+			status = DB_deleteUser(userId);
+		} else if(line[0] == 's') {
+			sscanf(line+1, "%s", userId);
+			printf("  DB_findUser(%s):\n", userId);
+			DB_BaseUserItem item;
+			status = DB_findUser(userId, &item);
+			if(status == 0)
+				dumpItem(&item);
+		} else if(line[0] == 'l') {
+			iterateCount = 0;
+			ItemReader_iterateItem(iterate);
+			status = 0;
+		} else{
 			help();
+			continue;
 		}
+		printf("%sstatus: %d%s\n", "\x1b[90m", status, COLOR_RESET);
 	}
 
 	if(DB_close() != 0)
