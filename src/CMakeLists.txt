@@ -25,37 +25,22 @@ else()
 	message(FATAL_ERROR "fatal: unknwon CMAKE_BUILD_TYPE: \"${CMAKE_BUILD_TYPE}\" (available type: debug/release)")
 endif()
 
-# set(ARM_FILE_NAME "")
 if (CMAKE_FOR_ARM)
 	message("CMake for aarch64(arm) platform ...")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFOR_ARM")
-
-# 	set(CMAKE_SYSTEM_NAME "Linux")
-# 	set(CMAKE_SYSTEM_VERSION 1)
-
-# 	set(CMAKE_C_COMPILER "/usr/bin/aarch64-linux-gnu-gcc-6")
-# 	set(CMAKE_CXX_COMPILER "/usr/bin/aarch64-linux-gnu-g++-6")
-
-
-# 	# search for programs in the build host directories
-# 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-# 	# for libraries and headers in the target directories
-# 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-# 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-
-# 	set(ARM_FILE_NAME "arm64_")
-
 # else()
 	# message("Linux-x86-64")
 endif()
 
 # libraries
 find_package( OpenCV REQUIRED )
+link_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/../libs/arm64-ff-face-sdk"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../libs" )
 
 # scan all files in this folder to set into variable: ${SOURCE_FILES}
 file(GLOB_RECURSE SOURCE_FILES . "**/*.cc" "**/*.cpp" "**/*.c")
-# aux_source_directory(. SOURCE_FILES)
-# add_executable("${PROJECT_NAME}.${BUILD_TYPE}" ${SOURCE_FILES})
+
 set(TARGET_SHARED_LIB "${TARGET_LIB_NAME}_${BUILD_TYPE}")
 add_library(${TARGET_SHARED_LIB} SHARED ${SOURCE_FILES})
 target_link_libraries(${TARGET_SHARED_LIB} ${OpenCV_LIBS})

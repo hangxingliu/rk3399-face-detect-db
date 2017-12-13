@@ -11,6 +11,7 @@
 #define FF_E_INCOMPATIBLE_VERSION	-5  ///< 版本不兼容
 #define FF_E_BAD_CONFIG_FILE		-6  ///< 配置文件格式错误
 #define FF_E_FILE_NOT_FOUND			-7  ///< 找不到文件
+#define FF_E_JUST_A_SIMULATION		-8  ///< 模拟API而已
 
 #ifdef __cplusplus
 extern "C" {

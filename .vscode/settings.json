@@ -4,13 +4,15 @@
 		"CROSSCOMPILING",
 		"Ctags",
 		"Doxyfile",
+		"Haar",
 		"Rockchip",
 		"STRUCT",
 		"aarch",
 		"autogen",
 		"doxygen",
 		"doxywizard",
-		"lsyncd"
+		"lsyncd",
+		"opencv"
 	],
 	"files.exclude": {
 		"**/.git": true,

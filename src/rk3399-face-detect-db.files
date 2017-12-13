@@ -14,6 +14,7 @@ global/frame_buffer.cc
 global/global.hpp
 global/lockers.cc
 include/firefly_faceverify.hpp
+include/firefly_faceverify_simulation.cc
 include/firefly_faceverify_version.hpp
 log/log.hpp
 log/methods.cc
