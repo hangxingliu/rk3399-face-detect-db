@@ -37,7 +37,7 @@ types/detect.hpp
 types/firefly_face_sdk.hpp
 utils/convert2string.cc
 utils/fs.cc
-utils/memory.cc
+utils/memory.hpp
 utils/opencv.cc
 utils/opencv.hpp
 utils/utils.hpp

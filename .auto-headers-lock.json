@@ -77,13 +77,13 @@
 		"extern-c": false,
 		"input": [
 			"./src/utils/convert2string.cc",
-			"./src/utils/memory.cc",
 			"./src/utils/opencv.cc",
 			"./src/utils/fs.cc"
 		],
 		"include": [
 			"opencv2/opencv.hpp",
-			"./opencv.hpp"
+			"./opencv.hpp",
+			"./memory.hpp"
 		]
 	},
 

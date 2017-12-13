@@ -1,3 +1,4 @@
+utilities/macro.hpp
 CMakeLists.txt
 gui/call_debug_so_get_frame.cc
 gui/cv_img_win_test.cc
@@ -24,5 +25,6 @@ unit/hash_user_item.cc
 unit/log_test.cc
 unit/sizeof_structures.cc
 unit/utils_fs_test.cc
+unit/utils_memory.cc
 utilities/index.cc
 utilities/index.hpp

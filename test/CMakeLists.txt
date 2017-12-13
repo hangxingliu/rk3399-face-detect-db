@@ -63,6 +63,9 @@ add_executable( utils_fs_module_unit.test ./unit/utils_fs_test.cc ${CompileWithF
     ../src/utils/fs.cc
     ../src/log/methods.cc )
 
+add_executable( utils_memory_module_unit.test ./unit/utils_memory.cc ${CompileWithFiles}
+    ../src/log/methods.cc )
+
 add_executable( hash_user_item_unit.test ./unit/hash_user_item.cc ${CompileWithFiles}
     ../../src/storage/hash.cc
     ../../src/log/methods.cc )
