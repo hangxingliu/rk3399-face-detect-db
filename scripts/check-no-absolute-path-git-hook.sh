@@ -15,6 +15,7 @@ function install_me_as_git_pre_commit_hook() {
 function check() {
 	find . -type f \
 		-not -path "./.git/*" \
+		-not -path "./lsyncd/*" \
 		-not -path "./build/*" \
 		-not -path "./build-*/*" \
 		-not -path "./*.pro.user" \

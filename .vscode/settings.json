@@ -9,7 +9,8 @@
 		"aarch",
 		"autogen",
 		"doxygen",
-		"doxywizard"
+		"doxywizard",
+		"lsyncd"
 	],
 	"files.exclude": {
 		"**/.git": true,
