@@ -92,8 +92,7 @@ int DB_createDatabaseFile(
 		break;
 	}
 
-	FILE *file = nullptr;
-	file = fopen(path, "wb+");
+	FILE *file = fopen(path, "wb+");
 	if(!file)
 		return LOG_ERRNO(), API_DB_CREATE_FILE_FAILED;
 
@@ -356,7 +355,7 @@ int DB_updatePriority(const char* userId, int priority) {
 		if(!ItemWriter_newItem(&item))
 			return API_DB_UPDATE_FAILED;
 	} else {
-		LOG_INFO_F("itemIndex of \"%s\" is %d.", userId, item.itemIndex);
+		LOG_INFO_F("itemIndex of \"%s\" is %u.", userId, item.itemIndex);
 		item.priority = priority;
 
 		DB_calcUserItemHash(&item, item.hash);

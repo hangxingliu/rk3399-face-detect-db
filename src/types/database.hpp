@@ -87,6 +87,7 @@ typedef struct DB_BaseUserItem {
 		memset(this->reserved, 0, 7);
 		memset(this->userId, 0, USERID_LENGTH);
 		memset(this->addonReserved, 0, 1024);
+		memset(this->hash, 0, 4);
 	}
 
 } DB_BaseUserItem;
