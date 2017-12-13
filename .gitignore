@@ -1,3 +1,6 @@
+# Ignore Firefly Face SDK shared libraries
+libs/arm64-ff-face-sdk/*.so
+
 # Ignore autosave files
 *.autosave
 
