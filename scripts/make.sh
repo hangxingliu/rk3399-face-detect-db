@@ -127,7 +127,7 @@ for opt in "$@"; do
 		fi
 	elif [[ "$opt" == -D*=* ]]; then CMAKE_OPTS="${CMAKE_OPTS} $opt";
 	elif [[ "$opt" == --* ]]; then fatal "unknown option '${opt}' (usage: --help)";
-	elif [[ -n `echo "$opt" | awk '/^cmake$/||/^build$/||/^test$/||/^clean-all$/'` ]]; then ACTION="$opt";
+	elif [[ -n `echo "$opt" | gawk '/^cmake$/||/^build$/||/^test$/||/^clean-all$/'` ]]; then ACTION="$opt";
 	else fatal "unknown action: '${opt}' (usage: --help)";
 	fi
 done
@@ -201,7 +201,7 @@ if [[ "$ACTION" == "test" ]]; then
 
 	TEST_ALL=0; TEST_PASSED=0;
 	ls | grep "$TEST_EXECUTE_FILE_EXT$" |
-		awk -vIS_ARM="$IS_ARM" 'IS_ARM || !/arm/ {print $0;} END {print "EOF";}' |
+		gawk -vIS_ARM="$IS_ARM" 'IS_ARM || !/arm/ {print $0;} END {print "EOF";}' |
 		while read TEST_FILE; do
 			if [[ "$TEST_FILE" == "EOF" ]]; then
 				echo -e "\n Test result: (Passed: ${TEST_PASSED} / All: ${TEST_ALL})\n";

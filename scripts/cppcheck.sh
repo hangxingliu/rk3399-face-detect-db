@@ -17,7 +17,7 @@ BLUE="\x1b[1;34m";
 RESET="\x1b[0m";
 function fatal() { echo -e "\n  ${RED}error: $1$RESET\n"; exit 1; }
 function colorable() {
-	awk \
+	gawk \
 		-vERROR="$RED"\
 		-vWARNING="$YELLOW"\
 		-vNORMAL="\x1b[33m"\
@@ -32,5 +32,5 @@ function colorable() {
 CPPCHECK="cppcheck";
 [[ -z `which $CPPCHECK` ]] && fatal "missing \"$CPPCHECK\" ";
 
-[[ -n `echo "$*" | awk '/test/'` ]] && PROJ="." || PROJ="src";
+[[ -n `echo "$*" | gawk '/test/'` ]] && PROJ="." || PROJ="src";
 $CPPCHECK "$PROJ" --enable=all --quiet --force 2>&1 | colorable;

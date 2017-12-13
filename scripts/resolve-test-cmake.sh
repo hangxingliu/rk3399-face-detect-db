@@ -56,14 +56,14 @@ appendCMake 'set( CMAKE_CXX_FLAGS_DEBUG' \
 appendCMake 'set( CMAKE_CXX_FLAGS_RELEASE' \
 	`queryConfig '.XCCFlags_Release'` ')\n';
 
-DIRS=`queryConfig '.LinkDirectories[]' | awk '{print "    " $0;}'`;
+DIRS=`queryConfig '.LinkDirectories[]' | gawk '{print "    " $0;}'`;
 CMAKE="${CMAKE}link_directories(\n${DIRS} )\n";
 
 PACKAGES=`queryConfig '.Packages[]' raw |
-	awk '{print "find_package( " $0 " REQUIRED )"}'`;
+	gawk '{print "find_package( " $0 " REQUIRED )"}'`;
 CMAKE="${CMAKE}${PACKAGES}\n";
 
-COMPILE_WITH_FILES=`queryConfig '.With[]' | awk '{print "    " $0;}'`;
+COMPILE_WITH_FILES=`queryConfig '.With[]' | gawk '{print "    " $0;}'`;
 CMAKE="${CMAKE}file(GLOB_RECURSE CompileWithFiles . \n${COMPILE_WITH_FILES} )\n\n"
 
 # For ARM
@@ -75,7 +75,7 @@ appendCMake "endif()\n";
 
 
 function generateCMakeFromFile() {
-	awk -vext="$1" '{
+	gawk -vext="$1" '{
 		file=$0;
 		fileForCMake=file; gsub("../test/", "./", fileForCMake);
 

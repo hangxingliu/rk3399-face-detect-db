@@ -30,8 +30,8 @@ function parse() {
 	ctags -o - -x --_xformat="[%{C++.properties}] %{name} %K %F:%n %S ||| %C"\
 		--kinds-C++=+p --language-force=C++ --extras=+q --fields-C++='*' "$1" |
 		# function name starts with _ is private or anonymous or lambda
-		awk '$3=="function" && !match($2, /^_/) && !match($1, /static/)' |
-		awk -vfn="$1" 'BEGIN{
+		gawk '$3=="function" && !match($2, /^_/) && !match($1, /static/)' |
+		gawk -vfn="$1" 'BEGIN{
 			print "//  ====================";
 			print "//  @file " fn;
 			print "//  ====================";

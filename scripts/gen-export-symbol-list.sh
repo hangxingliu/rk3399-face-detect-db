@@ -17,8 +17,8 @@ function parse() {
 	# --kinds-C++=+p --language-force=C++ --extras=+q
 	# these options for fully function list bewteen #ifndef and #endif
 	ctags -o - --kinds-C++=+p --language-force=C++ --extras=+q --output-format=xref "$EXPORT_FROM" |
-		awk '$2=="prototype" {print "\t\t" $1 ";"}' |
-		awk 'BEGIN { print "{\n\tglobal:"; }
+		gawk '$2=="prototype" {print "\t\t" $1 ";"}' |
+		gawk 'BEGIN { print "{\n\tglobal:"; }
 			{ print $0; }
 			END { print "\n\tlocal: *;\n};"; }';
 }

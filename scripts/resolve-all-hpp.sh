@@ -18,8 +18,8 @@ function fatal() { echo -e "\n  error: $1\n"; exit 1;}
 
 [[ -z `which jq` ]] && fatal "could not find denpedency: \"jq\" (sudo apt install jq) <https://stedolan.github.io/jq/>";
 
-[[ -n `echo "$*" | awk '/-q/||/quiet/'` ]] && QUIET=true || QUIET=false;
-[[ -n `echo "$*" | awk '/-f/||/force/'` ]] && FORCE_REFRESH=true || FORCE_REFRESH=false;
+[[ -n `echo "$*" | gawk '/-q/||/quiet/'` ]] && QUIET=true || QUIET=false;
+[[ -n `echo "$*" | gawk '/-f/||/force/'` ]] && FORCE_REFRESH=true || FORCE_REFRESH=false;
 
 [[ "$FORCE_REFRESH" == "true" ]] && echo "Force mode: on (ignore cache)";
 
@@ -37,8 +37,8 @@ fi
 function json() { echo "$CONFIG_CONTENT" | jq "$1" -r; }
 # paramter => $1: config id
 function isMatchConfigCache() {
-	_CFG=`echo "$CONFIG_CONTENT" | jq ".[$1]" | md5sum | awk '{print $1;}'`;
-	_CACHE=`echo "$CACHE_CONTENT" | jq ".[$1]" | md5sum | awk '{print $1;}'`;
+	_CFG=`echo "$CONFIG_CONTENT" | jq ".[$1]" | md5sum | gawk '{print $1;}'`;
+	_CACHE=`echo "$CACHE_CONTENT" | jq ".[$1]" | md5sum | gawk '{print $1;}'`;
 	[[ "$_CFG" == "$_CACHE" ]] && echo "true" || echo "false";
 }
 
@@ -50,16 +50,16 @@ while [[ $index -lt $CONFIG_LEN ]]; do
     CONFIG_NAME=`json .[${index}].name`;
 	HPP=`json .[${index}].hpp`;
 	EXTERNC=`json .[${index}].\"extern-c\"`;
-	INPUT=`json .[${index}].input[] | awk '{printf("--input=" $0 " ")}'`
+	INPUT=`json .[${index}].input[] | gawk '{printf("--input=" $0 " ")}'`
 	INPUT_MD5=`json .[${index}].input[] | xargs -I _f md5sum _f`;
-	INCLUDE=`json .[${index}].include[] | awk '{printf("--include=" $0 " ")}'`
+	INCLUDE=`json .[${index}].include[] | gawk '{printf("--include=" $0 " ")}'`
 
 	[[ "$QUIET" == "true" ]] || echo "[.] generating header ${CONFIG_NAME} into ${HPP} ...";
 
 	# ignore if matched config cache and file content cache
 	if [[ "$FORCE_REFRESH" == "false" ]]  && [[ -f "$HPP" ]]; then
 		MD5SUM_ALL=`echo "$INPUT_MD5" | wc -l`;
-		MD5SUM_MATCHED=`echo "$INPUT_MD5" | awk '{print $1}' |
+		MD5SUM_MATCHED=`echo "$INPUT_MD5" | gawk '{print $1}' |
 			xargs -I _regexp grep "$HPP" -e _regexp | wc -l`;
 
 		if [[ "$MD5SUM_ALL" == "$MD5SUM_MATCHED" ]] &&
@@ -76,7 +76,7 @@ while [[ $index -lt $CONFIG_LEN ]]; do
 	else EXTERNC=""; fi
 	COMMAND="${GENERATOR} --name=${CONFIG_NAME} --output=${HPP} ${EXTERNC} ${INPUT} ${INCLUDE}";
 
-	$COMMAND && echo "${INPUT_MD5}" | awk 'BEGIN {print "\n// md5sum:";} {print "// " $0;}' >> "$HPP";
+	$COMMAND && echo "${INPUT_MD5}" | gawk 'BEGIN {print "\n// md5sum:";} {print "// " $0;}' >> "$HPP";
 
 	if [[ "$?" == "0" ]]; then
 		[[ "$QUIET" == "true" ]] || echo -e "[~] generated!\n";

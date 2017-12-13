@@ -9,7 +9,7 @@ function usage() {
 	exit 0;
 }
 
-[[ -n `echo "$*" | awk '/-h/||/help/'` ]] && usage;
+[[ -n `echo "$*" | gawk '/-h/||/help/'` ]] && usage;
 [[ -n `uname -a | grep -e aarch64` ]] && IS_ARM="--arm" || IS_ARM="";
 
 OTHER_OPTS="";

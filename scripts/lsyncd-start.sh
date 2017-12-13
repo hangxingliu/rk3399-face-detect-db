@@ -12,7 +12,7 @@ pushd "..";
 
 function fatal() { echo "error: $1"; exit 1; }
 
-OLD_PID=`ps -o 'pid,cmd' -A x | awk '!/awk/ && /lsyncd\/configurations/ {print $1;}'`;
+OLD_PID=`ps -o 'pid,cmd' -A x | gawk '!/gawk/ && /lsyncd\/configurations/ {print $1;}'`;
 if [[ -n "$OLD_PID" ]]; then
 	echo "found old lsyncd process, killing ...";
 	kill "${OLD_PID}";
