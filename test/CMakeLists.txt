@@ -143,6 +143,11 @@ add_executable( call_release_so_once.test ./once/call_release_so_test.cc ${Compi
 target_link_libraries( call_release_so_once.test rk3399_face_detect_db_release )
 
 add_executable( random_access_file_once.test ./once/random_access_file.cc ${CompileWithFiles} )
+
+if (CMAKE_FOR_ARM)
+  add_executable( call_api_on_arm_once.test ./once/arm64-only/call_api_on_arm.cc ${CompileWithFiles} )
+  target_link_libraries( call_api_on_arm_once.test rk3399_face_detect_db_debug )
+endif()
 endif()
 
 

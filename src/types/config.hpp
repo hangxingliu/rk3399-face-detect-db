@@ -39,6 +39,10 @@ typedef struct GlobalConfig {
 		strcpy(workspacePath, "./workspace");
 	}
 
+	GlobalConfig(const char* _workspacePath) {
+		snprintf(workspacePath, MAX_LENGTH_OF_CONFIG_PATH, "%s", _workspacePath);
+	}
+
 } GlobalConfig;
 
 #endif // PUBLIC_TYPES_CONFIG_HPP

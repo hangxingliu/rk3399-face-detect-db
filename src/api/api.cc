@@ -219,6 +219,7 @@ int face_dispose_detect_results(int count, Detect_FaceInfoArray* results) {
 
 /**
  * @param result a pointer to a Detect_FaceInfo struct to receiving face result
+ * @param frameResult
  * @see API_NO_FACE
  * @return 0: detected face. 10001: no face. ...: other error
  */

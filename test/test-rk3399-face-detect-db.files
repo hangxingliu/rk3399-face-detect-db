@@ -1,4 +1,3 @@
-utilities/macro.hpp
 CMakeLists.txt
 gui/call_debug_so_get_frame.cc
 gui/cv_img_win_test.cc
@@ -7,6 +6,7 @@ gui/utils_opencv_test.cc
 images/README.md
 images/children-817365_1280.jpg
 images/sudo-rm-rf-meme.png
+once/arm64-only/call_api_on_arm.cc
 once/call_debug_so_test.cc
 once/call_release_so_test.cc
 once/cpp_base/cpp_malloc_sizeof_test.cc
@@ -18,7 +18,6 @@ once/jna/jna_struct_test_so.hpp
 once/jna/jna_struct_test_so_base.hpp
 once/random_access_file.cc
 once/storage/main.cc
-unit-arm/arm_test.cc
 unit/captures_test.cc
 unit/database_init.cc
 unit/hash_user_item.cc
@@ -28,3 +27,4 @@ unit/utils_fs_test.cc
 unit/utils_memory.cc
 utilities/index.cc
 utilities/index.hpp
+utilities/macro.hpp

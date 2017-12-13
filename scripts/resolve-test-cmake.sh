@@ -79,6 +79,7 @@ function generateCMakeFromFile() {
 		file=$0;
 		fileForCMake=file; gsub("../test/", "./", fileForCMake);
 
+		onlyForARM=0;
 		name=""; soName=""; with=" ${CompileWithFiles}";
 		# links=[];
 		linkLen=0;
@@ -88,6 +89,7 @@ function generateCMakeFromFile() {
 			switch(r[1]) {
 				case "TestEntry": name=r[2] ext; break;
 				case "SharedEntry": soName=r[2]; break;
+				case "OnlyForARM": onlyForARM=1; break;
 				case "With":
 					addWith=r[2];
 
@@ -107,15 +109,23 @@ function generateCMakeFromFile() {
 				case "Link": links[linkLen++]=r[2]; break;
 			}
 		}
-		if(name) {
-			print "add_executable( " name " " fileForCMake with " )";
-			for(i=0;i<linkLen;i++)
-				print "target_link_libraries( " name " " links[i] " )";
-		}
-		if(soName)
-			print "add_library( " soName " SHARED " fileForCMake with " )";
+		if(name || soName) {
+			indent="";
+			if(onlyForARM) { indent="  "; print "if (CMAKE_FOR_ARM)"; }
 
-		if(name || soName) print "";
+			if(name) {
+				print indent "add_executable( " name " " fileForCMake with " )";
+				for(i=0;i<linkLen;i++)
+					print indent "target_link_libraries( " name " " links[i] " )";
+			}
+			if(soName)
+				print indent "add_library( " soName " SHARED " fileForCMake with " )";
+
+			if(onlyForARM)
+				printf "endif()";
+
+			print "";
+		}
 	}';
 }
 
