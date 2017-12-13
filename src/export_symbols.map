@@ -1,6 +1,8 @@
 {
 	global:
+		cowSayDeprecatedAPI;
 		face_detect;
+		face_detect1;
 		face_detect_one_face_in_last_frame;
 		face_dispose_detect_results;
 		face_get_frame;

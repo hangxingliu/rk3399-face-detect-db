@@ -1,6 +1,7 @@
 CMakeLists.txt
 api/api.cc
 api/api.hpp
+api/api_cowsay.cc
 db-walker.cc
 exmaple.cc
 export_symbols.map

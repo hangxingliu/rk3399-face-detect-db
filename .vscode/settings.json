@@ -9,6 +9,7 @@
 		"STRUCT",
 		"aarch",
 		"autogen",
+		"cowsay",
 		"doxygen",
 		"doxywizard",
 		"lsyncd",

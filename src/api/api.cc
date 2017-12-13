@@ -101,8 +101,7 @@ int getFrameFromCapture(CaptureRequestOptions* opts, CaptureFrameAndPersonInfo* 
  */
 
 #define INIT_FLAG_NO_CAPTURE 1
-
-static const Capture_FrameRequestOpts face_get_frame_DefaultRequestOpts;
+#define INIT_FLAG_NO_DATABASE 2
 
 static int initFlagForTest = 0;
 void face_set_init_flag(int flag) {
@@ -129,8 +128,12 @@ int face_init(GlobalConfig* config) {
 	status = Config_initGlobalConfig(config);
 	if(status != 0) return status;
 
-	status = DB_init();
-	if(status != 0) return status;
+	if(initFlagForTest & INIT_FLAG_NO_DATABASE) {
+		LOG_INFO("Skip initialization for database (INIT_FLAG_NO_DATABASE)");
+	} else {
+		status = DB_init();
+		if(status != 0) return status;
+	}
 
 #ifndef FOR_ARM
 	initFaceHaarCascade("/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml");
@@ -143,21 +146,12 @@ int face_init(GlobalConfig* config) {
 	return 0;
 }
 
-/**
- * @param opts
- * @param resultInfo
- * @param resultData this is a pointer pointed to a uchar(unsigned char) array
- * @return int
- */
 int face_get_frame(
-	const Capture_FrameRequestOpts* opts,
-	API_OUT Capture_FrameImageInfo* resultInfo,
-	API_OUT_NON_NULL ucharArray* resultData) {
+	API_OUT_NON_NULL Capture_FrameImageInfo* result) {
 
-	LOG_API_INVOKE("get_frame", "%p, %p, %p", opts, resultInfo, resultData);
+	LOG_API_INVOKE("get_frame", "%p", result);
 
-	if(!resultData) return API_EMPTY_POINTER;
-	if(!opts) opts = &face_get_frame_DefaultRequestOpts;
+	if(!result) return API_EMPTY_POINTER;
 
 	int bufferId = -1;
 	cv::Mat* buffer = FrameBuffer_giveMeBuffer(&bufferId);
@@ -165,8 +159,9 @@ int face_get_frame(
 	DUMP_INT(bufferId, "got buffer to storaging frame image");
 
 	lockFrameAccess(bufferId);
-	FrameBuffer_setInvalid(bufferId);
 	#define _23_unlock_return(code) unlockFrameAccess(bufferId), (code);
+
+	FrameBuffer_setInvalid(bufferId);
 
 	LOG_DEBUG("getting frame image from capture (opencv) ...");
 	if(!Capture_Read(buffer))
@@ -182,36 +177,24 @@ int face_get_frame(
 		return _23_unlock_return(API_FRAME_IS_NOT_CONTINUOUS);
 	if(width <= 0 || height <= 0 || !buffer->data)
 		return _23_unlock_return(API_FRAME_IS_EMPTY);
-#ifndef NDEBUG
+#ifdef DEBUG
 	if(buffer->channels() != 3 || buffer->elemSize() != 3)
 		return _23_unlock_return(API_FRAME_IS_NOT_U8C3);
 #endif
 // =========================
 
-	if(resultInfo) {
-		/// TODO: If convert to RGB
-		resultInfo->isRGB = 0;
-		resultInfo->w = width;
-		resultInfo->h = height;
-		resultInfo->frameId = bufferId;
-		resultInfo->size = width * height * 3;
-	}
-	*resultData = buffer->data;
+	result->w = width;
+	result->h = height;
+	result->frameId = bufferId;
+	result->size = width * height * 3;
+	result->data = &(buffer->data);
 
 	FrameBuffer_setValid(bufferId);
 
-	LOG_DEBUG("Incoke API get_frame success!");
+	LOG_DEBUG("Invoke API get_frame success!");
 	return _23_unlock_return(API_OK);
 }
 
-/**
- * @param frameId
- * @param maxResultCapacity
- * @param resultCount
- * @param results
- * @see dispose_detect_results
- * @return
- */
 int face_detect(
 	int frameId,
 	int maxResultCapacity,
@@ -240,14 +223,25 @@ int face_dispose_detect_results(int count, Detect_FaceInfoArray* results) {
  * @return 0: detected face. 10001: no face. ...: other error
  */
 int face_detect_one_face_in_last_frame(
-	API_OUT_NON_NULL Detect_FaceInfo* result) {
+	API_OUT_NON_NULL Detect_FaceInfo* result,
+	API_OUT Capture_FrameImageInfo* frameResult) {
 
-	LOG_API_INVOKE("detect_one_face_in_last_frame", "%p", result);
+	LOG_API_INVOKE("detect_one_face_in_last_frame", "%p, %p", result, frameResult);
 
 	if(!result)
 		return API_EMPTY_POINTER;
 
 	return API_TODO;
+}
+
+int face_detect1(
+	API_OUT_NON_NULL Detect_FaceInfo* result,
+	API_OUT Capture_FrameImageInfo* frameResult) {
+
+	cowSayDeprecatedAPI();
+	LOG_API_INVOKE("detect1", "%p, %p", result, frameResult);
+
+	return face_detect_one_face_in_last_frame(result, frameResult);
 }
 
 
@@ -256,7 +250,7 @@ int face_update(DB_Modification* modification) {
 	LOG_API_INVOKE("update", "%p", modification);
 	if(!modification) return API_EMPTY_POINTER;
 
-	return 0;
+	return API_TODO;
 }
 
 /**
@@ -268,3 +262,4 @@ int face_ping_pong(int ping){
 	LOG_API_INVOKE("ping_pong", "%d", ping);
 	return ping + 1;
 }
+

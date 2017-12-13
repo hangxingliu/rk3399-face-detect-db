@@ -20,7 +20,7 @@ using namespace cv;
 
 int main() {
 
-	const char* XML = "./resources/haarcascade_frontalface_alt2.xml";
+	const char* XML = "/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml";
 	const char* IMAGE = "./test/images/children-817365_1280.jpg";
 	const char* WINDOW = "OpenCV Face detection";
 

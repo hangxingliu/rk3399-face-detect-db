@@ -15,20 +15,22 @@ char str[SIZE];
 
 using namespace cv;
 
+#define INIT_FLAG_NO_CAPTURE 1
+#define INIT_FLAG_NO_DATABASE 2
+
 int main() {
 	const char* WINDOW = "Frame in capture";
 
+	face_set_init_flag(INIT_FLAG_NO_DATABASE);
 	if( face_init(NULL) != 0 )
 		return testFailed("face_init");
 
-
-	ucharArray buffer;
 	Capture_FrameImageInfo info;
 
-	if( face_get_frame(NULL, &info, &buffer) != 0)
+	if( face_get_frame(&info) != 0)
 		return testFailed("face_get_frame");
 
-	cv::Mat image(info.h, info.w, CV_8UC3, buffer);
+	cv::Mat image(info.h, info.w, CV_8UC3, *(info.data) );
 
 	namedWindow(WINDOW);
 	imshow(WINDOW, image);

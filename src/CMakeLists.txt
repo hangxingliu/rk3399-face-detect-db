@@ -52,4 +52,4 @@ set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--version-script
 add_executable("db-walker" db-walker.cc)
 
 # gcc -fPIC
-# set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
