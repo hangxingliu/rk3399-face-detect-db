@@ -19,6 +19,9 @@
 #ifndef API_OUT_NON_NULL
 	#define API_OUT_NON_NULL
 #endif
+#ifndef NON_NULL
+	#define NON_NULL
+#endif
 
 
 

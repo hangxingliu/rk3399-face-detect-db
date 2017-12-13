@@ -4,6 +4,10 @@ api/api.hpp
 db-walker.cc
 exmaple.cc
 export_symbols.map
+face/face.cc
+face/face.hpp
+face/face_addon.hpp
+face/type_convert.cc
 global/_constant.hpp
 global/configurations.cc
 global/frame_buffer.cc
@@ -16,7 +20,6 @@ log/methods.cc
 log/methods.hpp
 media/capture.cc
 media/media.hpp
-media/media_handlers.hpp
 storage/blank_space_manager.cc
 storage/encoder.cc
 storage/hash.cc

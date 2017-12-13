@@ -37,8 +37,8 @@ fi
 function json() { echo "$CONFIG_CONTENT" | jq "$1" -r; }
 # paramter => $1: config id
 function isMatchConfigCache() {
-	_CFG=`echo "$CONFIG_CONTENT" | jq ".[$1]" | md5sum | awk '{print $1;}'`
-	_CACHE=`echo "$CACHE_CONTENT" | jq ".[$1]" | md5sum | awk '{print $1;}'`
+	_CFG=`echo "$CONFIG_CONTENT" | jq ".[$1]" | md5sum | awk '{print $1;}'`;
+	_CACHE=`echo "$CACHE_CONTENT" | jq ".[$1]" | md5sum | awk '{print $1;}'`;
 	[[ "$_CFG" == "$_CACHE" ]] && echo "true" || echo "false";
 }
 

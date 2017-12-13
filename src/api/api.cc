@@ -12,6 +12,8 @@
 #include "../utils/utils.hpp"
 #include "../global/global.hpp"
 #include "../media/media.hpp"
+#include "../face/face.hpp"
+#include "../storage/storage.hpp"
 
 #ifdef NDEBUG
 #define LOG_API_INVOKE(name, ps, ...) 0;
@@ -127,9 +129,15 @@ int face_init(GlobalConfig* config) {
 	status = Config_initGlobalConfig(config);
 	if(status != 0) return status;
 
+	status = DB_init();
+	if(status != 0) return status;
 
 #ifndef FOR_ARM
 	initFaceHaarCascade("/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml");
+#else
+	// For ARM release:
+	status = Face_init();
+	if(status != 0) return status;
 #endif
 
 	return 0;

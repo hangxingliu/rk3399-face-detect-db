@@ -14,9 +14,9 @@ typedef struct Detect_FaceInfo {
 	/// Face rect: (x0, y0)~(x1, y1)
 	int x0 = 0, y0 = 0, x1 = 0, y1 = 0;
 
+	float confidence;
+	float quality;
 //  Remove according to a ******* java programmer
-//	  float confidence;
-//	  float quality;
 //	  int yaw, pitch, roll; // 3*4=12
 //	  Detect_Pointf landmarks[5]; // 5*(4*2)=40
 

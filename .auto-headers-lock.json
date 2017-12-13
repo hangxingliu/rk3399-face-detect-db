@@ -59,6 +59,19 @@
 			"../types/database_operation.hpp"
 		]
 	}, {
+		"name": "FACE_HPP",
+		"hpp": "./src/face/face.hpp",
+		"extern-c": false,
+		"input": [
+			"./src/face/face.cc",
+			"./src/face/type_convert.cc"
+		],
+		"include": [
+			"../types/base.hpp",
+			"../types/firefly_face_sdk.hpp",
+			"../types/detect.hpp"
+		]
+	}, {
 		"name": "UTILS_HPP",
 		"hpp": "./src/utils/utils.hpp",
 		"extern-c": false,

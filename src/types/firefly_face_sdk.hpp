@@ -3,6 +3,15 @@
 #ifndef PUBLIC_TYPES_FIREFLY_FACE_HPP
 #define PUBLIC_TYPES_FIREFLY_FACE_HPP 1
 
+#define FF_OK						 0	///< 函数返回成功
+#define FF_E_ILLEGAL_ARGUMENT		-1	///< 非法参数
+#define FF_E_INVALID_HANDLE			-2	///< 无效句柄
+#define FF_E_NO_MEMORY				-3	///< 内存不足
+#define FF_E_FAIL					-4	///< 内部错误
+#define FF_E_INCOMPATIBLE_VERSION	-5  ///< 版本不兼容
+#define FF_E_BAD_CONFIG_FILE		-6  ///< 配置文件格式错误
+#define FF_E_FILE_NOT_FOUND			-7  ///< 找不到文件
+
 #ifdef __cplusplus
 extern "C" {
 #endif

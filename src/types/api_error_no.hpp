@@ -47,6 +47,14 @@
 
 #define API_DB_UPDATE_FAILED		__API_ERR(541, "Update database file failed")
 
+#define API_FACE_INIT_FD_FAILED		__API_ERR(601, "firefly_fd_init_detector() failed")
+#define API_FACE_INIT_FV_FAILED		__API_ERR(602, "firefly_fv_init_verifier() failed")
+#define API_FACE_DIDNOT_INIT		__API_ERR(603, "Face module is not initialized")
+#define API_FACE_DETECT_FAILED		__API_ERR(604, "Detect face failed!")
+#define API_FACE_DETECT_FAILED2		__API_ERR(606, "Detect face failed! (empty result pointer)")
+#define API_FACE_EXTRACT_FAILED		__API_ERR(607, "Extract face features failed!")
+#define API_FACE_EXTRACT_FAILED2		__API_ERR(608, "Extract face features failed! (empty result pointer)")
+
 
 #define API_NO_FACE				__API_DEBUG(10001, "Could not detect face from frame image");
 
