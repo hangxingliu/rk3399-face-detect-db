@@ -95,7 +95,7 @@
 		"hpp": "./test/utilities/index.hpp",
 		"extern-c": false,
 		"input": ["./test/utilities/index.cc"],
-		"include": []
+		"include": ["./macro.hpp"]
 	}, {
 		"name": "JNA_STRUCT_TEST_SO",
 		"hpp": "./test/once/jna/jna_struct_test_so.hpp",
