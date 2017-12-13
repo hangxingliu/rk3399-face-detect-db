@@ -53,7 +53,7 @@ if [[ "$CONFIRMED" != "yes" ]]; then
 fi
 
 CFG_DIR=`pwd`;
-CFG_EXCLUDE='".*", "build*", "demo", "docs", "resources", "test-env", "lsyncd"';
+CFG_EXCLUDE='".*", "build\-*", "demo", "docs", "resources", "test\-env", "lsyncd", "*.autosave"';
 CONF="-- # generated date: $(date '+%y/%m/%d %H:%M')
 settings {
 	logfile = \"${CFG_DIR}/lsyncd.log\",
