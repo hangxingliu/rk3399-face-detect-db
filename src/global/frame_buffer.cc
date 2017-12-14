@@ -1,8 +1,9 @@
 #include "opencv2/opencv.hpp"
 
 #include "./global.hpp"
-#include "../types/base.hpp"
 #include "../log/log.hpp"
+#include "../types/base.hpp"
+#include "../types/api_error_no.hpp"
 
 static cv::Mat staticFrameBuffer[FRAME_BUFFER_COUNT];
 static bool staticIsFrameBufferValid[FRAME_BUFFER_COUNT];
@@ -17,9 +18,8 @@ int FrameBuffer_init() {
 }
 
 bool FrameBuffer_isBufferValid(int bufferId) {
-	if(bufferId >= 0 && bufferId < FRAME_BUFFER_COUNT)
+	if(bufferId < 0 && bufferId >= FRAME_BUFFER_COUNT)
 		return false;
-
 	return staticIsFrameBufferValid[bufferId];
 }
 void FrameBuffer_setValid(int bufferId) { staticIsFrameBufferValid[bufferId] = true; }
@@ -44,5 +44,15 @@ cv::Mat* FrameBuffer_giveMeBuffer(int* bufferId) {
 	return NULL;
 }
 
+int FrameBuffer_cloneBuffer(int bufferId, cv::Mat& cloneTo) {
+	lockFrameAccess(bufferId);
+	if(!FrameBuffer_isBufferValid(bufferId)) {
+		unlockFrameAccess(bufferId);
+		return API_FRAME_ID_IS_INVALID;
+	}
 
+	staticFrameBuffer[bufferId].copyTo(cloneTo);
+	unlockFrameAccess(bufferId);
+	return 0;
+}
 

@@ -315,10 +315,8 @@ int DB_updateFeatures(const char* userId, FF_FaceFeatures* features) {
 		LOG_FATAL("DB_updateFeatures: features is null pointer");
 		return API_EMPTY_POINTER;
 	}
-	if(features->len <= 0 || features->len >= FACE_FEATURE_LENGTH) {
-		char buf[128];
-		snprintf(buf, 128, "DB_updateFeatures: features->len: %d is invalid!", features->len);
-		LOG_FATAL(buf);
+	if(features->len <= 0 || features->len >= FACE_FEATURE_SIZE) {
+		LOG_FATAL_F("DB_updateFeatures: features->len: %d is invalid!", features->len);
 		return API_DB_INVALID_FEATURES;
 	}
 
