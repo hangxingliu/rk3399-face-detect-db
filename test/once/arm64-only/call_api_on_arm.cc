@@ -23,7 +23,7 @@ using namespace std::chrono;
 
 Capture_FrameImageInfo frame;
 
-const int PAUSE_COUNT = 50;
+const int PAUSE_COUNT = 30;
 int count = 0;
 
 std::atomic<int> lastFrameId(-1);

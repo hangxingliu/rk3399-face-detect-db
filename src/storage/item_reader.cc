@@ -7,6 +7,7 @@
 #include "../types/database.hpp"
 
 #include "../utils/memory.hpp"
+#include "../utils/timer.hpp"
 
 static FILE* fs = nullptr;
 
@@ -134,6 +135,8 @@ bool ItemReader_findItemByFeatures(
 	float* score,
 	DB_BaseUserItem* result) {
 
+	_timer_init(t1, t2);double ms = 0.0f;
+
 	DB_BaseUserItem itemBuffer;
 	DB_BaseUserItem* item;
 
@@ -150,18 +153,25 @@ bool ItemReader_findItemByFeatures(
 			item = &itemBuffer;
 		}
 
+		_timer_set(t1);
 		float s = (*comparer)(features, item->features);
-		if(s < 0.6f) continue;
+		_timer_set(t2);
+		ms += _timer_calc(t2, t1);
+
+		if(s < 0.5f) continue;
 		if(s > 0.8f) {
 			*score = s;
 			memcpy(result, item, sizeof(DB_BaseUserItem));
+
+			_timer_log(ms, "compare features");
 			return true;
 		} else if(s > maxScore) {
 			maxScore = s;
 			maxItemIndex = item->itemIndex;
 		}
 	}
-	if(maxItemIndex > 0 && maxScore > 0.6f) {
+
+	if(maxItemIndex > 0 && maxScore >= 0.5f) {
 		*score = maxScore;
 
 		item = list[maxItemIndex];
@@ -171,6 +181,8 @@ bool ItemReader_findItemByFeatures(
 			item = &itemBuffer;
 		}
 		memcpy(result, item, sizeof(DB_BaseUserItem));
+
+		_timer_log(ms, "compare features");
 		return true;
 	}
 	return false;

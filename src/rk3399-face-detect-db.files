@@ -42,4 +42,5 @@ utils/fs.cc
 utils/memory.hpp
 utils/opencv.cc
 utils/opencv.hpp
+utils/timer.hpp
 utils/utils.hpp

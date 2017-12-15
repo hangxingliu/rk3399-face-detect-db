@@ -46,14 +46,14 @@
 #define LOG_FORMAT_WARN(_buf, _max, ...) __LOG_F(_buf, _max, __VA_ARGS__) LOG_WARN(_buf);
 #define LOG_FORMAT_FATAL(_buf, _max, ...) __LOG_F(_buf, _max, __VA_ARGS__) LOG_FATAL(_buf);
 
-#define LOG_INFO_F(...) LOG_FORMAT_INFO(__info_buffer, 256, __VA_ARGS__)
-#define LOG_WARN_F(...) LOG_FORMAT_WARN(__warn_buffer, 256, __VA_ARGS__)
-#define LOG_FATAL_F(...) LOG_FORMAT_FATAL(__fatal_buffer, 256, __VA_ARGS__)
+#define LOG_INFO_F(...) { LOG_FORMAT_INFO(__info_buffer, 256, __VA_ARGS__) }
+#define LOG_WARN_F(...) { LOG_FORMAT_WARN(__warn_buffer, 256, __VA_ARGS__) }
+#define LOG_FATAL_F(...) { LOG_FORMAT_FATAL(__fatal_buffer, 256, __VA_ARGS__) }
 
 #ifdef RELEASE
 	#define LOG_DEBUG_F(...)
 #else
-	#define LOG_DEBUG_F(...) __LOG_F(__debug_buffer, 256, __VA_ARGS__); LOG_DEBUG(__debug_buffer);
+	#define LOG_DEBUG_F(...) { __LOG_F(__debug_buffer, 256, __VA_ARGS__); LOG_DEBUG(__debug_buffer); }
 #endif
 
 #endif // LOG_HPP

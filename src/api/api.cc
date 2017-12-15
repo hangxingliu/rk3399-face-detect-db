@@ -12,6 +12,7 @@
 
 #include "../log/log.hpp"
 #include "../utils/utils.hpp"
+#include "../utils/timer.hpp"
 #include "../global/global.hpp"
 #include "../media/media.hpp"
 #include "../face/face.hpp"
@@ -19,6 +20,17 @@
 
 static bool hideGetFrameLog = false;
 static bool hideApiInvoke = false;
+
+#define ANALYZE_API_TIME 0
+#if ANALYZE_API_TIME
+#define _timer_for_api() _timer_init(t1, t2);
+#define _timer_bee_go() _timer_set(t1);
+#define _timer_hey_ok(s) {_timer_set(t2);double ms=_timer_calc(t2,t1);_timer_log(ms,s);}
+#else
+#define _timer_for_api()
+#define _timer_bee_go()
+#define _timer_hey_ok(s)
+#endif
 
 #ifdef NDEBUG
 #define LOG_API_INVOKE(name, ps, ...) 0;
@@ -125,7 +137,7 @@ int face_draw_face_rect(
 	NON_NULL Detect_FaceRectAttr* attr,
 	NON_NULL Detect_FaceInfo* faceInfo,
 	API_OUT NEED_TO_FREE ucharArray* newImageData,
-	API_OUT int* w, API_OUT int* h) {
+	API_OUT int* _w, API_OUT int* _h) {
 
 	LOG_API_INVOKE("draw_face_rect", "%d, %p, %p, %p", frameId, attr, faceInfo, newImageData);
 	if(!attr) return API_EMPTY_POINTER;
@@ -135,18 +147,27 @@ int face_draw_face_rect(
 	int status = FrameBuffer_cloneBuffer(frameId, image);
 	if(status != 0) return status;
 
+	auto w = image.cols, h = image.rows;
 	auto color = CV_RGB(attr->r, attr->g, attr->b);
 	auto p0 = cv::Point(faceInfo->x0, faceInfo->y0);
 	auto p1 = cv::Point(faceInfo->x1, faceInfo->y1);
 	cv::rectangle(image, p0, p1, color, attr->thickness);
+
+	if(faceInfo->matched && faceInfo->matchedUserId) {
+		int xText = faceInfo->x0, yText = faceInfo->y0 - 10;
+		if(yText < 20) yText = faceInfo->y1 + 10;
+		cv::Point pText(xText, yText);
+		cv::putText(image, faceInfo->matchedUserId, pText,
+			cv::FONT_HERSHEY_DUPLEX, 2.0f, color);
+	}
 
 	size_t size = image.cols * image.rows * image.channels();
 	ucharArray data = (ucharArray) malloc(size);
 	memcpy(data, image.data, size);
 
 	*newImageData = data;
-	if(w) *w = image.cols;
-	if(h) *h = image.rows;
+	if(w) *_w = w;
+	if(h) *_h = h;
 	return API_OK;
 }
 
@@ -157,23 +178,30 @@ int face_detect(
 	API_OUT NEED_TO_FREE Detect_FaceInfoArray* _results) {
 
 	LOG_API_INVOKE("detect", "%d, %d, %p, %p", frameId, maxResultCount, _resultCount, _results);
+
 #ifndef FOR_ARM
 	LOG_FATAL("Detect API could only use on arm64 device! (Firefly face SDK limited)");
 	return API_TODO;
 #endif
+	_timer_for_api();
 
 	int status = 0;
 	cv::Mat image;
+
+	_timer_bee_go();
 	status = FrameBuffer_cloneBuffer(frameId, image);
 	if(status != 0) return status;
+	_timer_hey_ok("clone frame buffer");
 
 	FF_FaceInfo* faces = (FF_FaceInfo*) malloc(maxResultCount * sizeof(FF_FaceInfo));
 #define freeFacesAndReturn(code) free(faces), (code);
 
+	_timer_bee_go();
 	int count = 0;
 	if(!Face_detect(image, maxResultCount, faces, &count))
 		return freeFacesAndReturn(API_FACE_DETECT_FAILED);
 	LOG_INFO_F("Found %d faces", count);
+	_timer_hey_ok("Face_detect");
 
 	if(count == 0) {
 		*_resultCount = count;
@@ -195,22 +223,29 @@ int face_detect(
 			continue;
 		}
 
+		_timer_bee_go();
 		FF_FaceFeatures features;
 		if(!Face_extract(image, faces[i], &features))
 			return freeFacesAndReturn(API_FACE_EXTRACT_FAILED);
+		_timer_hey_ok("Face_extract");
 
 		bool matched = false; float matchedScore = 0.0f; const char* name = nullptr;
 		DB_BaseUserItem matchedUser;
 		if(features.len > 0) { //valid features
 			LOG_DEBUG_F("Extracted features with length: %d", features.len);
 
+			_timer_bee_go();
 			matched = ItemReader_findItemByFeatures(features, Face_compare, &matchedScore, &matchedUser);
+			_timer_hey_ok("ItemReader_findItemByFeatures");
+
 			if(matched) {
 				name = matchedUser.userId;
 				LOG_DEBUG_F("Matched face in db: \"%s\"(score: %.4f)", name, matchedScore);
 			}
 		}
+		_timer_bee_go();
 		results[i] = Detect_FaceInfo_create(&(faces[i]), &features, matched, matchedScore, name);
+		_timer_hey_ok("Detect_FaceInfo_create");
 
 		auto dp = &(results[i]); //Dump Pointer
 		LOG_INFO_F("Biggest face: <%d, %d>~<%d, %d>; feature float count: %d",
@@ -235,12 +270,16 @@ int face_detect_one_face_in_last_frame(
 	LOG_API_INVOKE("detect_one_face_in_last_frame", "%p, %p", result, frameResult);
 	if(!result) return API_EMPTY_POINTER;
 
+	_timer_for_api();
+
 	int frameId = FrameBuffer_getLastFrameId();
 	int count = 0;
 	Detect_FaceInfoArray _results = nullptr;
 
+	_timer_bee_go();
 	int status = face_detect(frameId, 1, &count, &_results);
 	if(status != 0) return status;
+	_timer_hey_ok("api face_detect");
 	if(count < 1) {
 		if(_results) free(_results);
 		return API_NO_FACE;
