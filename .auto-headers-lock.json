@@ -23,7 +23,8 @@
 		"include": [
 			"opencv2/opencv.hpp",
 			"./_constant.hpp",
-			"../types/config.hpp"
+			"../types/config.hpp",
+			"../types/capture.hpp"
 		]
 	}, {
 		"name": "LOG_METHODS_HPP",

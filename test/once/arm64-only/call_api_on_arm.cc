@@ -29,8 +29,6 @@ int count = 0;
 std::atomic<int> lastFrameId(-1);
 std::atomic<bool> stop(false);
 
-Detect_FaceInfoArray faces = nullptr;
-
 high_resolution_clock::time_point _timer_begin, _timer_end;
 double _timer_elapsed = 0;
 #define _timer_now(var) var = high_resolution_clock::now();
@@ -85,27 +83,33 @@ bool loop() {
 			return false;
 		count = 0;
 	}
-	int frame = lastFrameId.load();
-	if(frame < 0)
-		return true;
 
 	int faceCount = 0;
 
 	timer_start();
-	int status = face_detect(frame, 1, &faceCount, &faces);
-	if(status != 0) {
+	Detect_FaceInfo face;
+	Capture_FrameImageInfo frameInfo;
+	int status = face_detect_one_face_in_last_frame(&face, &frameInfo);
+	if(status == 10001) { // no face
+		status = 0;
+		faceCount = 0;
+	} else if(status == 405) { // invalid buffer id
+		printf("Ignore detect invalid frame %d\n", frame.frameId);
+		return true;
+	} else if(status != 0) {
 		testFailedFormat("face_detect return %d", status);
 		return false;
+	} else {
+		faceCount = 1;
 	}
 	timer_end();
 
 	if(faceCount > 0) {
-		printf("Found %d face from frame %d!\n", faceCount, frame);
-		auto face = faces[0];
+		printf("Found %d face from frame %d!\n", faceCount, frame.frameId);
 
 		ucharArray preview = nullptr; int w, h;
 		Detect_FaceRectAttr attr = {0, 255, 0, 3};
-		status = face_draw_face_rect(frame, &attr, &face, &preview, &w, &h);
+		status = face_draw_face_rect(frame.frameId, &attr, &face, &preview, &w, &h);
 		if(status != 0 || !preview) {
 			testFailedFormat("Could not generate face matched rectangle image! (%d)", status);
 			return false;
@@ -158,7 +162,7 @@ bool loop() {
 		return true;
 	}
 
-	printf("No face in frame %d!\n", frame);
+	printf("No face in frame %d!\n", frame.frameId);
 	return true;
 }
 
@@ -178,10 +182,6 @@ int main() {
 	getFrame.detach();
 
 	while(loop()) {
-		if(faces)
-			free(faces);
-		faces = nullptr;
-
 //		printf("sleeping ... \n");
 		usleep(100 * 1000); //100ms
 		if(stop.load() == true)

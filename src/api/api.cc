@@ -105,43 +105,18 @@ int face_get_frame(
 	lockFrameAccess(bufferId);
 #define _23_unlock_return(code) unlockFrameAccess(bufferId), (code);
 
+	// ====> get frame from opencv
 	FrameBuffer_setInvalid(bufferId);
-
-	if(!hideGetFrameLog) {
-		LOG_DEBUG_F("getting frame image from capture (opencv) to buffer[%d]...", bufferId);
-	}
-
+	if(!hideGetFrameLog) { LOG_DEBUG_F("getting frame image from capture (opencv) to buffer[%d]...", bufferId); }
 	if(!Capture_Read(buffer))
 		return _23_unlock_return(API_READ_FRAME_FAILED);
-
-	if(!hideGetFrameLog) {
-		LOG_DEBUG("got frame image");
-	}
-
-	int width = buffer->cols;
-	int height = buffer->rows;
-
-// =========================
-// Validate image of frame
-	if(!buffer->isContinuous())
-		return _23_unlock_return(API_FRAME_IS_NOT_CONTINUOUS);
-	if(width <= 0 || height <= 0 || !buffer->data)
-		return _23_unlock_return(API_FRAME_IS_EMPTY);
-#ifdef DEBUG
-	if(buffer->channels() != 3 || buffer->elemSize() != 3)
-		return _23_unlock_return(API_FRAME_IS_NOT_U8C3);
-#endif
-// =========================
-
-	result->w = width;
-	result->h = height;
-	result->frameId = bufferId;
-	result->size = width * height * 3;
-	result->data = &(buffer->data);
-
+	if(!hideGetFrameLog) { LOG_DEBUG("got frame image from opencv"); }
 	FrameBuffer_setValid(bufferId);
+	// <====
 
-//	LOG_DEBUG("Invoke API get_frame success!");
+	int status = FrameBuffer_getFrameInfo(false, bufferId, result);
+	if(status != 0) return _23_unlock_return(status);
+
 	return _23_unlock_return(API_OK);
 }
 
@@ -260,12 +235,28 @@ int face_detect_one_face_in_last_frame(
 	LOG_API_INVOKE("detect_one_face_in_last_frame", "%p, %p", result, frameResult);
 	if(!result) return API_EMPTY_POINTER;
 
+	int frameId = FrameBuffer_getLastFrameId();
+	int count = 0;
+	Detect_FaceInfoArray _results = nullptr;
 
+	int status = face_detect(frameId, 1, &count, &_results);
+	if(status != 0) return status;
+	if(count < 1) {
+		if(_results) free(_results);
+		return API_NO_FACE;
+	}
 
+	// copy result
+	memcpy(result, &(_results[0]), sizeof(Detect_FaceInfo));
+	// copy frame info
+	if(frameResult)
+		status = FrameBuffer_getFrameInfo(true, frameId, frameResult);
 
+	// free teporary memory
+	if(_results)
+		free(_results);
 
-
-	return API_TODO;
+	return status;
 }
 
 int face_detect1(
