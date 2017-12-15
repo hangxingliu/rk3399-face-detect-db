@@ -15,7 +15,7 @@ cmake_minimum_required( VERSION 2.8 )
 
 project( rk3399-face-detect-db-test )
 
-set( CMAKE_CXX_FLAGS "-std=c++11" )
+set( CMAKE_CXX_FLAGS "-std=c++11 -Werror" )
 set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG" )
 set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE" )
 
@@ -152,6 +152,7 @@ if (CMAKE_FOR_ARM)
   add_executable( call_api_on_arm_once.test ./once/arm64-only/call_api_on_arm.cc ${CompileWithFiles} )
   target_link_libraries( call_api_on_arm_once.test rk3399_face_detect_db_debug )
   target_link_libraries( call_api_on_arm_once.test ${OpenCV_LIBS} )
+  target_link_libraries( call_api_on_arm_once.test ${CMAKE_THREAD_LIBS_INIT} )
 endif()
 endif()
 

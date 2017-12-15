@@ -9,7 +9,7 @@ set(TARGET_LIB_NAME rk3399_face_detect_db)
 
 # Add compile options
 # -std=c++11            use c++ 11 standard
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Werror")
 
 # Add DEBUG and RELEASE to g++
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -Wall")
