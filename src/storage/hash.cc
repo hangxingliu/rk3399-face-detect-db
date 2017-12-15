@@ -18,9 +18,8 @@ void DB_calcUserItemHash(
 	LOOP_TIMES(i, USERID_LENGTH) { hash[i&3] += item->userId[i]; }
 
 	auto features = &(item->features);
-	auto len = features->len;
-	hash[2] += len;
-	LOOP_TIMES(i, len) { hash[i&3] += (int)(features->data[i] * 100); }
+	hash[2] += features->len;
+	LOOP_TIMES(i, FACE_FEATURE_ARRAY_LENGTH) { hash[i&3] += (int)(features->data[i] * 100); }
 
 	LOOP_TIMES(i, 1024) { hash[i&3] += item->addonReserved[i]; }
 	LOOP_TIMES(i, 4) { hashResult[i] = hash[i]; }

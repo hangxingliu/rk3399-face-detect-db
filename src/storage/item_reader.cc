@@ -128,6 +128,54 @@ bool ItemReader_findItemByUserId(const char* userId, DB_BaseUserItem* result) {
 	return false;
 }
 
+bool ItemReader_findItemByFeatures(
+	FF_FaceFeatures features,
+	DB_FeaturesComparer comparer,
+	float* score,
+	DB_BaseUserItem* result) {
+
+	DB_BaseUserItem itemBuffer;
+	DB_BaseUserItem* item;
+
+	float maxScore = 0.0f;
+	uint maxItemIndex = 0;
+
+	auto list = memory.getItemList();
+	for( uint itemIndex = 0 ; itemIndex < IR_length ; itemIndex ++ ) {
+		if(!IR_living[itemIndex]) continue;
+		item = list[itemIndex];
+		if(!item) {
+			if(!ItemReader__getItemFromDisk(itemIndex, &itemBuffer))
+				return false;
+			item = &itemBuffer;
+		}
+
+		float s = (*comparer)(features, item->features);
+		if(s < 0.6f) continue;
+		if(s > 0.8f) {
+			*score = s;
+			memcpy(result, item, sizeof(DB_BaseUserItem));
+			return true;
+		} else if(s > maxScore) {
+			maxScore = s;
+			maxItemIndex = item->itemIndex;
+		}
+	}
+	if(maxItemIndex > 0 && maxScore > 0.6f) {
+		*score = maxScore;
+
+		item = list[maxItemIndex];
+		if(!item) {
+			if(!ItemReader__getItemFromDisk(maxItemIndex, &itemBuffer))
+				return false;
+			item = &itemBuffer;
+		}
+		memcpy(result, item, sizeof(DB_BaseUserItem));
+		return true;
+	}
+	return false;
+}
+
 
 bool ItemReader_iterateItem(DB_Iterator iterator) {
 	if(!iterator)

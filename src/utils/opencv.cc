@@ -71,7 +71,7 @@ bool initFaceHaarCascade(const char* haarcascadeXML) {
 			return false;
 		}
 	}
-	LOG_DEBUG2("Initialized face haar cascade from ", haarcascadeXML);
+	LOG_DEBUG_F("Initialized face haar cascade from %s", haarcascadeXML);
 	return true;
 }
 bool detectFace(

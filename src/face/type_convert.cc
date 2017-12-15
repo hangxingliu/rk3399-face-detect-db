@@ -21,8 +21,12 @@ Detect_FaceInfo Detect_FaceInfo_create(
 	info.quality = ffFaceInfo->quality;
 	info.confidence = ffFaceInfo->confidence;
 
-	info.featureLength = ffFaceFeatures->len;
-	memcpy(info.features, ffFaceFeatures->data, sizeof(float) * info.featureLength);
+	if(ffFaceFeatures) {
+		info.featureLength = ffFaceFeatures->len;
+		memcpy(info.features, ffFaceFeatures->data, FACE_FEATURE_SIZE);
+	} else {
+		info.featureLength = 0;
+	}
 
 	if(matched) {
 		info.matched = 1;
@@ -33,4 +37,13 @@ Detect_FaceInfo Detect_FaceInfo_create(
 	}
 
 	return info;
+}
+
+/// @todo move this function to correct location/file
+void FF_FaceFeatures_create(
+	int len, const float* data,
+	FF_FaceFeatures* instance) {
+
+	instance->len = len;
+	memcpy(instance->data, data, FACE_FEATURE_SIZE);
 }

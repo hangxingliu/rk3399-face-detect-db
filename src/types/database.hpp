@@ -93,5 +93,6 @@ typedef struct DB_BaseUserItem {
 } DB_BaseUserItem;
 
 typedef bool(*DB_Iterator)(DB_BaseUserItem* item);
+typedef float(*DB_FeaturesComparer)(FF_FaceFeatures& f1, FF_FaceFeatures& f2);
 
 #endif // DATABASE_HPP

@@ -29,24 +29,25 @@ int Face_init() {
 		faceDetector = firefly_fd_init_detector();
 	if(!faceDetector)
 		return API_FACE_INIT_FD_FAILED;
+	LOG_INFO("firefly faceDetector initialized!");
 
 	if(!faceVerifier)
 		faceVerifier = firefly_fv_init_verifier();
 	if(!faceVerifier)
 		return API_FACE_INIT_FV_FAILED;
+	LOG_INFO("firefly faceVerifier initialized!");
 
 	return API_OK;
 }
 
-FF_FaceInfo* Face_getBiggestFace(
+int Face_getBiggestFaceIndex(
 	FF_FaceInfo* faceArray,
 	int arrayLength) {
 	MaxRect max;
 	LOOP_TIMES(i, arrayLength)
 		max.addRect(i, &(faceArray[i].rect));
-	if(max.getMaxId() < 0)
-		return nullptr;
-	return &(faceArray[max.getMaxId()]);
+	return max.getMaxId();
+//	return &(faceArray[max.getMaxId()]);
 }
 
 bool Face_detect(cv::Mat &_image,
@@ -81,16 +82,26 @@ bool Face_extract(cv::Mat &_image,
 	NON_NULL FF_FaceFeatures* result) {
 
 	if(!result) {
-		FACE_FATAL("Face_extract: result pointer is null");
+		LOG_FATAL("Face_extract: result pointer is null");
 		return false;
 	}
 
 	auto image = FF_Image_FromCVMat(_image);
+	result->len = 0;
 	int status = firefly_fv_extract_feature(faceVerifier,
 		image, oneFace, result);
 	if(status != FF_OK) {
-		FACE_FATAL("firefly_fv_extract_feature return: %d", status);
+		LOG_FATAL_F("firefly_fv_extract_feature return: %d", status);
 		return false;
+	}
+	if(result->len <= 0) {
+		LOG_WARN_F("firefly_fv_extract_feature (invalid length: %d) <= 0", result->len);
+		result->len = 0;
+	}
+	const int maxLength = (int) FACE_FEATURE_SIZE;
+	if(result->len >= maxLength) {
+		LOG_WARN_F("firefly_fv_extract_feature (invalid length: %d) >= %d", result->len, maxLength);
+		result->len = 0;
 	}
 	return true;
 }

@@ -8,6 +8,7 @@
 #define API_OK 0
 
 #define API_EMPTY_POINTER			__API_ERR( 10, "Invoke API with empty pointer")
+#define API_INVALID_PARAMTER		__API_ERR( 11, "Invalid parameter")
 #define API_TODO					__API_ERR( 66, "TODO doesn't means all")
 #define API_ERROR_TERRIBLE			__API_ERR( 99, "A terrible error occured and I don't know the reason")
 
@@ -23,6 +24,7 @@
 #define API_FRAME_IS_EMPTY			__API_ERR(402, "Frame image is empty")
 #define API_FRAME_IS_NOT_U8C3		__API_ERR(403, "Frame image is not 3 channel unsigned char")
 #define API_FRAME_IS_NOT_CONTINUOUS	__API_ERR(404, "Frame image is not continuous")
+#define API_FRAME_ID_IS_INVALID		__API_ERR(405, "Frame Id is invalid (no frame data)")
 
 #define API_DB_MKDIRS_FAILED		__API_ERR(501, "Could not create directory database file located in")
 #define API_DB_CREATE_FILE_FAILED	__API_ERR(502, "Could not create database file")
@@ -51,9 +53,7 @@
 #define API_FACE_INIT_FV_FAILED		__API_ERR(602, "firefly_fv_init_verifier() failed")
 #define API_FACE_DIDNOT_INIT		__API_ERR(603, "Face module is not initialized")
 #define API_FACE_DETECT_FAILED		__API_ERR(604, "Detect face failed!")
-#define API_FACE_DETECT_FAILED2		__API_ERR(606, "Detect face failed! (empty result pointer)")
 #define API_FACE_EXTRACT_FAILED		__API_ERR(607, "Extract face features failed!")
-#define API_FACE_EXTRACT_FAILED2		__API_ERR(608, "Extract face features failed! (empty result pointer)")
 
 
 #define API_NO_FACE				__API_DEBUG(10001, "Could not detect face from frame image");

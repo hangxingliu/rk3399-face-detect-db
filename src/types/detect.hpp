@@ -22,7 +22,7 @@ typedef struct Detect_FaceInfo {
 
 	/** 0: could not get face features */
 	int featureLength = 0;
-	float features[FACE_FEATURE_LENGTH];
+	float features[FACE_FEATURE_ARRAY_LENGTH];
 
 	/** (0:not/1:matched) is this person info matched a person in database*/
 	int matched = 0;
@@ -34,5 +34,10 @@ typedef struct Detect_FaceInfo {
 } Detect_FaceInfo;
 
 typedef struct Detect_FaceInfo* Detect_FaceInfoArray;
+
+typedef struct Detect_FaceRectAttr {
+	int r, g, b;
+	int thickness;
+} Detect_FaceRectAttr;
 
 #endif // PUBLIC_TYPES_DETECT_HPP

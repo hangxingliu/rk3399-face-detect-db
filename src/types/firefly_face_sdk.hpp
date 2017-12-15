@@ -80,8 +80,8 @@ typedef struct FF_FaceInfo {
  * Firefly Face SDK Face Features(len, data[6000])
  */
 typedef struct FF_FaceFeatures {
-	int len = 0;
-	float data[FACE_FEATURE_LENGTH];
+	int len;
+	float data[FACE_FEATURE_ARRAY_LENGTH];
 } FF_FaceFeatures;
 
 #ifdef __cplusplus

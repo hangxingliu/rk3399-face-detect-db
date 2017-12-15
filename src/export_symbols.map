@@ -4,10 +4,11 @@
 		face_detect;
 		face_detect1;
 		face_detect_one_face_in_last_frame;
-		face_dispose_detect_results;
+		face_draw_face_rect;
 		face_get_frame;
 		face_init;
 		face_ping_pong;
+		face_set_debug_log;
 		face_set_init_flag;
 		face_update;
 

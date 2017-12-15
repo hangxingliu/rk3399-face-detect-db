@@ -10,9 +10,12 @@
 
 /// "mm-dd HH:MM:SS" 14
 #define LOG_DATE_PREFIX_LEN 16
-
 time_t Log_prefix_time; ///< @todo thread safe
 char Log_prefix_str[LOG_DATE_PREFIX_LEN]; ///< @todo thread safe
+
+static bool hideDebugTemporary = false;
+void Log_hideDebugTemporary() { hideDebugTemporary = true; }
+void Log_cancelHideDebugTemporary() { hideDebugTemporary = false; }
 
 char* Log_getLogDatePrefix() {
 	time_t timestamp = time(NULL);
@@ -47,7 +50,7 @@ const char* PREFIX_INFO   = "INFO     ";
 const char* PREFIX_WARN   = "WARN!    ";
 const char* PREFIX_FATAL  = "FATAL!!! ";
 
-void Log_debug(const char* content) { Log__log(PREFIX_DEBUG, content); }
+void Log_debug(const char* content) { if(!hideDebugTemporary) Log__log(PREFIX_DEBUG, content); }
 void Log_info(const char* content) { Log__log(PREFIX_INFO, content); }
 void Log_warn(const char* content) { Log__log(PREFIX_WARN, content); }
 void Log_fatal(const char* content) { Log__log(PREFIX_FATAL, content); }
@@ -59,7 +62,6 @@ void Log_fatalErrno() {
 	Log__log(PREFIX_FATAL, descBuffer);
 }
 
-void Log_debug2(const char* prefix, const char* content) { Log__log2(PREFIX_DEBUG, prefix, content); }
 void Log_info2(const char* prefix, const char* content) { Log__log2(PREFIX_INFO, prefix, content); }
 void Log_warn2(const char* prefix, const char* content) { Log__log2(PREFIX_WARN, prefix, content); }
 void Log_fatal2(const char* prefix, const char* content) { Log__log2(PREFIX_FATAL, prefix, content); }

@@ -19,12 +19,12 @@ int cowSayDeprecatedAPI() {
 	puts(DETECT1_DIV_LINE);
 	printf("< %s >\n", DETECT1_STORY[rand() % 3]);
 	puts(DETECT1_DIV_LINE);
-	puts("        \\   ^__^");
-	puts("         \\  (oo)\\_______");
-	puts("            (__)\\       )\\/\\");
-	puts("                ||----w |");
-	puts("                ||     ||");
-	puts("");
+	if(rand() % 16) puts("        \\   ^__^");
+	if(rand() % 10) puts("         \\  (oo)\\_______");
+	if(rand() % 14) puts("            (__)\\       )\\/\\");
+	if(rand() % 20) puts("                ||----w |");
+	if(rand() %  8) puts("                ||     ||");
+	if(rand() %  4) puts("");
 #endif
 	return 0;
 }

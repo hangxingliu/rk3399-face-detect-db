@@ -84,6 +84,10 @@ endif()
 option(CMAKE_TEST_GUI "Enable compile gui tests" OFF)
 if (CMAKE_TEST_GUI)
 message ( STATUS "Compile: enabled CMAKE_TEST_GUI")
+add_executable( cv_capture_queue_test.gui ./gui/cv_capture_queue.cc ${CompileWithFiles} )
+target_link_libraries( cv_capture_queue_test.gui ${OpenCV_LIBS} )
+target_link_libraries( cv_capture_queue_test.gui ${CMAKE_THREAD_LIBS_INIT} )
+
 add_executable( cv_img_window_test.gui ./gui/cv_img_win_test.cc ${CompileWithFiles} )
 target_link_libraries( cv_img_window_test.gui ${OpenCV_LIBS} )
 
@@ -147,6 +151,7 @@ add_executable( random_access_file_once.test ./once/random_access_file.cc ${Comp
 if (CMAKE_FOR_ARM)
   add_executable( call_api_on_arm_once.test ./once/arm64-only/call_api_on_arm.cc ${CompileWithFiles} )
   target_link_libraries( call_api_on_arm_once.test rk3399_face_detect_db_debug )
+  target_link_libraries( call_api_on_arm_once.test ${OpenCV_LIBS} )
 endif()
 endif()
 

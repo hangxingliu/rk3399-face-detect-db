@@ -44,7 +44,7 @@ cv::Mat* FrameBuffer_giveMeBuffer(int* bufferId) {
 	return NULL;
 }
 
-int FrameBuffer_cloneBuffer(int bufferId, cv::Mat& cloneTo) {
+int FrameBuffer_cloneBuffer(int bufferId, cv::OutputArray cloneTo) {
 	lockFrameAccess(bufferId);
 	if(!FrameBuffer_isBufferValid(bufferId)) {
 		unlockFrameAccess(bufferId);

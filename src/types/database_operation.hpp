@@ -14,7 +14,10 @@ typedef struct DB_Modification {
 	/// @see DB_MODIFICATION_DELETE
 	int type = DB_MODIFICATION_DESPACITO;
 
-	char userId[USERID_LENGTH];
+	/**
+	 * @see USERID_LENGTH
+	 */
+	char *userId;
 
 	int featureLength;
 	float *features;

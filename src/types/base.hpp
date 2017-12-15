@@ -9,7 +9,8 @@
 #define PUBLIC_TYPES_BASE_HPP 1
 
 #define USERID_LENGTH 64
-#define FACE_FEATURE_LENGTH 6000
+#define FACE_FEATURE_ARRAY_LENGTH 6000
+#define FACE_FEATURE_SIZE (FACE_FEATURE_ARRAY_LENGTH * sizeof(float))
 
 // =================================
 
@@ -21,6 +22,9 @@
 #endif
 #ifndef NON_NULL
 	#define NON_NULL
+#endif
+#ifndef NEED_TO_FREE
+	#define NEED_TO_FREE
 #endif
 
 

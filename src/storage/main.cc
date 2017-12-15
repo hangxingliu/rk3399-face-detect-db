@@ -54,7 +54,6 @@ long DB_getItemOffset(uint itemIndex) {
 	return DB_HEAD_SIZE + (itemIndex - 1) * DB__itemSizeL;}
 
 
-
 const char* DB_FILE_NAME = "face.db";
 const char* DB_RECOVER_DIR = ".recover";
 
@@ -75,7 +74,7 @@ FILE* DB_getFileStream() { return DatabaseFs; }
 int DB_createDatabaseFile(
 	const char* _path,
 	unsigned long initializedSize) {
-	LOG_DEBUG2("createDatabaseFile: ", _path);
+	LOG_DEBUG_F("createDatabaseFile: %s", _path);
 
 	char path[256];
 	int pathLen = 0;
@@ -87,7 +86,7 @@ int DB_createDatabaseFile(
 		path[i] = 0;
 		if(!mkdirRecursively(path))
 			return API_DB_MKDIRS_FAILED;
-		LOG_DEBUG2("Created directory for database file: ", path);
+		LOG_DEBUG_F("Created directory for database file: %s", path);
 		path[i] = '/';
 		break;
 	}
@@ -315,13 +314,16 @@ int DB_updateFeatures(const char* userId, FF_FaceFeatures* features) {
 		LOG_FATAL("DB_updateFeatures: features is null pointer");
 		return API_EMPTY_POINTER;
 	}
-	if(features->len <= 0 || features->len >= FACE_FEATURE_SIZE) {
+	const int maxLen = (int) FACE_FEATURE_SIZE;
+	if(features->len <= 0 || features->len >= maxLen) {
 		LOG_FATAL_F("DB_updateFeatures: features->len: %d is invalid!", features->len);
 		return API_DB_INVALID_FEATURES;
 	}
 
 	DB_BaseUserItem item;
 	if(!ItemReader_findItemByUserId(userId, &item)) {
+		LOG_INFO_F("\"%s\" is new user", userId);
+
 		DB__createNewLivingUserStruct(userId, &item);
 		memcpy(&(item.features), features, sizeof(FF_FaceFeatures));
 
@@ -329,10 +331,12 @@ int DB_updateFeatures(const char* userId, FF_FaceFeatures* features) {
 		if(!ItemWriter_newItem(&item))
 			return API_DB_UPDATE_FAILED;
 	} else {
+		LOG_INFO_F("itemIndex of \"%s\" is %u.", userId, item.itemIndex);
+
 		memcpy(&(item.features), features, sizeof(FF_FaceFeatures));
 
 		DB_calcUserItemHash(&item, item.hash);
-		if(!ItemWriter_newItem(&item))
+		if(!ItemWriter_modifyItem(&item))
 			return API_DB_UPDATE_FAILED;
 	}
 	return 0;
@@ -357,7 +361,7 @@ int DB_updatePriority(const char* userId, int priority) {
 		item.priority = priority;
 
 		DB_calcUserItemHash(&item, item.hash);
-		if(!ItemWriter_newItem(&item))
+		if(!ItemWriter_modifyItem(&item))
 			return API_DB_UPDATE_FAILED;
 	}
 	return 0;
