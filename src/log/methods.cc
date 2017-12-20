@@ -40,10 +40,6 @@ static inline void Log__log(const char* type, const char* content) {
 	printf("%s%s    %s\n", type, Log_getLogDatePrefix(), content);
 	fflush(stdout);
 }
-static inline void Log__log2(const char* type, const char* prefix, const char* content) {
-	printf("%s%s    %s%s\n", type, Log_getLogDatePrefix(), prefix, content);
-	fflush(stdout);
-}
 
 const char* PREFIX_DEBUG  = "DEBUG    ";
 const char* PREFIX_INFO   = "INFO     ";
@@ -61,10 +57,6 @@ void Log_fatalErrno() {
 	snprintf(descBuffer, 256, "errno: %d; description: %s", no, strerror(no));
 	Log__log(PREFIX_FATAL, descBuffer);
 }
-
-void Log_info2(const char* prefix, const char* content) { Log__log2(PREFIX_INFO, prefix, content); }
-void Log_warn2(const char* prefix, const char* content) { Log__log2(PREFIX_WARN, prefix, content); }
-void Log_fatal2(const char* prefix, const char* content) { Log__log2(PREFIX_FATAL, prefix, content); }
 
 /** @param name  max length is **64** */
 void Log_dumpInt(int value, const char* name) {

@@ -78,7 +78,7 @@ int main() {
 	LOG_INFO("torrent --macro");
 
 	const char* ARG_NAME = "Name";
-	LOG_WARN2("Invalid arguemnt: ", ARG_NAME);
+	LOG_WARN_F("Invalid argument: %s", ARG_NAME);
 
 	return testDone("Log module test");
 }

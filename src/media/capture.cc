@@ -63,24 +63,19 @@ static bool isDeviceACapture(const char* deviceName) {
 static int getDeviceId(const char* deviceName) {
 	int len = strlen(deviceName);
 
-	/// return in function getDeviceId and free resource
-	#define GET_DEVICE_ID_RETURN(v) DELETE_STR(nameWithQuote), v;
-	// /dev/video0 => "/dev/video0"
-	CREATE_STR(nameWithQuote, (len+4)); addQuote2String(deviceName, nameWithQuote);
-
 	if(len < 2) {
-		LOG_FATAL2("getDeviceId: Invalid device name (it is too short); name: ", nameWithQuote);
-		return GET_DEVICE_ID_RETURN(-1);
+		LOG_FATAL_F("getDeviceId: Invalid device name: \"%s\" (it is too short)", deviceName);
+		return -1;
 	};
 
 	char c1 = deviceName[len-1], c2 = deviceName[len-2];
 	if(!IS_NUMBER_CHAR(c1)) {
-		LOG_FATAL2("getDeviceId: Invalid device name (not a number); name: ", nameWithQuote);
-		return GET_DEVICE_ID_RETURN(-1);
+		LOG_FATAL_F("getDeviceId: Invalid device name: \"%s\" (not a number)", deviceName);
+		return -1;
 	}
 	if(IS_NUMBER_CHAR(c2)) {
-		LOG_WARN2("getDeviceId: Id of device >= 10; name: ", nameWithQuote);
-		return GET_DEVICE_ID_RETURN(-1);
+		LOG_WARN_F("getDeviceId: Id of device >= 10; name: \"%s\"", deviceName);
+		return -1;
 	}
 
 	return c1 - '0';

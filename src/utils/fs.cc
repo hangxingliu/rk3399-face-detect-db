@@ -40,13 +40,17 @@ bool mkdirRecursively(const char *dir) {
 		if(*p == '/') {
 			*p = 0;
 			// S_IRWXU: READ WRITE AND EXECUTE FOR OWNER
-			if(!mkdirIfNotExist(tmp, S_IRWXU))
-				return LOG_FATAL2("Create folder failed: ", tmp), false;
+			if(!mkdirIfNotExist(tmp, S_IRWXU)) {
+				LOG_FATAL_F("Create folder failed: \"%s\"", tmp);
+				return false;
+			}
 			*p = '/';
 		}
 	}
-	if(!mkdirIfNotExist(tmp, S_IRWXU))
-		return LOG_FATAL2("Create folder failed: ", tmp), false;
+	if(!mkdirIfNotExist(tmp, S_IRWXU)) {
+		LOG_FATAL_F("Create folder failed: \"%s\"", tmp)
+		return false;
+	}
 	return true;
 }
 

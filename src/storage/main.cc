@@ -299,7 +299,7 @@ int DB_deleteUser(const char* userId) {
 
 	DB_BaseUserItem item;
 	if(!ItemReader_findItemByUserId(userId, &item)) {
-		LOG_FATAL2("Could not found userId: ", userId);
+		LOG_FATAL_F("Could not found userId: \"%s\"", userId);
 		return API_DB_USERID_NOT_FOUND;
 	}
 	if(!ItemWriter_deleteItem(&item))

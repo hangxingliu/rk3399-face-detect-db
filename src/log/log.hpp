@@ -32,16 +32,6 @@
 #define LOG_FATAL(ctx) Log_fatal(ctx)
 #define LOG_ERRNO() Log_fatalErrno()
 
-/// @todo replace LOG_XX2 to LOG_XX_F
-/// @deprecated
-#define LOG_INFO2(pf, ctx) Log_info2(pf, ctx)
-/// @todo replace LOG_XX2 to LOG_XX_F
-/// @deprecated
-#define LOG_WARN2(pf, ctx) Log_warn2(pf, ctx)
-/// @todo replace LOG_XX2 to LOG_XX_F
-/// @deprecated
-#define LOG_FATAL2(pf, ctx) Log_fatal2(pf, ctx)
-
 /// Format log methods
 #define __LOG_F(_buf, _max, ...) char _buf[_max]; snprintf(_buf, _max, __VA_ARGS__);
 #define LOG_FORMAT_INFO(_buf, _max, ...) __LOG_F(_buf, _max, __VA_ARGS__) LOG_INFO(_buf);

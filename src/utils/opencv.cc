@@ -23,14 +23,12 @@ unsigned char* copyBGRMat2DataArray(
 	int channels = mat.channels();
 
 	if(depth != CV_8U) {
-		CREATE_STR_FROM_INT(str, depth, true);
-		LOG_FATAL2("copyBGRMat2DataArray: depth is not CV_8U but ", str);
-		return DELETE_STR(str), nullptr;
+		LOG_FATAL_F("copyBGRMat2DataArray: depth is not CV_8U but %d", depth);
+		return nullptr;
 	}
 	if(channels != 3) {
-		CREATE_STR_FROM_INT(str, channels, true);
-		LOG_FATAL2("copyBGRMat2DataArray: channels is not 3 but ", str);
-		return DELETE_STR(str), nullptr;
+		LOG_FATAL_F("copyBGRMat2DataArray: channels is not 3 but %d", channels);
+		return nullptr;
 	}
 
 	int rows = mat.rows, cols = mat.cols;
