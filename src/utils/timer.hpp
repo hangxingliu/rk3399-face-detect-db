@@ -1,3 +1,12 @@
+/// A timer module
+/// @file timer
+/// Example:
+/// _timer_init(v1, v2);
+/// _timer_set(v1)
+/// ...
+/// _timer_set(v2)
+/// _timer_log(_timer_calc(v2, v1), "demo time consumming:")
+
 #include<chrono>
 #include "../log/log.hpp"
 

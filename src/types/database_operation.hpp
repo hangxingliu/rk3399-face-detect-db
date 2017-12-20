@@ -17,10 +17,10 @@ typedef struct DB_Modification {
 	/**
 	 * @see USERID_LENGTH
 	 */
-	char *userId;
+	char userId[USERID_LENGTH];
 
 	int featureLength;
-	float *features;
+	float features[FACE_FEATURE_ARRAY_LENGTH];
 
 } DB_Modification;
 

@@ -9,6 +9,7 @@
 
 #define API_EMPTY_POINTER			__API_ERR( 10, "Invoke API with empty pointer")
 #define API_INVALID_PARAMTER		__API_ERR( 11, "Invalid parameter")
+#define API_ONLY_FOR_AARCH64		__API_ERR( 12, "This API is only support aarch64 platform")
 #define API_TODO					__API_ERR( 66, "TODO doesn't means all")
 #define API_ERROR_TERRIBLE			__API_ERR( 99, "A terrible error occured and I don't know the reason")
 
@@ -55,6 +56,7 @@
 #define API_FACE_DETECT_FAILED		__API_ERR(604, "Detect face failed!")
 #define API_FACE_EXTRACT_FAILED		__API_ERR(607, "Extract face features failed!")
 
+#define API_INVALID_MAX_RESULT_COUNT	__API_ERR(701, "Invalid value of maxResultCount (expect value is less than 5)")
 
 #define API_NO_FACE				__API_DEBUG(10001, "Could not detect face from frame image");
 

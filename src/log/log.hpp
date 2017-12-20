@@ -1,3 +1,5 @@
+#include<stdio.h>
+
 #include "./methods.hpp"
 
 #ifndef LOG_HPP

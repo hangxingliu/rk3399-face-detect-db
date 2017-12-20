@@ -42,6 +42,7 @@ cv::Mat* FrameBuffer_giveMeBuffer(int* bufferId) {
 		return &(staticFrameBuffer[v]);
 	}
 
+	LOG_FATAL_F("Could not choose a buffer space. Terrible exception! (v = %d)", v);
 	return NULL;
 }
 

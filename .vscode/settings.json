@@ -13,7 +13,8 @@
 		"doxygen",
 		"doxywizard",
 		"lsyncd",
-		"opencv"
+		"opencv",
+		"rect"
 	],
 	"files.exclude": {
 		"**/.git": true,

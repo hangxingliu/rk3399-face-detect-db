@@ -3,12 +3,21 @@
 		"name": "API_API_HPP",
 		"hpp": "./src/api/api.hpp",
 		"extern-c": true,
-		"input": [ "./src/api/api.cc", "./src/api/api_cowsay.cc" ],
+		"input": [
+			"./src/api/api_core.cc",
+			"./src/api/api_detect.cc",
+			"./src/api/api_draw_face_rect.cc",
+			"./src/api/api_get_frame.cc",
+			"./src/api/api_update_db.cc",
+			"./src/api/api_init.cc"
+		],
 		"include": [
+			"./api__helper.hpp",
 			"../types/capture.hpp",
 			"../types/detect.hpp",
 			"../types/config.hpp",
 			"../types/api_error_no.hpp",
+			"../types/database.hpp",
 			"../types/database_operation.hpp"
 		]
 	}, {

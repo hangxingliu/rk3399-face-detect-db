@@ -7,9 +7,12 @@ option(CMAKE_FOR_ARM "Set this variable to ON if you compile this project on arm
 project(rk3399-face-detect-db)
 set(TARGET_LIB_NAME rk3399_face_detect_db)
 
+# Get current timestamp:
+string(TIMESTAMP NOW_DATE_STR "%Y-%m-%d %H:%M:%S")
+
 # Add compile options
 # -std=c++11            use c++ 11 standard
-set(CMAKE_CXX_FLAGS "-std=c++11 -Werror")
+set(CMAKE_CXX_FLAGS "-std=c++11 -Werror -DCOMPILE_DATE='\"${NOW_DATE_STR}\"' ")
 
 # Add DEBUG and RELEASE to g++
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -Wall")
@@ -59,7 +62,7 @@ endif()
 # https://www.gnu.org/software/gnulib/manual/html_node/LD-Version-Scripts.html
 set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--version-script=${CMAKE_SOURCE_DIR}/export_symbols.map")
 
-add_executable("db-walker" db-walker.cc)
+add_executable("db_walker" db_walker.cc)
 
 # gcc -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

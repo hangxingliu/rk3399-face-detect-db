@@ -156,7 +156,9 @@ bool ItemReader_findItemByFeatures(
 		_timer_set(t1);
 		float s = (*comparer)(features, item->features);
 		_timer_set(t2);
+#ifndef RELEASE
 		ms += _timer_calc(t2, t1);
+#endif
 
 		if(s < 0.5f) continue;
 		if(s > 0.8f) {

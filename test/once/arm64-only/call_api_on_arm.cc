@@ -18,6 +18,7 @@
 #include "../../../src/api/api.hpp"
 #include "../../../src/types/capture.hpp"
 #include "../../../src/types/config.hpp"
+#include "../../../src/types/firefly_face_sdk.hpp"
 
 using namespace std::chrono;
 
@@ -41,7 +42,7 @@ char command[256];
 char* readCommand(const char* prompt) {
 	printf("\x1b[34m%s", prompt);
 	command[0] = 0;
-	scanf("%s", command);
+	int result = scanf("%s", command);
 	printf("\x1b[0m");//reset color
 	return command;
 }
@@ -70,7 +71,7 @@ void ThreadGetFrame() {
 //		cv::Mat frameImage(frame.h, frame.w, CV_8UC3, *(frame.data));
 //		cv::imwrite("frame.jpg", frameImage);
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(15));
+		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	}
 
 	stop.store(true);
@@ -126,7 +127,8 @@ bool loop() {
 			if(strEquals(del, "delete")) {
 				DB_Modification modi;
 				modi.type = DB_MODIFICATION_DELETE;
-				modi.userId = face.matchedUserId;
+				snprintf(modi.userId, USERID_LENGTH, "%s", face.matchedUserId);
+
 				if(face_update(&modi) == 0) {
 					testPassed("face_update");
 				} else {
@@ -141,9 +143,10 @@ bool loop() {
 				auto name = readCommand("input username > ");
 				DB_Modification modi;
 				modi.type = DB_MODIFICATION_UPDATE;
-				modi.userId = name;
 				modi.featureLength = face.featureLength;
-				modi.features = face.features;
+				snprintf(modi.userId, USERID_LENGTH, "%s", name);
+				memcpy(modi.features, face.features, FACE_FEATURE_SIZE);
+
 				if(face_update(&modi) == 0) {
 					testPassed("face_update");
 				} else {
