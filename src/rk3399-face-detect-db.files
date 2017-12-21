@@ -8,7 +8,15 @@ api/api_get_frame.cc
 api/api_init.cc
 api/api_update_db.cc
 compile_options.hpp
-db_walker.cc
+db-client/base.hpp
+db-client/command_reader.cc
+db-client/db_info.cc
+db-client/help.cc
+db-client/index.hpp
+db-client/main.cc
+db-client/reader.cc
+db-client/seek.cc
+db-client/writer.cc
 export_symbols.map
 face/face.cc
 face/face.hpp

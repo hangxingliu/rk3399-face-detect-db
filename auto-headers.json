@@ -112,6 +112,20 @@
 		"extern-c": true,
 		"input": [ "./test/once/jna/jna_struct_test_so.cc"],
 		"include": [ "jna_struct_test_so_base.hpp" ]
+	},
+
+	{
+		"name": "DB_CLIENT_INDEX",
+		"hpp": "./src/db-client/index.hpp",
+		"input": [
+			"./src/db-client/help.cc",
+			"./src/db-client/seek.cc",
+			"./src/db-client/reader.cc",
+			"./src/db-client/writer.cc",
+			"./src/db-client/db_info.cc",
+			"./src/db-client/command_reader.cc"
+		],
+		"include": [ "./base.hpp" ]
 	}
 
 ]

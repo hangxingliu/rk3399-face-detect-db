@@ -10,3 +10,4 @@ global
 types
 storage
 face
+db-client

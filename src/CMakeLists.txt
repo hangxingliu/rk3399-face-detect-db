@@ -42,7 +42,16 @@ link_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/../libs" )
 
 # scan all files in this folder to set into variable: ${SOURCE_FILES}
-file(GLOB_RECURSE SOURCE_FILES . "**/*.cc" "**/*.cpp" "**/*.c")
+file(GLOB_RECURSE SOURCE_FILES .
+	"api.cc"
+	"face/*.cc"
+	"global/*.cc"
+	"include/*.cc"
+	"log/*.cc"
+	"media/*.cc"
+	"storage/*.cc"
+	"types/*.cc"
+	"utils/*.cc")
 
 set(TARGET_SHARED_LIB "${TARGET_LIB_NAME}_${BUILD_TYPE}")
 add_library(${TARGET_SHARED_LIB} SHARED ${SOURCE_FILES})
@@ -61,8 +70,10 @@ endif()
 # using export symbols file
 # https://www.gnu.org/software/gnulib/manual/html_node/LD-Version-Scripts.html
 set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--version-script=${CMAKE_SOURCE_DIR}/export_symbols.map")
-
-add_executable("db_walker" db_walker.cc)
-
 # gcc -fPIC
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# db-client executable file
+file(GLOB_RECURSE DB_CLIENT_FILES . "db-client/*.cc")
+add_executable("db-client" ${DB_CLIENT_FILES})
+
