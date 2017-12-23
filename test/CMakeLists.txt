@@ -16,7 +16,7 @@ cmake_minimum_required( VERSION 2.8 )
 project( rk3399-face-detect-db-test )
 
 set( CMAKE_CXX_FLAGS "-std=c++11 -Werror" )
-set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG" )
+set( CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -g" )
 set( CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DRELEASE" )
 
 link_directories(
@@ -92,7 +92,6 @@ add_executable( cv_img_window_test.gui ./gui/cv_img_win_test.cc ${CompileWithFil
 target_link_libraries( cv_img_window_test.gui ${OpenCV_LIBS} )
 
 add_executable( utils_opencv_test.gui ./gui/utils_opencv_test.cc ${CompileWithFiles}
-    ../src/utils/convert2string.cc
     ../src/utils/opencv.cc
     ../src/log/methods.cc )
 target_link_libraries( utils_opencv_test.gui ${OpenCV_LIBS} )
@@ -150,10 +149,15 @@ add_executable( random_access_file_once.test ./once/random_access_file.cc ${Comp
 
 if (CMAKE_FOR_ARM)
   add_executable( call_api_on_arm_once.test ./once/arm64-only/call_api_on_arm.cc ${CompileWithFiles} )
-  target_link_libraries( call_api_on_arm_once.test rk3399_face_detect_db_release )
+  target_link_libraries( call_api_on_arm_once.test rk3399_face_detect_db_debug )
   target_link_libraries( call_api_on_arm_once.test ${OpenCV_LIBS} )
   target_link_libraries( call_api_on_arm_once.test ${CMAKE_THREAD_LIBS_INIT} )
 endif()
+add_executable( blur_detect_time_consuming_once.test ./once/computer_vision/blur_detect_time_consuming.cc ${CompileWithFiles}
+    ../../src/utils/opencv.cc
+    ../../src/log/methods.cc )
+target_link_libraries( blur_detect_time_consuming_once.test rk3399_face_detect_db_debug )
+target_link_libraries( blur_detect_time_consuming_once.test ${OpenCV_LIBS} )
 endif()
 
 

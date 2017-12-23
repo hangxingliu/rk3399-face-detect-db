@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.3.1, 2017-12-14T17:43:12. -->
+<!-- Written by QtCreator 4.3.1, 2017-12-23T08:40:48. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -70,8 +70,8 @@
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
-      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">test debug</value>
-      <value type="QString" key="ProjectExplorer.ProcessStep.Command">./scripts/build.sh</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Arguments">once</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Command">./test.sh</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">%{buildDir}/..</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">自定义进程步骤</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>

@@ -90,3 +90,35 @@ bool detectFace(
 	}
 	return true;
 }
+
+bool detectBlurByLaplacian(
+	cv::Mat& image,
+	double threshold,
+	double* meanValueResult,
+	double* varianceResult) {
+
+	cv::Mat lap;
+	cv::Mat greyImage;
+
+	if(image.channels() == 1) {
+		greyImage = image;
+	} else {
+		cv::cvtColor(image, greyImage, CV_BGR2GRAY);
+	}
+
+	cv::Laplacian(greyImage, lap, CV_64F);
+	cv::Scalar _mu, _sigma; // 均值(mean value: 平均值), 标准差(standard deviation: 标准偏差)
+	cv::meanStdDev(lap, _mu, _sigma);
+
+	double meanValue = _mu.val[0];
+	double standardDeviation = _sigma.val[0];
+	double variance = standardDeviation * standardDeviation;
+
+	if(meanValueResult) *meanValueResult = meanValue;
+	if(varianceResult) *varianceResult = variance;
+
+	return variance < threshold;
+}
+bool detectBlurByLaplacian(cv::Mat &image) {
+	return detectBlurByLaplacian(image, DEFAULT_LAPLACIAN_BLUR_THRESHOLD, nullptr, nullptr);
+}

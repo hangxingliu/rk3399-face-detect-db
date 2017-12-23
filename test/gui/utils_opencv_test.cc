@@ -1,5 +1,4 @@
 /// TestEntry: utils_opencv
-/// With: ../src/utils/convert2string.cc
 /// With: ../src/utils/opencv.cc
 /// With: ../src/log/methods.cc
 /// Link: ${OpenCV_LIBS}
