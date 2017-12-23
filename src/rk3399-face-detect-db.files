@@ -55,5 +55,6 @@ utils/fs.cc
 utils/memory.hpp
 utils/opencv.cc
 utils/opencv.hpp
+utils/rect_motion_simulator.hpp
 utils/timer.hpp
 utils/utils.hpp

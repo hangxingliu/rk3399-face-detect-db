@@ -96,6 +96,9 @@ add_executable( utils_opencv_test.gui ./gui/utils_opencv_test.cc ${CompileWithFi
     ../src/log/methods.cc )
 target_link_libraries( utils_opencv_test.gui ${OpenCV_LIBS} )
 
+add_executable( rect_motion_simulator_test.gui ./gui/rect_motion_simulator.cc ${CompileWithFiles} )
+target_link_libraries( rect_motion_simulator_test.gui ${OpenCV_LIBS} )
+
 add_executable( utils_opencv_face_test.gui ./gui/utils_opencv_face_test.cc ${CompileWithFiles}
     ../src/utils/convert2string.cc
     ../src/utils/opencv.cc

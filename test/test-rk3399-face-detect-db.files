@@ -2,6 +2,7 @@ CMakeLists.txt
 gui/call_debug_so_get_frame.cc
 gui/cv_capture_queue.cc
 gui/cv_img_win_test.cc
+gui/rect_motion_simulator.cc
 gui/utils_opencv_face_test.cc
 gui/utils_opencv_test.cc
 images/README.md
