@@ -22,6 +22,7 @@ face/face.cc
 face/face.hpp
 face/face_addon.hpp
 face/type_convert.cc
+frame-buffer/structure.hpp
 global/_constant.hpp
 global/configurations.cc
 global/frame_buffer.cc

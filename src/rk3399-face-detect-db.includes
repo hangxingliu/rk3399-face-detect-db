@@ -11,3 +11,4 @@ types
 storage
 face
 db-client
+frame-buffer
