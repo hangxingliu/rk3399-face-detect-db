@@ -43,7 +43,7 @@ link_directories(
 
 # scan all files in this folder to set into variable: ${SOURCE_FILES}
 file(GLOB_RECURSE SOURCE_FILES .
-	"api.cc"
+	"api/*.cc"
 	"face/*.cc"
 	"global/*.cc"
 	"include/*.cc"
